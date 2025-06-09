@@ -7,6 +7,7 @@ public class TestScript : MonoBehaviour
 {
     private TextMeshProUGUI totalMoneyText;
     [SerializeField] private TextMeshProUGUI printText;
+
     private void Awake()
     {
         totalMoneyText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
@@ -19,7 +20,7 @@ public class TestScript : MonoBehaviour
 
     public void IncreaseMoney()
     {
-        GameManager.Instance.GetGameData().totalMoney += 10;
+        GameManager.Instance.GetGameData().totalMoney += 1;
         totalMoneyText.text = "" + GameManager.Instance.GetGameData().totalMoney;
         //Debug.Log("Total Money: " + GameManager.Instance.getGameData().totalMoney);
 
