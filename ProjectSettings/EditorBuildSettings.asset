@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenuScene.unity
+    guid: 9f72076c2852eef49b7bb5a39d07465f
+  - enabled: 1
+    path: Assets/Scenes/CookieClickerScene.unity
+    guid: 69a33db2b19e4e2468a2400c10101388
+  - enabled: 1
+    path: Assets/Scenes/PlatformScene.unity
+    guid: 7d5cca5414fce674ba73c10b868f85e0
+  - enabled: 1
     path: Assets/Scenes/TestScenes/TestScene.unity
     guid: d90b28829db76d24384847b5cd342fb9
   - enabled: 1
