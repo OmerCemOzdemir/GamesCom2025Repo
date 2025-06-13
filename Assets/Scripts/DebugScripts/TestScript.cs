@@ -1,5 +1,4 @@
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,7 +19,7 @@ public class TestScript : MonoBehaviour
 
     public void IncreaseMoney()
     {
-        GameManager.Instance.GetGameData().totalMoney += 1;
+        GameManager.Instance.GetGameData().totalMoney += 100;
         totalMoneyText.text = "" + GameManager.Instance.GetGameData().totalMoney;
         //Debug.Log("Total Money: " + GameManager.Instance.getGameData().totalMoney);
 
