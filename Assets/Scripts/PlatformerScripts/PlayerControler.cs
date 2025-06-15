@@ -6,16 +6,21 @@ public class PlayerControler : MonoBehaviour
 {
     private Rigidbody2D playerRigid2D;
     [SerializeField] private float playerSpeed;
-    [SerializeField] private float playerJumpHeight;
+    [SerializeField] private float playerJumpPower;
+    [SerializeField] private float playerMaxJumpHeight;
     [SerializeField] private Transform groundCheck;
+    private Animator playerAnimator;
+
     private float groundCheckRadius = 0.2f;
     private InputSystem playerInputAction;
     private Vector2 flipSpriteVector;
-    private bool isGrounded;
+    private Vector3 currentLocalScale;
     private bool enableMove = true;
+    private bool isJumping = false;
 
     private void Awake()
     {
+        playerAnimator = transform.GetChild(0).GetComponent<Animator>();
         playerRigid2D = GetComponent<Rigidbody2D>();
         playerInputAction = new InputSystem();
     }
@@ -24,26 +29,45 @@ public class PlayerControler : MonoBehaviour
     {
         playerInputAction.PlayerPlatform.Move.Enable();
         playerInputAction.PlayerPlatform.Jump.Enable();
-        playerInputAction.PlayerPlatform.Move.started += FlipDeterminator;
-        playerInputAction.PlayerPlatform.Move.canceled += FlipDeterminator;
+
         playerInputAction.PlayerPlatform.Move.performed += FlipSprite;
-        playerInputAction.PlayerPlatform.Jump.performed += Jump;
+        playerInputAction.PlayerPlatform.Move.started += FlipDeterminator;
+
+        //playerInputAction.PlayerPlatform.Move.started += AnimSetRunning;
+        //playerInputAction.PlayerPlatform.Jump.started += AnimSetJumping;
+        playerInputAction.PlayerPlatform.Move.canceled += AnimSetIdle;
+
+        playerInputAction.PlayerPlatform.Jump.started += JumpStart;
+        playerInputAction.PlayerPlatform.Jump.canceled += JumpEnd;
         //-----------------------------------------------------
         PlatformerManager.onMoneyZero += DisableMovement;
-
     }
 
     private void OnDisable()
     {
         playerInputAction.PlayerPlatform.Move.Disable();
         playerInputAction.PlayerPlatform.Jump.Disable();
-        playerInputAction.PlayerPlatform.Move.started -= FlipDeterminator;
-        playerInputAction.PlayerPlatform.Move.canceled -= FlipDeterminator;
+
         playerInputAction.PlayerPlatform.Move.performed -= FlipSprite;
-        playerInputAction.PlayerPlatform.Jump.performed -= Jump;
+        playerInputAction.PlayerPlatform.Move.started -= FlipDeterminator;
+
+        //playerInputAction.PlayerPlatform.Move.started -= AnimSetRunning;
+        //playerInputAction.PlayerPlatform.Jump.started -= AnimSetJumping;
+        playerInputAction.PlayerPlatform.Move.canceled -= AnimSetIdle;
+
+        playerInputAction.PlayerPlatform.Jump.started -= JumpStart;
+        playerInputAction.PlayerPlatform.Jump.canceled -= JumpEnd;
         //-----------------------------------------------------
         PlatformerManager.onMoneyZero -= DisableMovement;
     }
+
+
+    private void Start()
+    {
+        playerAnimator.SetTrigger("Idle");
+        currentLocalScale = transform.localScale;   
+    }
+
 
     private void Move()
     {
@@ -56,37 +80,115 @@ public class PlayerControler : MonoBehaviour
         flipSpriteVector = context.ReadValue<Vector2>();
     }
 
+    //Right is positive; Left is negative
+    //flipSpriteVector.x < 0 --> Negative
+    //flipSpriteVector.x > 0 --> Positive
     private void FlipSprite(InputAction.CallbackContext context)
     {
+        //Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
+        //transform.localScale = new Vector3(currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
         if (flipSpriteVector.x < 0)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
+            transform.localScale = new Vector3(-currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
+            //playerAnimator.SetTrigger("RunLeft");
         }
         else
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
+            //playerAnimator.SetTrigger("RunRight");
+            transform.localScale = new Vector3(currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
+        }
+        AnimSetWalking();
+    }
+
+
+
+    private void AnimSetIdle(InputAction.CallbackContext context)
+    {
+        if (!isJumping)
+        {
+            playerAnimator.SetTrigger("Idle");
         }
     }
 
-    private void Jump(InputAction.CallbackContext context)
+    private void AnimSetWalking()
     {
-        //Debug.Log("Jump Pressed");
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, LayerMask.GetMask("Ground"));
-        if (isGrounded)
+        if (!isJumping)
+        {
+            playerAnimator.SetTrigger("Walk");
+        }
+    }
+
+    private void AnimSetJumping()
+    {
+        playerAnimator.SetTrigger("Jump");
+    }
+
+    //-----------------------------------------------------------------
+    private void JumpStart(InputAction.CallbackContext context)
+    {
+        if (isGround())
+        {
+            isJumping = true;
+            Jumping();
+            //Debug.Log("Jump Pressed");
+        }
+
+    }
+
+    private void Jumping()
+    {
+        if (isJumping)
         {
             StopAllCoroutines();
             playerRigid2D.gravityScale = 1;
-            playerRigid2D.AddForce(Vector2.up * playerJumpHeight, ForceMode2D.Impulse);
-            StartCoroutine(DownForce());
+            StartCoroutine(JumpHeightModifier());
+            StartCoroutine(GravityMultiplier());
         }
-
+        AnimSetJumping();
     }
 
-    IEnumerator DownForce()
+    IEnumerator JumpHeightModifier()
     {
-        yield return new WaitForSeconds(0.7f);
-        playerRigid2D.gravityScale = 4;
-        Debug.Log("Gravity Scale: " + playerRigid2D.gravityScale);
+        float currentJumpHeight = 0;
+        while (currentJumpHeight < playerMaxJumpHeight)
+        {
+            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower - currentJumpHeight);
+            currentJumpHeight++;
+            yield return new WaitForSeconds(0.1f);
+        }
+        //playerRigid2D.gravityScale = 3;
+        //Debug.Log("Gravity Scale: " + playerRigid2D.gravityScale);
+    }
+
+
+    IEnumerator GravityMultiplier()
+    {
+        while (playerRigid2D.gravityScale < 4)
+        {
+            playerRigid2D.gravityScale++;
+            yield return new WaitForSeconds(0.5f);
+        }
+        //playerRigid2D.gravityScale = 3;
+        //Debug.Log("Gravity Scale: " + playerRigid2D.gravityScale);
+    }
+
+
+    private void JumpEnd(InputAction.CallbackContext context)
+    {
+        if (isJumping)
+        {
+            StopAllCoroutines();
+            Debug.Log("Jump Stoped");
+            isJumping = false;
+            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, 0);
+        }
+    }
+
+    private bool isGround()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, LayerMask.GetMask("Ground"));
     }
 
     private void DisableMovement()
@@ -99,7 +201,7 @@ public class PlayerControler : MonoBehaviour
 
     private void Update()
     {
-        if (enableMove) 
+        if (enableMove)
         {
             Move();
         }
@@ -178,5 +280,23 @@ public class PlayerControler : MonoBehaviour
         Debug.Log(!isGrounded && !jumpPress);
 
     }
+
+            //playerRigid2D.AddForce(Vector2.up * playerJumpHeight, ForceMode2D.Impulse);
+            //Debug.Log("Context.duration: " + (float)context.duration);
+
+
+
+        if (flipSpriteVector.x < 0)
+        {
+            Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
+            transform.localScale = new Vector3(flipSpriteVector.x * currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
+            //playerAnimator.SetTrigger("RunLeft");
+        }
+        else
+        {
+            Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
+            //playerAnimator.SetTrigger("RunRight");
+            transform.localScale = new Vector3(currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
+        }
 
  */
