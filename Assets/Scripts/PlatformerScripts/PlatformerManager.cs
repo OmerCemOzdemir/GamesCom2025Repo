@@ -8,6 +8,7 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onMoneyChange;
     public static event Action onMoneyZero;
     private InputSystem playerInputAction;
+
     private void Awake()
     {
         playerInputAction = new InputSystem();
@@ -56,8 +57,6 @@ public class PlatformerManager : MonoBehaviour
             onMoneyZero?.Invoke();
         }
     }
-
-
 
     private void ReduceMoneyJump(InputAction.CallbackContext context)
     {
