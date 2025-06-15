@@ -7,33 +7,46 @@ public class PlatformerManager : MonoBehaviour
 
     public static event Action onMoneyChange;
     public static event Action onMoneyZero;
-    private InputSystem playerInputAction;
 
-    private void Awake()
+    protected InputSystem playerInputAction;
+
+    protected virtual void Awake()
     {
         playerInputAction = new InputSystem();
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         playerInputAction.PlayerPlatform.Move.Enable();
         playerInputAction.PlayerPlatform.Jump.Enable();
+
         playerInputAction.PlayerPlatform.Move.started += ReduceMoneyMove;
         playerInputAction.PlayerPlatform.Jump.performed += ReduceMoneyJump;
         //------------------------------------------------------------------
         onMoneyZero += DisableInput;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         playerInputAction.PlayerPlatform.Move.Disable();
         playerInputAction.PlayerPlatform.Jump.Disable();
+
         playerInputAction.PlayerPlatform.Move.started -= ReduceMoneyMove;
         playerInputAction.PlayerPlatform.Jump.performed -= ReduceMoneyJump;
         //------------------------------------------------------------------
         onMoneyZero += DisableInput;
+    }
 
+    protected void DisableInput()
+    {
+        playerInputAction.PlayerPlatform.Move.Disable();
+        playerInputAction.PlayerPlatform.Jump.Disable();
+    }
 
+    protected void EnableInput()
+    {
+        playerInputAction.PlayerPlatform.Move.Enable();
+        playerInputAction.PlayerPlatform.Jump.Enable();
     }
 
     private void Update()
@@ -55,6 +68,7 @@ public class PlatformerManager : MonoBehaviour
         if (GameManager.Instance.GetGameData().totalMoney < 0)
         {
             onMoneyZero?.Invoke();
+
         }
     }
 
@@ -66,12 +80,6 @@ public class PlatformerManager : MonoBehaviour
         {
             onMoneyZero?.Invoke();
         }
-    }
-
-    private void DisableInput()
-    {
-        playerInputAction.PlayerPlatform.Move.Disable();
-        playerInputAction.PlayerPlatform.Jump.Disable();
     }
 
 }
@@ -112,7 +120,14 @@ public class PlatformerManager : MonoBehaviour
 
     }
 
+    private void DisableInput()
+    {
+        playerInputAction.PlayerPlatform.Move.Disable();
+        playerInputAction.PlayerPlatform.Jump.Disable();
+    }
 
-
-
+    private void DebugInputSystem()
+    {
+        Debug.Log("Disable Input : " + playerInputAction.PlayerPlatform.Move.enabled);
+    }
  */

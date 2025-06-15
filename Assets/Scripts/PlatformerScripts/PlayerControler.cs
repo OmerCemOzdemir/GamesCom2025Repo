@@ -2,37 +2,44 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerControler : MonoBehaviour
+public class PlayerControler : PlatformerManager
 {
     private Rigidbody2D playerRigid2D;
     [SerializeField] private float playerSpeed;
     [SerializeField] private float playerJumpPower;
-    [SerializeField] private float playerMaxJumpHeight;
+    [SerializeField] private float playerGravityActivationTime;
+    [SerializeField] private float playerDefaultGravityScale;
+
+    private float playerGravityActivationTimeTemp;
+
+    [SerializeField] private float playerMaxGravityMultiplier;
+
+
     [SerializeField] private Transform groundCheck;
     private Animator playerAnimator;
 
     private float groundCheckRadius = 0.2f;
-    private InputSystem playerInputAction;
     private Vector2 flipSpriteVector;
     private Vector3 currentLocalScale;
     private bool enableMove = true;
     private bool isJumping = false;
 
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake(); // Ensures playerInputAction is initialized
         playerAnimator = transform.GetChild(0).GetComponent<Animator>();
         playerRigid2D = GetComponent<Rigidbody2D>();
-        playerInputAction = new InputSystem();
+        playerGravityActivationTimeTemp = playerGravityActivationTime;
+        playerRigid2D.gravityScale = playerDefaultGravityScale;
+
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        playerInputAction.PlayerPlatform.Move.Enable();
-        playerInputAction.PlayerPlatform.Jump.Enable();
-
+        base.OnEnable();
         playerInputAction.PlayerPlatform.Move.performed += FlipSprite;
         playerInputAction.PlayerPlatform.Move.started += FlipDeterminator;
-
         //playerInputAction.PlayerPlatform.Move.started += AnimSetRunning;
         //playerInputAction.PlayerPlatform.Jump.started += AnimSetJumping;
         playerInputAction.PlayerPlatform.Move.canceled += AnimSetIdle;
@@ -43,11 +50,9 @@ public class PlayerControler : MonoBehaviour
         PlatformerManager.onMoneyZero += DisableMovement;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        playerInputAction.PlayerPlatform.Move.Disable();
-        playerInputAction.PlayerPlatform.Jump.Disable();
-
+        base.OnDisable();
         playerInputAction.PlayerPlatform.Move.performed -= FlipSprite;
         playerInputAction.PlayerPlatform.Move.started -= FlipDeterminator;
 
@@ -65,7 +70,7 @@ public class PlayerControler : MonoBehaviour
     private void Start()
     {
         playerAnimator.SetTrigger("Idle");
-        currentLocalScale = transform.localScale;   
+        currentLocalScale = transform.localScale;
     }
 
 
@@ -89,13 +94,13 @@ public class PlayerControler : MonoBehaviour
         //transform.localScale = new Vector3(currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
         if (flipSpriteVector.x < 0)
         {
-            Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
+            //Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
             transform.localScale = new Vector3(-currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
             //playerAnimator.SetTrigger("RunLeft");
         }
         else
         {
-            Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
+            //Debug.Log("flipSpriteVector.x: " + flipSpriteVector.x);
             //playerAnimator.SetTrigger("RunRight");
             transform.localScale = new Vector3(currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
         }
@@ -142,47 +147,32 @@ public class PlayerControler : MonoBehaviour
         if (isJumping)
         {
             StopAllCoroutines();
-            playerRigid2D.gravityScale = 1;
-            StartCoroutine(JumpHeightModifier());
+            playerRigid2D.gravityScale = playerDefaultGravityScale;
             StartCoroutine(GravityMultiplier());
+            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower);
         }
         AnimSetJumping();
     }
 
-    IEnumerator JumpHeightModifier()
-    {
-        float currentJumpHeight = 0;
-        while (currentJumpHeight < playerMaxJumpHeight)
-        {
-            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower - currentJumpHeight);
-            currentJumpHeight++;
-            yield return new WaitForSeconds(0.1f);
-        }
-        //playerRigid2D.gravityScale = 3;
-        //Debug.Log("Gravity Scale: " + playerRigid2D.gravityScale);
-    }
-
-
     IEnumerator GravityMultiplier()
     {
-        while (playerRigid2D.gravityScale < 4)
+        playerGravityActivationTime = playerGravityActivationTimeTemp;
+        while (playerRigid2D.gravityScale < playerMaxGravityMultiplier)
         {
             playerRigid2D.gravityScale++;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(playerGravityActivationTime);
+            playerGravityActivationTime--;
         }
-        //playerRigid2D.gravityScale = 3;
-        //Debug.Log("Gravity Scale: " + playerRigid2D.gravityScale);
     }
-
 
     private void JumpEnd(InputAction.CallbackContext context)
     {
         if (isJumping)
         {
             StopAllCoroutines();
-            Debug.Log("Jump Stoped");
+            //Debug.Log("Jump Stoped");
             isJumping = false;
-            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, 0);
+            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerRigid2D.linearVelocity.y);
         }
     }
 
@@ -195,8 +185,6 @@ public class PlayerControler : MonoBehaviour
     {
         enableMove = false;
         playerRigid2D.linearVelocity = Vector3.zero;
-        playerInputAction.PlayerPlatform.Move.Disable();
-        playerInputAction.PlayerPlatform.Jump.Disable();
     }
 
     private void Update()
@@ -298,5 +286,37 @@ public class PlayerControler : MonoBehaviour
             //playerAnimator.SetTrigger("RunRight");
             transform.localScale = new Vector3(currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
         }
+
+
+    IEnumerator JumpHeightModifier()
+    {
+        float currentJumpHeight = 0;
+        while (currentJumpHeight < playerMaxJumpHeight)
+        {
+            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower);
+            currentJumpHeight++;
+
+
+            yield return new WaitForSeconds(0.1f);
+        }
+        //playerRigid2D.gravityScale = 3;
+        //Debug.Log("Gravity Scale: " + playerRigid2D.gravityScale);
+    }
+
+
+    IEnumerator GravityMultiplier()
+    {
+        while (playerRigid2D.gravityScale < 4)
+        {
+            playerRigid2D.gravityScale++;
+            yield return new WaitForSeconds(0.1f);
+        }
+        //playerRigid2D.gravityScale = 3;
+        //Debug.Log("Gravity Scale: " + playerRigid2D.gravityScale);
+    }
+
+
+
+
 
  */
