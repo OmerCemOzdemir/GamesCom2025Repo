@@ -10,6 +10,8 @@ public class PlatformerManager : MonoBehaviour
 
     protected InputSystem playerInputAction;
 
+    [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1.5f, -10f); // default for Z is -10 to prevent 2D clipping issues
+
     protected virtual void Awake()
     {
         playerInputAction = new InputSystem();
@@ -56,7 +58,8 @@ public class PlatformerManager : MonoBehaviour
 
     private void CameraFollow()
     {
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position, Time.deltaTime * 3f);
+        Vector3 targetPosition = transform.position + cameraOffset; // apply offset to camera position
+        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, Time.deltaTime * 3f);
 
     }
 
