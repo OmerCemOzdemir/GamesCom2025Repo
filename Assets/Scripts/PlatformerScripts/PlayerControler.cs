@@ -7,15 +7,15 @@ public class PlayerControler : PlatformerManager
     private Rigidbody2D playerRigid2D;
     [SerializeField] private float playerSpeed = 5; // default value is 5
     [SerializeField] private float playerJumpPower = 13; // default value is 13
-    [SerializeField] private float playerGravityActivationTime; 
-    [SerializeField] private float playerDefaultGravityScale; // default value is 5
+    [SerializeField] private float playerGravityActivationTime = 0.6f; // default value is 0.6
+    [SerializeField] private float playerDefaultGravityScale = 5; // default value is 5
 
     private float playerGravityActivationTimeTemp;
 
-    [SerializeField] private float playerMaxGravityMultiplier;// default value is 7
+    [SerializeField] private float playerMaxGravityMultiplier = 7;// default value is 7
 
 
-    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform groundCheck; // assign groundcheck gameObject
     private Animator playerAnimator;
 
     private float groundCheckRadius = 0.2f;
