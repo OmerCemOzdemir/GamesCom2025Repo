@@ -3341,7 +3341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   platformerUI: {fileID: 1469377616}
-  infiMoney: 1
+  infiMoney: 0
 --- !u!1 &1540763128
 GameObject:
   m_ObjectHideFlags: 0
