@@ -10,7 +10,6 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerClimb;
     public static event Action onSpacePressed;
 
-
     private Rigidbody2D playerRigid2D;
     [SerializeField] private float playerSpeed = 5; // default value is 5
     [SerializeField] private float playerJumpPower = 13; // default value is 13
@@ -90,14 +89,21 @@ public class PlayerControler : MonoBehaviour
         PlatformerManager.onLadderExit -= DismountLadder;
     }
 
-
     private void Start()
     {
         playerAnimator.SetTrigger("Idle");
         currentLocalScale = transform.localScale;
     }
+    private void Update()
+    {
+        if (enableMove)
+        {
+            Move();
+        }
+    }
 
-
+    //This function runs on update and it handles player movement for the left and right directions.
+    //If the player climb ability is active then this functions moves player up and down.
     private void Move()
     {
         Vector2 _horizontalMovement = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
@@ -110,9 +116,18 @@ public class PlayerControler : MonoBehaviour
         {
             playerRigid2D.linearVelocity = new Vector2(_horizontalMovement.x * playerSpeed, playerRigid2D.linearVelocity.y);
         }
-
+    }
+    //This Functions just sends a event trigger to PlatformManager to deduct money.
+    private void PlayerMoved(InputAction.CallbackContext context)
+    {
+        onPlayerMove?.Invoke();
     }
 
+    //The way climb ability works is first we have 3 different onTrigger2D functions in PlatformManager. When onTriggerStay2D sends a event trigger that player is in a ladder
+    //When player is in a ladder if they press interact function then climbing mod initiates which at this point there is only 2 ways to get of:
+    //1) Player presses jump button to dismount the ladder or the onTrigger2DExit function detects that player is out of the ladder and dismounts the player.
+    //Note that current pressing interact again doesnt dismount ladder. (TO DO)
+    #region ClimbAbility
     private void MountLadder(InputAction.CallbackContext context)
     {
         //Debug.Log("climb: " + climb);
@@ -144,11 +159,11 @@ public class PlayerControler : MonoBehaviour
         toggleClimb = true;
     }
 
-    private void PlayerMoved(InputAction.CallbackContext context)
-    {
-        onPlayerMove?.Invoke();
-    }
 
+    #endregion
+
+    //the FlipDeterminatior and FlipSprite are used to determine which direction the player is going and then flip the sprite according to that direction.
+    #region FlipSprite
     private void FlipDeterminator(InputAction.CallbackContext context)
     {
         flipSpriteVector = context.ReadValue<Vector2>();
@@ -173,6 +188,12 @@ public class PlayerControler : MonoBehaviour
         AnimSetWalking();
     }
 
+
+    #endregion
+
+    //Animation Functions Triggers the animations based on player inputs
+    //Example: If player presses Jump(Space) then an AnimSetJumping() will initilize the jumping animation.
+    #region Animation
     private void AnimSetIdle(InputAction.CallbackContext context)
     {
         if (!isJumping)
@@ -193,8 +214,13 @@ public class PlayerControler : MonoBehaviour
     {
         playerAnimator.SetTrigger("Jump");
     }
+    #endregion
 
-    //-----------------------------------------------------------------
+    //The Jump ability works in 3 functions and one coroutine. When player press jump button it triggers the jumpStart function. This functions checks if if the player 
+    //grounded using the isGrounded function. After if the player is grounded then it calls the jumping function which is where the actual vertical movement happens.
+    //Jumping Function also starts the corotinue for gravity accelaration(GravityMultiplier()). This corotine uses gravity scale gradually increase the gravity until 
+    //player hits the ground. And finally if player leaves their hand of the space bar all of these functions gets canceled (used to be used to dynamic jumping but later removed.)
+    #region JumpAbility
     private void JumpStart(InputAction.CallbackContext context)
     {
         DismountLadder();
@@ -247,12 +273,18 @@ public class PlayerControler : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, LayerMask.GetMask("Ground"));
     }
 
+
+
+    #endregion
+
+    //This function disables the movement of the player when called. It is triggered by platform manager when money is below or equal to 0.
     private void DisableMovement()
     {
         enableMove = false;
         playerRigid2D.linearVelocity = Vector3.zero;
     }
 
+    //This function disables the player inputs. It is triggered by platform manager when money is below or equal to 0.
     protected void DisableInput()
     {
         playerInputAction.PlayerPlatform.Move.Disable();
@@ -260,6 +292,7 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Interact.Disable();
     }
 
+    //This function is purely for debug purposes. Is not yet used.
     protected void EnableInput()
     {
         playerInputAction.PlayerPlatform.Move.Enable();
@@ -267,13 +300,7 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Interact.Enable();
     }
 
-    private void Update()
-    {
-        if (enableMove)
-        {
-            Move();
-        }
-    }
+
 
 }
 

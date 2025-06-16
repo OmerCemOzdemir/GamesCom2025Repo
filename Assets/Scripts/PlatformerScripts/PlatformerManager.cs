@@ -7,13 +7,16 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onMoneyZero;
     public static event Action<bool> onLadderDetected;
     public static event Action onLadderExit;
+    public static event Action onDoorEnter;
+    public static event Action onDoorExit;
+
 
 
     [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1.5f, -10f); // default for Z is -10 to prevent 2D clipping issues
     [SerializeField] private GameObject interactText;
     [SerializeField] private GameObject stopInteractText;
 
-
+    
     private void OnEnable()
     {
         PlayerControler.onPlayerJump += ReduceMoneyJump;
@@ -34,19 +37,22 @@ public class PlatformerManager : MonoBehaviour
         //------------------------------------------------------------------
     }
 
-
-
     private void Update()
     {
         CameraFollow();
     }
 
+
+    //THis Functions makes the main camera in the Scene to follow the player.
     private void CameraFollow()
     {
         Vector3 targetPosition = transform.position + cameraOffset; // apply offset to camera position
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, Time.deltaTime * 3f);
     }
 
+
+    //This function is tied to player movement. When player presses a single movement key this function deducts a certain amount of money.
+    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
     private void ReduceMoneyMove()
     {
         //Vector2 horizontalMovement = context.ReadValue<Vector2>();
@@ -58,6 +64,8 @@ public class PlatformerManager : MonoBehaviour
         }
     }
 
+    //This function is tied to player jump ability. When player succesfully initiates a jump action, this function deducts a certain amount of money.
+    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
     private void ReduceMoneyJump()
     {
         GameManager.Instance.GetGameData().totalMoney -= 100;
@@ -68,6 +76,8 @@ public class PlatformerManager : MonoBehaviour
         }
     }
 
+    //This function is tied to player climb ability. When player succesfully mounts on a ladder, this function deducts a certain amount of money.
+    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
     private void ReduceMoneyClimb()
     {
         GameManager.Instance.GetGameData().totalMoney -= 1000;
@@ -77,6 +87,7 @@ public class PlatformerManager : MonoBehaviour
             onMoneyZero?.Invoke();
         }
     }
+
 
     private void EnableStopInteractText()
     {
@@ -98,6 +109,14 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             interactText.SetActive(true);
         }
+
+        if (collision.CompareTag("Door"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            interactText.SetActive(true);
+            onDoorEnter?.Invoke();
+        }
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -107,7 +126,6 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can be used");
             onLadderDetected?.Invoke(true);
-
         }
     }
 
@@ -120,6 +138,14 @@ public class PlatformerManager : MonoBehaviour
             onLadderExit?.Invoke();
             DisableStopInteractText();
         }
+
+        if (collision.CompareTag("Door"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            interactText.SetActive(false);
+            onDoorExit?.Invoke();
+        }
+
     }
 
 }
