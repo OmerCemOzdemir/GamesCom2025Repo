@@ -7,6 +7,9 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onMoneyZero;
     public static event Action<bool> onLadderDetected;
     public static event Action onLadderExit;
+    public static event Action onDoorEnter;
+    public static event Action onDoorExit;
+
 
 
     [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1.5f, -10f); // default for Z is -10 to prevent 2D clipping issues
@@ -106,6 +109,14 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             interactText.SetActive(true);
         }
+
+        if (collision.CompareTag("Door"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            interactText.SetActive(true);
+            onDoorEnter?.Invoke();
+        }
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -127,6 +138,14 @@ public class PlatformerManager : MonoBehaviour
             onLadderExit?.Invoke();
             DisableStopInteractText();
         }
+
+        if (collision.CompareTag("Door"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            interactText.SetActive(false);
+            onDoorExit?.Invoke();
+        }
+
     }
 
 }
