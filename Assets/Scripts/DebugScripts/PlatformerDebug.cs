@@ -7,7 +7,7 @@ public class PlatformerDebug : MonoBehaviour
     public void GiveMoney()
     {
         GameManager.Instance.GetGameData().totalMoney += 1000;
-        platformerUI.UpdateMoneyText();
+        platformerUI.UpdateMoneyText(0);
         //PlatformerManager.moneyBelowZero = false;
     }
 

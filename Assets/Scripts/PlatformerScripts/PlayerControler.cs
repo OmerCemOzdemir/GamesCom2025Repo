@@ -2,42 +2,49 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 public class PlayerControler : MonoBehaviour
 {
     public static event Action onPlayerJump;
     public static event Action onPlayerMove;
     public static event Action onPlayerClimb;
-    public static event Action onSpacePressed;
 
-    private Rigidbody2D playerRigid2D;
+    public static event Action onPlayerPickUp;
+    public static event Action onPlayerDoorOpen;
+
     [SerializeField] private float playerSpeed = 5; // default value is 5
     [SerializeField] private float playerJumpPower = 13; // default value is 13
     [SerializeField] private float playerGravityActivationTime = 0.6f; // default value is 0.6
     [SerializeField] private float playerDefaultGravityScale = 5; // default value is 5
-    [SerializeField] private float playerMaxGravityMultiplier = 7;// default value is 7
+    [SerializeField] private float playerMaxGravityMultiplier = 7; // default value is 7
+    private float playerGravityActivationTimeTemp;
+    private float groundCheckRadius = 0.2f;
 
     [SerializeField] private Transform playerModel;
-
-    private float playerGravityActivationTimeTemp;
-    protected InputSystem playerInputAction;
-
     [SerializeField] private Transform groundCheck; // assign groundcheck gameObject
-    private Animator playerAnimator;
 
-    private float groundCheckRadius = 0.2f;
+    private Rigidbody2D playerRigid2D;
+    private InputSystem playerInputAction;
+    private Animator playerAnimator;
+    private Interaction interaction = Interaction.Empty; //Default is Ladder
+    private PlatformerManager platformerManager;
+
+
     private Vector2 flipSpriteVector;
     private Vector3 currentLocalScale;
+
+
     private bool enableMove = true;
     private bool isJumping = false;
     private bool climb = false;
-    private bool canClimb = false;
-    private bool toggleClimb = false;
+    private bool toggleClimb = true;
 
     private void Awake()
     {
         playerAnimator = transform.GetChild(0).GetComponent<Animator>();
         playerRigid2D = GetComponent<Rigidbody2D>();
+        platformerManager = GetComponent<PlatformerManager>();  
         playerGravityActivationTimeTemp = playerGravityActivationTime;
         playerRigid2D.gravityScale = playerDefaultGravityScale;
         playerInputAction = new InputSystem();
@@ -49,7 +56,7 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Jump.Enable();
         playerInputAction.PlayerPlatform.Interact.Enable();
 
-        playerInputAction.PlayerPlatform.Interact.performed += MountLadder;
+        playerInputAction.PlayerPlatform.Interact.performed += Interact;
 
         playerInputAction.PlayerPlatform.Move.performed += FlipSprite;
         playerInputAction.PlayerPlatform.Move.started += FlipDeterminator;
@@ -62,8 +69,9 @@ public class PlayerControler : MonoBehaviour
         //-----------------------------------------------------
         PlatformerManager.onMoneyZero += DisableMovement;
         PlatformerManager.onMoneyZero += DisableInput;
-        PlatformerManager.onLadderDetected += EnableLadder;
+
         PlatformerManager.onLadderExit += DismountLadder;
+        PlatformerManager.onInteract += SetUpInteraction;
 
     }
 
@@ -73,7 +81,7 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Jump.Disable();
         playerInputAction.PlayerPlatform.Interact.Disable();
 
-        playerInputAction.PlayerPlatform.Interact.performed -= MountLadder;
+        playerInputAction.PlayerPlatform.Interact.performed -= Interact;
 
         playerInputAction.PlayerPlatform.Move.performed -= FlipSprite;
         playerInputAction.PlayerPlatform.Move.started -= FlipDeterminator;
@@ -85,8 +93,9 @@ public class PlayerControler : MonoBehaviour
         //-----------------------------------------------------
         PlatformerManager.onMoneyZero -= DisableMovement;
         PlatformerManager.onMoneyZero -= DisableInput;
-        PlatformerManager.onLadderDetected -= EnableLadder;
+
         PlatformerManager.onLadderExit -= DismountLadder;
+        PlatformerManager.onInteract -= SetUpInteraction;
     }
 
     private void Start()
@@ -107,7 +116,7 @@ public class PlayerControler : MonoBehaviour
     private void Move()
     {
         Vector2 _horizontalMovement = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
-        if (climb && canClimb)
+        if (climb)
         {
             playerRigid2D.gravityScale = 0;
             playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, _horizontalMovement.y * playerSpeed);
@@ -123,42 +132,69 @@ public class PlayerControler : MonoBehaviour
         onPlayerMove?.Invoke();
     }
 
-    //The way climb ability works is first we have 3 different onTrigger2D functions in PlatformManager. When onTriggerStay2D sends a event trigger that player is in a ladder
-    //When player is in a ladder if they press interact function then climbing mod initiates which at this point there is only 2 ways to get of:
-    //1) Player presses jump button to dismount the ladder or the onTrigger2DExit function detects that player is out of the ladder and dismounts the player.
-    //Note that current pressing interact again doesnt dismount ladder. (TO DO)
-    #region ClimbAbility
-    private void MountLadder(InputAction.CallbackContext context)
-    {
-        //Debug.Log("climb: " + climb);
-        //Debug.Log("canClimb: " + canClimb);
-        climb = canClimb;
-        OnLadder();
-        if (toggleClimb)
-        {
-            onPlayerClimb?.Invoke();
-            toggleClimb = false;
-        }
+    //SetUpInteraction function is trigger when player changes a trigger area and from the Platform Manager a signal is send to SetUpInteraction() to change the interaction enum
+    //to the correct object: Example if player is in Ladder the interaction enum is set to Interactio.Ladder, 
+    //If player presses the interact button which byt default is "X", then the interact function determines what to do with the object:
+    //Example: if player presses X while in a ladder, MountLadder Function runs and player mounts the ladder.
+    #region Interaction
 
+    private void SetUpInteraction(Interaction tempInteraction = Interaction.Ladder)
+    {
+        interaction = tempInteraction;
     }
 
+    private void Interact(InputAction.CallbackContext context)
+    {
+        switch (interaction)
+        {
+            case Interaction.Empty:
+                Debug.Log("No Interaction");
+                break;
+            case Interaction.Ladder:
+                Debug.Log("Mount Ladder");
+                if (toggleClimb)
+                {
+                    Debug.Log("Player ON Ladder");
+                    MountLadder();
+                }
+                else
+                {
+                    Debug.Log("Player OFF Ladder");
+                    DismountLadder();
+                }
+                break;
+            case Interaction.Door:
+                Debug.Log("Open Door");
+                onPlayerDoorOpen?.Invoke();
+                break;
+            case Interaction.Key:
+                Debug.Log("PickUp Key");
+                onPlayerPickUp?.Invoke();
+                platformerManager.KeyNumber++;
+                interaction = Interaction.Empty;
+                break;
+            default:
+                break;
+        }
+    }
+
+    //When called player dismounts the ladder by enabling the climb value to false.
     private void DismountLadder()
     {
-        climb = false;
-        canClimb = false;
-        playerRigid2D.gravityScale = playerDefaultGravityScale;
-    }
-
-    private void EnableLadder(bool climbDetect)
-    {
-        canClimb = climbDetect;
-    }
-
-    private void OnLadder()
-    {
         toggleClimb = true;
+        climb = false;
+        playerRigid2D.gravityScale = playerDefaultGravityScale;
+
     }
 
+    //When called player mounts the ladder by enabling the climb value to true.
+    private void MountLadder()
+    {
+        toggleClimb = false;
+        onPlayerClimb?.Invoke();
+        climb = true;
+        AnimSetClimbing();
+    }
 
     #endregion
 
@@ -196,7 +232,7 @@ public class PlayerControler : MonoBehaviour
     #region Animation
     private void AnimSetIdle(InputAction.CallbackContext context)
     {
-        if (!isJumping)
+        if (!isJumping && !climb)
         {
             playerAnimator.SetTrigger("Idle");
         }
@@ -204,7 +240,7 @@ public class PlayerControler : MonoBehaviour
 
     private void AnimSetWalking()
     {
-        if (!isJumping)
+        if (!isJumping && !climb)
         {
             playerAnimator.SetTrigger("Walk");
         }
@@ -214,6 +250,12 @@ public class PlayerControler : MonoBehaviour
     {
         playerAnimator.SetTrigger("Jump");
     }
+
+    private void AnimSetClimbing()
+    {
+        playerAnimator.SetTrigger("Climb");
+    }
+
     #endregion
 
     //The Jump ability works in 3 functions and one coroutine. When player press jump button it triggers the jumpStart function. This functions checks if if the player 
@@ -223,9 +265,8 @@ public class PlayerControler : MonoBehaviour
     #region JumpAbility
     private void JumpStart(InputAction.CallbackContext context)
     {
-        DismountLadder();
-        onSpacePressed?.Invoke();
-        if (isGround())
+        //DismountLadder();
+        if (isGround() && !climb)
         {
             isJumping = true;
             Jumping();
@@ -273,8 +314,6 @@ public class PlayerControler : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, LayerMask.GetMask("Ground"));
     }
 
-
-
     #endregion
 
     //This function disables the movement of the player when called. It is triggered by platform manager when money is below or equal to 0.
@@ -299,10 +338,17 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Jump.Enable();
         playerInputAction.PlayerPlatform.Interact.Enable();
     }
+}
 
-
+public enum Interaction
+{
+    Empty,
+    Door,
+    Ladder,
+    Key
 
 }
+
 
 /*
  
@@ -424,6 +470,37 @@ public class PlayerControler : MonoBehaviour
 
 
 
+    private void EnableLadder(bool climbDetect)
+    {
+        canClimb = climbDetect;
+    }
+
+    private void OnLadder()
+    {
+        toggleClimb = true;
+    }
+
+
+    private void MountLadder(InputAction.CallbackContext context)
+    {
+        //Debug.Log("climb: " + climb);
+        //Debug.Log("canClimb: " + canClimb);
+        climb = canClimb;
+        OnLadder();
+        if (toggleClimb)
+        {
+            onPlayerClimb?.Invoke();
+            toggleClimb = false;
+        }
+
+    }
+
+
+Old Interaction Logic: 
+//The way climb ability works is first we have 3 different onTrigger2D functions in PlatformManager. When onTriggerStay2D sends a event trigger that player is in a ladder
+    //When player is in a ladder if they press interact function then climbing mod initiates which at this point there is only 2 ways to get of:
+    //1) Player presses jump button to dismount the ladder or the onTrigger2DExit function detects that player is out of the ladder and dismounts the player.
+    //Note that current pressing interact again doesnt dismount ladder. (TO DO)
 
 
  */

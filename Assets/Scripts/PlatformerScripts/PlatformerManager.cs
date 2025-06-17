@@ -1,39 +1,52 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class PlatformerManager : MonoBehaviour
 {
-    public static event Action onMoneyChange;
+    public static event Action<float> onMoneyChange;
     public static event Action onMoneyZero;
-    public static event Action<bool> onLadderDetected;
     public static event Action onLadderExit;
     public static event Action onDoorEnter;
     public static event Action onDoorExit;
+    public static event Action onKeyEnter;
+    public static event Action<int> onDoorCheck;
 
+    private int keyNumber;
+    public int KeyNumber { get => keyNumber; set => keyNumber = value; }
 
+    public static event Action<Interaction> onInteract;
 
     [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1.5f, -10f); // default for Z is -10 to prevent 2D clipping issues
     [SerializeField] private GameObject interactText;
-    [SerializeField] private GameObject stopInteractText;
+    [SerializeField] private GameObject requiredMoneyText;
 
-    
+    [SerializeField] private float moneyRequiredMove = 10;
+    [SerializeField] private float moneyRequiredJump = 100;
+    [SerializeField] private float moneyRequiredClimb = 1000;
+    [SerializeField] private float moneyRequiredPickUp = 2000;
+    [SerializeField] private float moneyRequiredOpenDoor = 3000;
+
+
+
     private void OnEnable()
     {
         PlayerControler.onPlayerJump += ReduceMoneyJump;
-        PlayerControler.onSpacePressed += DisableStopInteractText;
         PlayerControler.onPlayerMove += ReduceMoneyMove;
         PlayerControler.onPlayerClimb += ReduceMoneyClimb;
-        PlayerControler.onPlayerClimb += EnableStopInteractText;
+        PlayerControler.onPlayerPickUp += ReduceMoneyPickUp;
+        PlayerControler.onPlayerDoorOpen += ReduceMoneyDoorOpen;
+
         //------------------------------------------------------------------
     }
 
     private void OnDisable()
     {
         PlayerControler.onPlayerJump -= ReduceMoneyJump;
-        PlayerControler.onSpacePressed -= DisableStopInteractText;
         PlayerControler.onPlayerMove -= ReduceMoneyMove;
         PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
-        PlayerControler.onPlayerClimb -= EnableStopInteractText;
+        PlayerControler.onPlayerPickUp -= ReduceMoneyPickUp;
+        PlayerControler.onPlayerDoorOpen -= ReduceMoneyDoorOpen;
         //------------------------------------------------------------------
     }
 
@@ -56,8 +69,8 @@ public class PlatformerManager : MonoBehaviour
     private void ReduceMoneyMove()
     {
         //Vector2 horizontalMovement = context.ReadValue<Vector2>();
-        GameManager.Instance.GetGameData().totalMoney -= 10;
-        onMoneyChange?.Invoke();
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredMove;
+        onMoneyChange?.Invoke(moneyRequiredMove);
         if (GameManager.Instance.GetGameData().totalMoney < 0)
         {
             onMoneyZero?.Invoke();
@@ -68,8 +81,8 @@ public class PlatformerManager : MonoBehaviour
     //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
     private void ReduceMoneyJump()
     {
-        GameManager.Instance.GetGameData().totalMoney -= 100;
-        onMoneyChange?.Invoke();
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredJump;
+        onMoneyChange?.Invoke(moneyRequiredJump);
         if (GameManager.Instance.GetGameData().totalMoney < 0)
         {
             onMoneyZero?.Invoke();
@@ -80,8 +93,28 @@ public class PlatformerManager : MonoBehaviour
     //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
     private void ReduceMoneyClimb()
     {
-        GameManager.Instance.GetGameData().totalMoney -= 1000;
-        onMoneyChange?.Invoke();
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredClimb;
+        onMoneyChange?.Invoke(moneyRequiredClimb);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    private void ReduceMoneyPickUp()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredPickUp;
+        onMoneyChange?.Invoke(moneyRequiredPickUp);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    private void ReduceMoneyDoorOpen()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredOpenDoor;
+        onMoneyChange?.Invoke(moneyRequiredOpenDoor);
         if (GameManager.Instance.GetGameData().totalMoney < 0)
         {
             onMoneyZero?.Invoke();
@@ -89,16 +122,17 @@ public class PlatformerManager : MonoBehaviour
     }
 
 
-    private void EnableStopInteractText()
+    private void EnableInteractText(string txt)
     {
-        interactText.SetActive(false);
-        stopInteractText.SetActive(true); 
+        interactText.SetActive(true);
+        requiredMoneyText.SetActive(true);
+        requiredMoneyText.GetComponent<TextMeshProUGUI>().text = txt;
     }
 
-    private void DisableStopInteractText()
+    private void DisableInteractText()
     {
-        stopInteractText.SetActive(false);
         interactText.SetActive(false);
+        requiredMoneyText.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -107,14 +141,27 @@ public class PlatformerManager : MonoBehaviour
         if (collision.CompareTag("Ladder"))
         {
             //Debug.Log("Ladder can NOT be used");
-            interactText.SetActive(true);
+            onInteract?.Invoke(Interaction.Ladder);
+            EnableInteractText("$" + moneyRequiredClimb);
         }
 
         if (collision.CompareTag("Door"))
         {
             //Debug.Log("Ladder can NOT be used");
-            interactText.SetActive(true);
+            onInteract?.Invoke(Interaction.Door);
             onDoorEnter?.Invoke();
+            onDoorCheck?.Invoke(keyNumber);
+            EnableInteractText("$" + moneyRequiredOpenDoor);
+
+        }
+
+        if (collision.CompareTag("Key"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Key);
+            onKeyEnter?.Invoke();
+            EnableInteractText("$" + moneyRequiredPickUp);
+
         }
 
     }
@@ -125,7 +172,7 @@ public class PlatformerManager : MonoBehaviour
         if (collision.CompareTag("Ladder"))
         {
             //Debug.Log("Ladder can be used");
-            onLadderDetected?.Invoke(true);
+            onInteract?.Invoke(Interaction.Ladder);
         }
     }
 
@@ -136,14 +183,23 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can NOT be used");
             onLadderExit?.Invoke();
-            DisableStopInteractText();
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
         }
 
         if (collision.CompareTag("Door"))
         {
             //Debug.Log("Ladder can NOT be used");
-            interactText.SetActive(false);
+            onInteract?.Invoke(Interaction.Empty);
             onDoorExit?.Invoke();
+            DisableInteractText();
+        }
+
+        if (collision.CompareTag("Key"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
         }
 
     }
