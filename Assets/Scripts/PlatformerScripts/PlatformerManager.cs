@@ -11,8 +11,10 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onDoorExit;
     public static event Action onKeyEnter;
     public static event Action<int> onDoorCheck;
+    public static event Action onBridgeExit;
 
     private int keyNumber;
+    private bool elevatorActive = false;
     public int KeyNumber { get => keyNumber; set => keyNumber = value; }
 
     public static event Action<Interaction> onInteract;
@@ -26,6 +28,8 @@ public class PlatformerManager : MonoBehaviour
     [SerializeField] private float moneyRequiredClimb = 1000;
     [SerializeField] private float moneyRequiredPickUp = 2000;
     [SerializeField] private float moneyRequiredOpenDoor = 3000;
+    [SerializeField] private float moneyRequiredUseElevator = 5000;
+    [SerializeField] private float moneyRequiredPassBridge = 6000;
 
 
 
@@ -35,9 +39,14 @@ public class PlatformerManager : MonoBehaviour
         PlayerControler.onPlayerMove += ReduceMoneyMove;
         PlayerControler.onPlayerClimb += ReduceMoneyClimb;
         PlayerControler.onPlayerPickUp += ReduceMoneyPickUp;
-        PlayerControler.onPlayerDoorOpen += ReduceMoneyDoorOpen;
-
+        PlayerControler.onPlayerOpenDoor += ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerUseElevator += ReduceMoneyUseElevator;
+        PlayerControler.onPlayerPassBridge += ReduceMoneyPassBridge;
         //------------------------------------------------------------------
+        LerpObject.onlerpOpStart += DisableInteractText;
+        LerpObject.onlerpOpDone += ToggleElevatorActive;
+        LerpObject.onlerpOpStart += ToggleElevatorActive;
+
     }
 
     private void OnDisable()
@@ -46,8 +55,14 @@ public class PlatformerManager : MonoBehaviour
         PlayerControler.onPlayerMove -= ReduceMoneyMove;
         PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
         PlayerControler.onPlayerPickUp -= ReduceMoneyPickUp;
-        PlayerControler.onPlayerDoorOpen -= ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerOpenDoor -= ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerPassBridge -= ReduceMoneyPassBridge;
         //------------------------------------------------------------------
+        LerpObject.onlerpOpStart -= DisableInteractText;
+        LerpObject.onlerpOpDone -= ToggleElevatorActive;
+        LerpObject.onlerpOpStart -= ToggleElevatorActive;
+
+
     }
 
     private void Update()
@@ -121,6 +136,26 @@ public class PlatformerManager : MonoBehaviour
         }
     }
 
+    private void ReduceMoneyUseElevator()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredUseElevator;
+        onMoneyChange?.Invoke(moneyRequiredUseElevator);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    private void ReduceMoneyPassBridge()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredPassBridge;
+        onMoneyChange?.Invoke(moneyRequiredPassBridge);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
 
     private void EnableInteractText(string txt)
     {
@@ -133,6 +168,11 @@ public class PlatformerManager : MonoBehaviour
     {
         interactText.SetActive(false);
         requiredMoneyText.SetActive(false);
+    }
+
+    private void ToggleElevatorActive()
+    {
+        elevatorActive = !elevatorActive;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -164,6 +204,23 @@ public class PlatformerManager : MonoBehaviour
 
         }
 
+        if (collision.CompareTag("Elevator"))
+        {
+            if (!elevatorActive)
+            {
+                //Debug.Log("Ladder can NOT be used");
+                onInteract?.Invoke(Interaction.Elevator);
+                EnableInteractText("$" + moneyRequiredUseElevator);
+            }
+        }
+
+        if (collision.CompareTag("Bridge"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Bridge);
+            EnableInteractText("$" + moneyRequiredPassBridge);
+
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -200,6 +257,26 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Empty);
             DisableInteractText();
+        }
+
+
+        if (collision.CompareTag("Elevator"))
+        {
+            if (!elevatorActive)
+            {
+                //Debug.Log("Ladder can NOT be used");
+                onInteract?.Invoke(Interaction.Empty);
+                DisableInteractText();
+            }
+        }
+
+        if (collision.CompareTag("Bridge"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            onBridgeExit?.Invoke();
+            DisableInteractText();
+
         }
 
     }

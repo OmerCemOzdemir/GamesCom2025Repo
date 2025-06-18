@@ -11,7 +11,11 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerClimb;
 
     public static event Action onPlayerPickUp;
-    public static event Action onPlayerDoorOpen;
+    public static event Action onPlayerOpenDoor;
+    public static event Action onPlayerUseElevator;
+    public static event Action onPlayerPassBridge;
+
+
 
     [SerializeField] private float playerSpeed = 5; // default value is 5
     [SerializeField] private float playerJumpPower = 13; // default value is 13
@@ -39,6 +43,8 @@ public class PlayerControler : MonoBehaviour
     private bool isJumping = false;
     private bool climb = false;
     private bool toggleClimb = true;
+
+    public InputSystem PlayerInputAction { get => playerInputAction; set => playerInputAction = value; }
 
     private void Awake()
     {
@@ -148,30 +154,38 @@ public class PlayerControler : MonoBehaviour
         switch (interaction)
         {
             case Interaction.Empty:
-                Debug.Log("No Interaction");
+                //Debug.Log("No Interaction");
                 break;
             case Interaction.Ladder:
                 Debug.Log("Mount Ladder");
                 if (toggleClimb)
                 {
-                    Debug.Log("Player ON Ladder");
+                    //Debug.Log("Player ON Ladder");
                     MountLadder();
                 }
                 else
                 {
-                    Debug.Log("Player OFF Ladder");
+                    //Debug.Log("Player OFF Ladder");
                     DismountLadder();
                 }
                 break;
             case Interaction.Door:
                 Debug.Log("Open Door");
-                onPlayerDoorOpen?.Invoke();
+                onPlayerOpenDoor?.Invoke();
                 break;
             case Interaction.Key:
                 Debug.Log("PickUp Key");
                 onPlayerPickUp?.Invoke();
                 platformerManager.KeyNumber++;
                 interaction = Interaction.Empty;
+                break;
+            case Interaction.Elevator:
+                Debug.Log("Use Elevator");
+                onPlayerUseElevator?.Invoke();
+                break;
+            case Interaction.Bridge:
+                Debug.Log("PassBridge");
+                onPlayerPassBridge?.Invoke();
                 break;
             default:
                 break;
@@ -345,7 +359,9 @@ public enum Interaction
     Empty,
     Door,
     Ladder,
-    Key
+    Key,
+    Elevator,
+    Bridge
 
 }
 

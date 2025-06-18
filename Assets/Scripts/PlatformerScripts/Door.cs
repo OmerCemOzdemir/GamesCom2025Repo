@@ -3,16 +3,19 @@ using UnityEngine.InputSystem;
 
 public class Door : MonoBehaviour
 {
+    private GameObject keyText;
     private Animator doorAnimator;
     private bool isDoorOpen = false;
     private bool hasKey = false;
+
     [SerializeField] private bool requireKey = false; //default doesnt require key to open door;
     [SerializeField] private int levelIndex = 0;
-    [SerializeField] private GameObject keyText;
+
 
     private void Awake()
     {
         doorAnimator = GetComponent<Animator>();
+        keyText = transform.GetChild(0).GetChild(0).gameObject;
     }
 
     private void OnEnable()
@@ -23,7 +26,7 @@ public class Door : MonoBehaviour
             PlatformerManager.onDoorExit += DoorCloseAnimPlay;
         }
 
-        PlayerControler.onPlayerDoorOpen += CheckDoor;
+        PlayerControler.onPlayerOpenDoor += CheckDoor;
         PlatformerManager.onDoorCheck += CheckKey;
     }
 
@@ -33,7 +36,7 @@ public class Door : MonoBehaviour
         PlatformerManager.onDoorEnter -= DoorOpenAnimPlay;
         PlatformerManager.onDoorExit -= DoorCloseAnimPlay;
 
-        PlayerControler.onPlayerDoorOpen -= CheckDoor;
+        PlayerControler.onPlayerOpenDoor -= CheckDoor;
         PlatformerManager.onDoorCheck -= CheckKey;
     }
 
@@ -53,7 +56,6 @@ public class Door : MonoBehaviour
             doorAnimator.SetTrigger("DoorClose");
             isDoorOpen = false;
         }
-
     }
 
     private void OpenDoor()

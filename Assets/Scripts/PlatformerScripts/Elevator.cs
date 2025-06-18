@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Elevator : MonoBehaviour
 {
-    //UNDER CONSTRUCTION
+    [SerializeField] private float elevatorCoolDown;
     private Animator elevatorAnimator;
     private LerpObject lerpObject;
+    private bool toggleElevator = true;
+    private bool allowElevatorOp = true;
+    private GameObject player;
 
     private void Awake()
     {
@@ -14,38 +16,118 @@ public class Elevator : MonoBehaviour
         lerpObject = GetComponent<LerpObject>();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            ElevatorUp();
-            Debug.Log("Elevator Up");
-        }
+        PlayerControler.onPlayerUseElevator += ToggleElevator;
+        LerpObject.onlerpOpDone += ElevatorStop;
+    }
 
+    private void OnDisable()
+    {
+        PlayerControler.onPlayerUseElevator -= ToggleElevator;
+        LerpObject.onlerpOpDone -= ElevatorStop;
+    }
+
+
+    private void ToggleElevator()
+    {
+        if (allowElevatorOp)
+        {
+            if (toggleElevator)
+            {
+                player.transform.SetParent(transform, true);
+                ElevatorUp();
+                toggleElevator = false;
+                //Debug.Log("Elevator Up");
+            }
+            else
+            {
+                player.transform.SetParent(transform, true);
+                ElevatorDown();
+                toggleElevator = true;
+            }
+            allowElevatorOp = false;
+        }
+       
     }
 
     private void ElevatorUp()
     {
-        Debug.Log("Elevator going");
+        //Debug.Log("Elevator going");
         elevatorAnimator.SetTrigger("ElevatorUp");
-        //elevatorRigid2D.MovePosition(Vector2.up * 0.0001f);
         lerpObject.LerpObjectKinematicToPoint();
 
     }
 
-    //DOES NOT WORK YET!!!!!
-    IEnumerator LerpObjectCoroutine(Vector3 source, Vector3 target, float overTime)
+    private void ElevatorDown()
     {
-        float startTime = Time.time;
-        while (Time.time < startTime + overTime)
+        //Debug.Log("Elevator going");
+        elevatorAnimator.SetTrigger("ElevatorUp");
+        lerpObject.LerpObjectKinematicBack();
+    }
+
+
+    private void ElevatorStop()
+    {
+        elevatorAnimator.SetTrigger("ElevatorStop");
+        player.transform.SetParent(null, true);
+        StartCoroutine(ElevatorCoolDown(elevatorCoolDown));
+    }
+
+
+    IEnumerator ElevatorCoolDown(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        allowElevatorOp = !allowElevatorOp;
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
         {
-            transform.position = Vector3.Lerp(source, target, (Time.time - startTime) / overTime);
-            yield return null;
+            player = collision.gameObject;
         }
-        transform.position = target;
-        //elevatorRigid2D.MovePosition(target);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            player = collision.gameObject;
+        }
+
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (player != null)
+        {
+            player.transform.SetParent(null, true);
+        }
+    }
+
+}
+
+/*
+     private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (toggleElevator)
+            {
+                ElevatorUp();
+                toggleElevator = false;
+                //Debug.Log("Elevator Up");
+            }
+            else
+            {
+                ElevatorDown();
+                toggleElevator = true;
+            }
+        }
     }
 
 
 
-}
+ */
