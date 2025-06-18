@@ -8,6 +8,7 @@ TagManager:
   - Door
   - Key
   - Elevator
+  - Bridge
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Door
   - Key
   - Elevator
-  - 
+  - Bridge
   - 
   - 
   - 
