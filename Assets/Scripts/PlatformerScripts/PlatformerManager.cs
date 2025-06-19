@@ -15,6 +15,8 @@ public class PlatformerManager : MonoBehaviour
 
     private int keyNumber;
     private bool elevatorActive = false;
+    private bool[] localItems;
+
     public int KeyNumber { get => keyNumber; set => keyNumber = value; }
 
     public static event Action<Interaction> onInteract;
@@ -46,7 +48,8 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpStart += DisableInteractText;
         LerpObject.onlerpOpDone += ToggleElevatorActive;
         LerpObject.onlerpOpStart += ToggleElevatorActive;
-
+        //------------------------------------------------------------------
+        UpgradeShop.onItemExchange += UpdateLocalItems;
     }
 
     private void OnDisable()
@@ -61,8 +64,19 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpStart -= DisableInteractText;
         LerpObject.onlerpOpDone -= ToggleElevatorActive;
         LerpObject.onlerpOpStart -= ToggleElevatorActive;
+        //------------------------------------------------------------------
+        UpgradeShop.onItemExchange -= UpdateLocalItems;
 
 
+    }
+
+    private void Awake()
+    {
+        localItems = new bool[4];
+        for (int i = 0; i < localItems.Length; i++)
+        {
+            localItems[i] = false;
+        }
     }
 
     private void Update()
@@ -76,6 +90,12 @@ public class PlatformerManager : MonoBehaviour
     {
         Vector3 targetPosition = transform.position + cameraOffset; // apply offset to camera position
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, Time.deltaTime * 3f);
+    }
+
+    //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
+    private void UpdateLocalItems(bool[] items)
+    {
+        localItems = items;
     }
 
 
@@ -182,7 +202,19 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Ladder);
-            EnableInteractText("$" + moneyRequiredClimb);
+            if (localItems != null)
+            {
+                // Climb Gloves: 3 = Climbing free
+                if (localItems[3])
+                {
+                    EnableInteractText("FREE");
+                }
+                else
+                {
+                    EnableInteractText("$" + moneyRequiredClimb);
+                }
+            }
+
         }
 
         if (collision.CompareTag("Door"))
@@ -219,6 +251,14 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Bridge);
             EnableInteractText("$" + moneyRequiredPassBridge);
+
+        }
+
+        if (collision.CompareTag("Shop"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Shop);
+            EnableInteractText("Upgrade Shop");
 
         }
     }
@@ -275,6 +315,14 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Empty);
             onBridgeExit?.Invoke();
+            DisableInteractText();
+
+        }
+
+        if (collision.CompareTag("Shop"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
             DisableInteractText();
 
         }

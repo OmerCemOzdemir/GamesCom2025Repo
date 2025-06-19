@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 
 public class PlayerControler : MonoBehaviour
 {
@@ -14,11 +13,14 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerOpenDoor;
     public static event Action onPlayerUseElevator;
     public static event Action onPlayerPassBridge;
+    public static event Action onPlayerOpenShop;
 
 
 
     [SerializeField] private float playerSpeed = 5; // default value is 5
+    [SerializeField] private float playerSprintMultiplier = 1.5f; // default value is 1.5f
     [SerializeField] private float playerJumpPower = 13; // default value is 13
+    [SerializeField] private float playerJumpPowerMultiplier = 1.5f ; // default value is 1.5f
     [SerializeField] private float playerGravityActivationTime = 0.6f; // default value is 0.6
     [SerializeField] private float playerDefaultGravityScale = 5; // default value is 5
     [SerializeField] private float playerMaxGravityMultiplier = 7; // default value is 7
@@ -38,7 +40,8 @@ public class PlayerControler : MonoBehaviour
     private Vector2 flipSpriteVector;
     private Vector3 currentLocalScale;
 
-
+    //This Array holds the items of game temp: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
+    private bool[] localItems;
     private bool enableMove = true;
     private bool isJumping = false;
     private bool climb = false;
@@ -50,10 +53,15 @@ public class PlayerControler : MonoBehaviour
     {
         playerAnimator = transform.GetChild(0).GetComponent<Animator>();
         playerRigid2D = GetComponent<Rigidbody2D>();
-        platformerManager = GetComponent<PlatformerManager>();  
+        platformerManager = GetComponent<PlatformerManager>();
         playerGravityActivationTimeTemp = playerGravityActivationTime;
         playerRigid2D.gravityScale = playerDefaultGravityScale;
         playerInputAction = new InputSystem();
+        localItems = new bool[4];
+        for (int i = 0; i < localItems.Length; i++)
+        {
+            localItems[i] = false;
+        }
     }
 
     private void OnEnable()
@@ -72,12 +80,17 @@ public class PlayerControler : MonoBehaviour
 
         playerInputAction.PlayerPlatform.Jump.started += JumpStart;
         playerInputAction.PlayerPlatform.Jump.canceled += JumpEnd;
+
+        playerInputAction.PlayerPlatform.Sprint.started += SprintStart;
+        playerInputAction.PlayerPlatform.Sprint.canceled += SprintEnd;
+
         //-----------------------------------------------------
         PlatformerManager.onMoneyZero += DisableMovement;
         PlatformerManager.onMoneyZero += DisableInput;
 
         PlatformerManager.onLadderExit += DismountLadder;
         PlatformerManager.onInteract += SetUpInteraction;
+        UpgradeShop.onItemExchange += UpdateLocalItems;
 
     }
 
@@ -86,22 +99,29 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Move.Disable();
         playerInputAction.PlayerPlatform.Jump.Disable();
         playerInputAction.PlayerPlatform.Interact.Disable();
+        playerInputAction.PlayerPlatform.Sprint.Disable();
+
 
         playerInputAction.PlayerPlatform.Interact.performed -= Interact;
 
         playerInputAction.PlayerPlatform.Move.performed -= FlipSprite;
         playerInputAction.PlayerPlatform.Move.started -= FlipDeterminator;
-
         playerInputAction.PlayerPlatform.Move.canceled -= AnimSetIdle;
+        playerInputAction.PlayerPlatform.Move.performed -= PlayerMoved;
 
         playerInputAction.PlayerPlatform.Jump.started -= JumpStart;
         playerInputAction.PlayerPlatform.Jump.canceled -= JumpEnd;
+
+        playerInputAction.PlayerPlatform.Sprint.started -= SprintStart;
+        playerInputAction.PlayerPlatform.Sprint.canceled -= SprintEnd;
         //-----------------------------------------------------
         PlatformerManager.onMoneyZero -= DisableMovement;
         PlatformerManager.onMoneyZero -= DisableInput;
 
         PlatformerManager.onLadderExit -= DismountLadder;
         PlatformerManager.onInteract -= SetUpInteraction;
+        UpgradeShop.onItemExchange -= UpdateLocalItems;
+
     }
 
     private void Start()
@@ -111,25 +131,41 @@ public class PlayerControler : MonoBehaviour
     }
     private void Update()
     {
-        if (enableMove)
+
+        Move();
+        DebugFunc();
+    }
+
+    //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
+    //This Functions also enables sprinting when localItem[1] = true
+    private void UpdateLocalItems(bool[] items)
+    {
+        localItems = items;
+        //SprintBoots: 1 = Enables sprinting
+        if (localItems[1])
         {
-            Move();
+            playerInputAction.PlayerPlatform.Sprint.Enable();
         }
     }
+    //These Functions handle basic movement and sprint
+    #region HorizontalMovement
 
     //This function runs on update and it handles player movement for the left and right directions.
     //If the player climb ability is active then this functions moves player up and down.
     private void Move()
     {
-        Vector2 _horizontalMovement = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
-        if (climb)
+        if (enableMove)
         {
-            playerRigid2D.gravityScale = 0;
-            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, _horizontalMovement.y * playerSpeed);
-        }
-        else
-        {
-            playerRigid2D.linearVelocity = new Vector2(_horizontalMovement.x * playerSpeed, playerRigid2D.linearVelocity.y);
+            Vector2 _horizontalMovement = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
+            if (climb)
+            {
+                playerRigid2D.gravityScale = 0;
+                playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, _horizontalMovement.y * playerSpeed);
+            }
+            else
+            {
+                playerRigid2D.linearVelocity = new Vector2(_horizontalMovement.x * playerSpeed, playerRigid2D.linearVelocity.y);
+            }
         }
     }
     //This Functions just sends a event trigger to PlatformManager to deduct money.
@@ -137,6 +173,18 @@ public class PlayerControler : MonoBehaviour
     {
         onPlayerMove?.Invoke();
     }
+
+    private void SprintStart(InputAction.CallbackContext context)
+    {
+        playerSpeed = playerSpeed * playerSprintMultiplier;
+    }
+
+    private void SprintEnd(InputAction.CallbackContext context)
+    {
+        playerSpeed = playerSpeed / playerSprintMultiplier;
+    }
+    #endregion
+
 
     //SetUpInteraction function is trigger when player changes a trigger area and from the Platform Manager a signal is send to SetUpInteraction() to change the interaction enum
     //to the correct object: Example if player is in Ladder the interaction enum is set to Interactio.Ladder, 
@@ -187,6 +235,10 @@ public class PlayerControler : MonoBehaviour
                 Debug.Log("PassBridge");
                 onPlayerPassBridge?.Invoke();
                 break;
+            case Interaction.Shop:
+                Debug.Log("Open Shop");
+                onPlayerOpenShop?.Invoke();
+                break;
             default:
                 break;
         }
@@ -205,7 +257,16 @@ public class PlayerControler : MonoBehaviour
     private void MountLadder()
     {
         toggleClimb = false;
-        onPlayerClimb?.Invoke();
+        if (localItems != null)
+        {
+            // ClimbGloves: 3 = Climbing ladders becomes free
+            if (!localItems[3])
+            {
+                //Reduce Money
+                onPlayerClimb?.Invoke();
+                Debug.Log("Reduce Monay For Climbing");
+            }
+        }
         climb = true;
         AnimSetClimbing();
     }
@@ -284,10 +345,18 @@ public class PlayerControler : MonoBehaviour
         {
             isJumping = true;
             Jumping();
-            onPlayerJump?.Invoke();
+            if (localItems != null)
+            {
+                // JumpBoots: 0 = Jumping becomes free
+                if (!localItems[0])
+                {
+                    //Reduce Money
+                    onPlayerJump?.Invoke();
+                    Debug.Log("Reduce Monay For Climbing");
+                }
+            }
             //Debug.Log("Jump Pressed");
         }
-
     }
 
     private void Jumping()
@@ -296,7 +365,9 @@ public class PlayerControler : MonoBehaviour
         {
             StopAllCoroutines();
             StartCoroutine(GravityMultiplier());
-            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower);
+            //SpringSoles: 2 = Double the Jump Power // If localItems[2] = true: double the jump power
+            float trueJumpPower = localItems[2] ? playerJumpPower * playerJumpPowerMultiplier : playerJumpPower;
+            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, trueJumpPower);
         }
         AnimSetJumping();
     }
@@ -352,6 +423,32 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Jump.Enable();
         playerInputAction.PlayerPlatform.Interact.Enable();
     }
+
+
+    //Function used for debbuging
+    #region DebugFunc
+
+    private void PrintArray()
+    {
+        int i = 0;
+        foreach (var item in localItems)
+        {
+            Debug.Log("Item_" + i++ + ": " + item);
+        }
+    }
+
+    private void DebugFunc()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            PrintArray();
+        }
+    }
+
+    #endregion
+
+
+
 }
 
 public enum Interaction
@@ -361,7 +458,8 @@ public enum Interaction
     Ladder,
     Key,
     Elevator,
-    Bridge
+    Bridge,
+    Shop
 
 }
 
@@ -518,5 +616,9 @@ Old Interaction Logic:
     //1) Player presses jump button to dismount the ladder or the onTrigger2DExit function detects that player is out of the ladder and dismounts the player.
     //Note that current pressing interact again doesnt dismount ladder. (TO DO)
 
+
+
+            Vector2 verticalVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower);
+            Vector2 verticalDoubleVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower * 2);
 
  */

@@ -569,6 +569,15 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""cdd81f23-338a-42e3-a86c-6b6a265a5706"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -646,6 +655,17 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""60ed09e9-d466-41bf-9bb1-b46935e0f223"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -760,6 +780,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_PlayerPlatform_Jump = m_PlayerPlatform.FindAction("Jump", throwIfNotFound: true);
         m_PlayerPlatform_Move = m_PlayerPlatform.FindAction("Move", throwIfNotFound: true);
         m_PlayerPlatform_Interact = m_PlayerPlatform.FindAction("Interact", throwIfNotFound: true);
+        m_PlayerPlatform_Sprint = m_PlayerPlatform.FindAction("Sprint", throwIfNotFound: true);
         // PlayerCookie
         m_PlayerCookie = asset.FindActionMap("PlayerCookie", throwIfNotFound: true);
         m_PlayerCookie_GetMoney = m_PlayerCookie.FindAction("GetMoney", throwIfNotFound: true);
@@ -952,6 +973,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerPlatform_Jump;
     private readonly InputAction m_PlayerPlatform_Move;
     private readonly InputAction m_PlayerPlatform_Interact;
+    private readonly InputAction m_PlayerPlatform_Sprint;
     public struct PlayerPlatformActions
     {
         private @InputSystem m_Wrapper;
@@ -959,6 +981,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerPlatform_Jump;
         public InputAction @Move => m_Wrapper.m_PlayerPlatform_Move;
         public InputAction @Interact => m_Wrapper.m_PlayerPlatform_Interact;
+        public InputAction @Sprint => m_Wrapper.m_PlayerPlatform_Sprint;
         public InputActionMap Get() { return m_Wrapper.m_PlayerPlatform; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -977,6 +1000,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
         }
 
         private void UnregisterCallbacks(IPlayerPlatformActions instance)
@@ -990,6 +1016,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
         }
 
         public void RemoveCallbacks(IPlayerPlatformActions instance)
@@ -1116,6 +1145,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
     }
     public interface IPlayerCookieActions
     {
