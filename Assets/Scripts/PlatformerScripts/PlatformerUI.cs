@@ -1,13 +1,25 @@
-
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlatformerUI : MonoBehaviour
 {
+    [Header("General GUI Elements")]
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI lostMoneyText;
     [SerializeField] private GameObject keyImage;
+    [SerializeField] private GameObject upgradeShopPanel;
+    [Space(10)]
+
+    [Header("Item Images")]
+    [Tooltip("This Array holds the IMAGES of game items:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [SerializeField] private GameObject[] itemSlotImages;
+    [Space(10)]
+
+    [Header("Item Buttons")]
+    [Tooltip("This Array holds the BUTTONS of game items:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [SerializeField] private GameObject[] itemSlotButtons;
 
 
     private void Awake()
@@ -15,14 +27,28 @@ public class PlatformerUI : MonoBehaviour
         UpdateMoneyText(0);
     }
 
+    private void OnEnable()
+    {
+        PlatformerManager.onMoneyChange += UpdateLostMoney;
+        PlayerControler.onPlayerPickUp += EnableKeyImage;
+        PlayerControler.onPlayerOpenShop += OpenShop;
+        UpgradeShop.onItemExchange += UpdateItemSlotImages;
+
+    }
+
+    private void OnDisable()
+    {
+        PlatformerManager.onMoneyChange -= UpdateLostMoney;
+        PlayerControler.onPlayerPickUp -= EnableKeyImage;
+        PlayerControler.onPlayerOpenShop -= OpenShop;
+        UpgradeShop.onItemExchange -= UpdateItemSlotImages;
+
+
+    }
+
     public void UpdateMoneyText(float money)
     {
         moneyText.text = "$" + GameManager.Instance.GetGameData().totalMoney;
-    }
-
-    private void EnableKeyImage()
-    {
-        keyImage.SetActive(true);
     }
 
     private void DisableKeyImage()
@@ -30,13 +56,24 @@ public class PlatformerUI : MonoBehaviour
         keyImage.SetActive(true);
     }
 
-    private void UpdateLostMoney(float money)
+    public void CloseShop()
+    {
+        upgradeShopPanel.SetActive(false);
+    }
+
+    private void OpenShop()
+    {
+        upgradeShopPanel.SetActive(true);
+    }
+
+    public void UpdateLostMoney(float money)
     {
         StopAllCoroutines();
         lostMoneyText.color = new Color(1, 0, 0, 1f);
         lostMoneyText.gameObject.SetActive(true);
         lostMoneyText.text = "-$" + money;
         StartCoroutine(DecreaseTransparency(2));
+        UpdateMoneyText(money);
     }
 
     IEnumerator DecreaseTransparency(float sec)
@@ -57,19 +94,23 @@ public class PlatformerUI : MonoBehaviour
         lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
     }
 
-    private void OnEnable()
+
+    private void UpdateItemSlotImages(bool[] itemSlots)
     {
-        PlatformerManager.onMoneyChange += UpdateMoneyText;
-        PlatformerManager.onMoneyChange += UpdateLostMoney;
-        PlayerControler.onPlayerPickUp += EnableKeyImage;
+        for (int i = 0; itemSlots.Length > i; i++)
+        {
+            itemSlotImages[i].SetActive(itemSlots[i]);
+            itemSlotButtons[i].GetComponent<Button>().interactable = !itemSlots[i];
+            if (itemSlots[i])
+            {
+                itemSlotButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+            }
+        }
     }
 
-    private void OnDisable()
+    private void EnableKeyImage()
     {
-        PlatformerManager.onMoneyChange -= UpdateMoneyText;
-        PlatformerManager.onMoneyChange -= UpdateLostMoney;
-        PlayerControler.onPlayerPickUp -= EnableKeyImage;
-
+        keyImage.SetActive(true);
     }
 
 }

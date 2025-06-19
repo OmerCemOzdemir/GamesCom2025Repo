@@ -9,6 +9,7 @@ TagManager:
   - Key
   - Elevator
   - Bridge
+  - Shop
   layers:
   - Default
   - TransparentFX
