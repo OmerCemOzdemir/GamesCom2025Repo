@@ -12,6 +12,9 @@ public class ClickerManager : MonoBehaviour
     [SerializeField]
     private int Level;
 
+    [SerializeField]
+    private animationManager anim;
+
     private bool mouseEnable = false;
 
     private InputSystem _inputSystem;
@@ -45,6 +48,7 @@ public class ClickerManager : MonoBehaviour
         if (mouseEnable)
         {
             _gameRule.IncreaseScore();
+            anim.playAnimation();
             clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
         }
     }
