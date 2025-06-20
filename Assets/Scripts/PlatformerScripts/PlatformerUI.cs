@@ -33,6 +33,7 @@ public class PlatformerUI : MonoBehaviour
         PlayerControler.onPlayerPickUp += EnableKeyImage;
         PlayerControler.onPlayerOpenShop += OpenShop;
         UpgradeShop.onItemExchange += UpdateItemSlotImages;
+        Door.onDoorTravel += StartFadeEffect;
 
     }
 
@@ -42,6 +43,7 @@ public class PlatformerUI : MonoBehaviour
         PlayerControler.onPlayerPickUp -= EnableKeyImage;
         PlayerControler.onPlayerOpenShop -= OpenShop;
         UpgradeShop.onItemExchange -= UpdateItemSlotImages;
+        Door.onDoorTravel -= StartFadeEffect;
 
 
     }
@@ -77,6 +79,30 @@ public class PlatformerUI : MonoBehaviour
     }
 
     IEnumerator DecreaseTransparency(float sec)
+    {
+        Color originalColor = lostMoneyText.color;
+        float startAlpha = originalColor.a;
+        float elapsed = 0f;
+
+        while (elapsed < sec)
+        {
+            elapsed += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(startAlpha, 0f, elapsed / sec);
+            lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
+            yield return null; // wait for next frame
+        }
+
+        // Ensure it's fully transparent at the end
+        lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+    }
+
+    private void StartFadeEffect(Vector3 pos, float sec)
+    {
+        Debug.Log("FadeEffect");
+    }
+
+    //Will be done
+    IEnumerator FadeEffect(float sec)
     {
         Color originalColor = lostMoneyText.color;
         float startAlpha = originalColor.a;

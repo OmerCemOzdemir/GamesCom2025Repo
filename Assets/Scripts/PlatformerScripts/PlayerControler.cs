@@ -16,7 +16,6 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerOpenShop;
 
 
-
     [SerializeField] private float playerSpeed = 5; // default value is 5
     [SerializeField] private float playerSprintMultiplier = 1.5f; // default value is 1.5f
     [SerializeField] private float playerJumpPower = 13; // default value is 13
@@ -40,6 +39,8 @@ public class PlayerControler : MonoBehaviour
     private Vector2 flipSpriteVector;
     private Vector3 currentLocalScale;
 
+    private GameObject currentInteractedGameObject;
+
     //This Array holds the items of game temp: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
     private bool[] localItems;
     private bool enableMove = true;
@@ -48,6 +49,7 @@ public class PlayerControler : MonoBehaviour
     private bool toggleClimb = true;
     private bool interactionToggle = true;
     public InputSystem PlayerInputAction { get => playerInputAction; set => playerInputAction = value; }
+    public bool[] LocalItems { get => localItems; set => localItems = value; }
 
     private void Awake()
     {
@@ -96,6 +98,9 @@ public class PlayerControler : MonoBehaviour
         Elevator.onElevatorDone += ToggleInteraction;
         //Bridge is Passed 
         Bridge.onBridgeDone += ToggleInteraction;
+        //
+        PlatformerManager.onGameObjectInteract += SetUpGameObjectInteraction;
+        Door.onDoorTravel += TeleportPlayer;
     }
 
     private void OnDisable()
@@ -104,7 +109,6 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Jump.Disable();
         playerInputAction.PlayerPlatform.Interact.Disable();
         playerInputAction.PlayerPlatform.Sprint.Disable();
-
 
         playerInputAction.PlayerPlatform.Interact.performed -= Interact;
 
@@ -130,7 +134,8 @@ public class PlayerControler : MonoBehaviour
         Elevator.onElevatorDone -= ToggleInteraction;
         //Bridge is Passed 
         Bridge.onBridgeDone -= ToggleInteraction;
-
+        PlatformerManager.onGameObjectInteract -= SetUpGameObjectInteraction;
+        Door.onDoorTravel -= TeleportPlayer;
     }
 
     private void Start()
@@ -156,6 +161,23 @@ public class PlayerControler : MonoBehaviour
             playerInputAction.PlayerPlatform.Sprint.Enable();
         }
     }
+
+    private void TeleportPlayer(Vector3 pos,float sec)
+    {
+        DisableInput();
+        //playerRigid2D.MovePosition(pos);
+        //StartCoroutine(DelayOnTeleport(sec));
+        transform.position = pos;        
+        EnableInput();
+    }
+    
+    IEnumerator DelayOnTeleport(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+    }
+
+
+
     //These Functions handle basic movement and sprint
     #region HorizontalMovement
 
@@ -200,6 +222,13 @@ public class PlayerControler : MonoBehaviour
     //If player presses the interact button which byt default is "X", then the interact function determines what to do with the object:
     //Example: if player presses X while in a ladder, MountLadder Function runs and player mounts the ladder.
     #region Interaction
+
+    //Take the interacted gameobject and assigns it to  currentInteractedGameObject to use it in ladder positioning.s
+    private void SetUpGameObjectInteraction(GameObject obj)
+    {
+
+        currentInteractedGameObject = obj;
+    }
 
     private void SetUpInteraction(Interaction tempInteraction = Interaction.Ladder)
     {
@@ -278,6 +307,10 @@ public class PlayerControler : MonoBehaviour
     private void MountLadder()
     {
         toggleClimb = false;
+        if (currentInteractedGameObject != null)
+        {
+            transform.position = new Vector2(currentInteractedGameObject.transform.position.x, transform.position.y);
+        }
         if (localItems != null)
         {
             // ClimbGloves: 3 = Climbing ladders becomes free

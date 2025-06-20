@@ -63,6 +63,11 @@ public class TestScript : MonoBehaviour
     public void PrintGameData()
     {
         printText.text = "Total Money: " + GameManager.Instance.GetGameData().totalMoney + "\n"
+            + "Platform Game Var:\n"
+            + "Item Jump Boots: " + GameManager.Instance.GetGameData().platformItems[0] + "\n"
+            + "Item Sprint Boots: " + GameManager.Instance.GetGameData().platformItems[1] + "\n"
+            + "Item Spring Soles: " + GameManager.Instance.GetGameData().platformItems[2] + "\n"
+            + "Item Climb Gloves: " + GameManager.Instance.GetGameData().platformItems[3] + "\n"
             + "Clicker Game Var:\n"
             + "ItemBaseIncome: " + GameManager.Instance.GetGameData().ItemBaseIncome + "\n"
             + "ItemCount: " + GameManager.Instance.GetGameData().ItemCount + "\n"
