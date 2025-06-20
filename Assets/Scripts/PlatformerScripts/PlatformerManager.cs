@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlatformerManager : MonoBehaviour
 {
     public static event Action<float> onMoneyChange;
+    //Used for sending the game object of the interacted game object. Used for sending the game object of ladder.
+    public static event Action<GameObject> onGameObjectInteract;
     public static event Action onMoneyZero;
     public static event Action onLadderExit;
     public static event Action onDoorEnter;
@@ -15,7 +17,7 @@ public class PlatformerManager : MonoBehaviour
 
     private int keyNumber;
     private bool elevatorActive = false;
-    private bool[] localItems;
+    private PlayerControler playerControler;
 
     public int KeyNumber { get => keyNumber; set => keyNumber = value; }
 
@@ -49,7 +51,7 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpDone += ToggleElevatorActive;
         LerpObject.onlerpOpStart += ToggleElevatorActive;
         //------------------------------------------------------------------
-        UpgradeShop.onItemExchange += UpdateLocalItems;
+        UpgradeShop.onItemExchange += SaveGameData;
     }
 
     private void OnDisable()
@@ -65,18 +67,14 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpDone -= ToggleElevatorActive;
         LerpObject.onlerpOpStart -= ToggleElevatorActive;
         //------------------------------------------------------------------
-        UpgradeShop.onItemExchange -= UpdateLocalItems;
+        UpgradeShop.onItemExchange -= SaveGameData;
 
 
     }
 
     private void Awake()
     {
-        localItems = new bool[4];
-        for (int i = 0; i < localItems.Length; i++)
-        {
-            localItems[i] = false;
-        }
+        playerControler = GetComponent<PlayerControler>();
     }
 
     private void Update()
@@ -92,12 +90,12 @@ public class PlatformerManager : MonoBehaviour
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, Time.deltaTime * 3f);
     }
 
-    //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
-    private void UpdateLocalItems(bool[] items)
+    private void SaveGameData(bool[] items)
     {
-        localItems = items;
+        //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
+        GameManager.Instance.GetGameData().platformItems = items;
+        GameManager.Instance.SaveGame();
     }
-
 
     //This function is tied to player movement. When player presses a single movement key this function deducts a certain amount of money.
     //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
@@ -202,10 +200,10 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Ladder);
-            if (localItems != null)
+            if (playerControler.LocalItems != null)
             {
                 // Climb Gloves: 3 = Climbing free
-                if (localItems[3])
+                if (playerControler.LocalItems[3])
                 {
                     EnableInteractText("FREE");
                 }
@@ -270,6 +268,7 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can be used");
             onInteract?.Invoke(Interaction.Ladder);
+            onGameObjectInteract?.Invoke(collision.gameObject);
         }
     }
 

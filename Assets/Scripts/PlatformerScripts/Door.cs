@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Door : MonoBehaviour
 {
@@ -7,15 +7,17 @@ public class Door : MonoBehaviour
     private Animator doorAnimator;
     private bool isDoorOpen = false;
     private bool hasKey = false;
+    public static event Action<Vector3, float> onDoorTravel;
 
+    private Transform doorTravelPosition;
     [SerializeField] private bool requireKey = false; //default doesnt require key to open door;
-    [SerializeField] private int levelIndex = 0;
-
+    [SerializeField] private float delayOnTeleport;
 
     private void Awake()
     {
         doorAnimator = GetComponent<Animator>();
-        keyText = transform.GetChild(0).GetChild(0).gameObject;
+        keyText = transform.GetChild(1).GetChild(0).gameObject;
+        doorTravelPosition = transform.GetChild(0).gameObject.transform;
     }
 
     private void OnEnable()
@@ -60,14 +62,14 @@ public class Door : MonoBehaviour
 
     private void OpenDoor()
     {
-        GameManager.Instance.NextLevel(levelIndex);
+        onDoorTravel.Invoke(doorTravelPosition.position, delayOnTeleport);
     }
 
     private void OpenDoorWithKey()
     {
         if (hasKey)
         {
-            GameManager.Instance.NextLevel(levelIndex);
+            onDoorTravel.Invoke(doorTravelPosition.position, delayOnTeleport);
         }
     }
 
