@@ -48,6 +48,6 @@ public class animationManager : MonoBehaviour
             animator.enabled = true;
         }
         animationSpeedCul();
-        animator.Play("Click", 0, 0f);
+        animator.Play("Click2", 0, 0f);
     }
 }
