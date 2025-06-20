@@ -116,6 +116,15 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""234bf56a-ea4f-4f2a-8857-110a4f2060dc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -536,6 +545,17 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""daf94998-2071-4ef8-b6d4-40f196e0d782"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -775,6 +795,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_GUI_ScrollWheel = m_GUI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_GUI_TrackedDevicePosition = m_GUI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_GUI_TrackedDeviceOrientation = m_GUI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_GUI_Pause = m_GUI.FindAction("Pause", throwIfNotFound: true);
         // PlayerPlatform
         m_PlayerPlatform = asset.FindActionMap("PlayerPlatform", throwIfNotFound: true);
         m_PlayerPlatform_Jump = m_PlayerPlatform.FindAction("Jump", throwIfNotFound: true);
@@ -862,6 +883,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_GUI_ScrollWheel;
     private readonly InputAction m_GUI_TrackedDevicePosition;
     private readonly InputAction m_GUI_TrackedDeviceOrientation;
+    private readonly InputAction m_GUI_Pause;
     public struct GUIActions
     {
         private @InputSystem m_Wrapper;
@@ -876,6 +898,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @ScrollWheel => m_Wrapper.m_GUI_ScrollWheel;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_GUI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_GUI_TrackedDeviceOrientation;
+        public InputAction @Pause => m_Wrapper.m_GUI_Pause;
         public InputActionMap Get() { return m_Wrapper.m_GUI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -915,6 +938,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IGUIActions instance)
@@ -949,6 +975,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IGUIActions instance)
@@ -1139,6 +1168,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnScrollWheel(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IPlayerPlatformActions
     {

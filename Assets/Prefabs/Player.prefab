@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8713866994314607462}
   - component: {fileID: 7466260515452624915}
   - component: {fileID: -727133942443865416}
+  - component: {fileID: 6118663209651679425}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -46,7 +47,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2199448821371055467}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -201,6 +202,64 @@ MonoBehaviour:
   playerMaxGravityMultiplier: 7
   playerModel: {fileID: 7773842568779554165}
   groundCheck: {fileID: 6332439135971059515}
+--- !u!60 &6118663209651679425
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2199448821371055467}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.036221404, y: 0.49742794}
+      - {x: -0.0927024, y: 0.4323698}
+      - {x: -0.1356312, y: 0.1946102}
+      - {x: -0.16486661, y: 0.025603175}
+      - {x: -0.16933048, y: -0.31747404}
+      - {x: -0.115733586, y: -0.39169493}
+      - {x: -0.012149304, y: -0.50008506}
+      - {x: 0.10977225, y: -0.3682046}
+      - {x: 0.16197796, y: -0.29680938}
+      - {x: 0.1532962, y: 0.04406417}
+      - {x: 0.11121908, y: 0.22635858}
+  m_UseDelaunayMesh: 0
 --- !u!1 &4937596012221908970
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,7 +676,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.02}
-  m_Size: {x: 0.76, y: 0.11}
+  m_Size: {x: 0.45, y: 0.11}
   m_Direction: 1
 --- !u!1 &8837785696366829684
 GameObject:
