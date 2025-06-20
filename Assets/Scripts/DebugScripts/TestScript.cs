@@ -48,14 +48,36 @@ public class TestScript : MonoBehaviour
     public void LoadGame()
     {
         GameManager.Instance.LoadGame();
+    }
 
+    public void ResetGameData()
+    {
+        GameManager.Instance.ResetGameData();
+
+    }
+
+    public void ResetMoneyData()
+    {
+        GameManager.Instance.GetGameData().totalMoney = 0;
+        GameManager.Instance.SaveGame();
+        GameManager.Instance.LoadGame();
     }
 
     public void PrintGameData()
     {
         printText.text = "Total Money: " + GameManager.Instance.GetGameData().totalMoney + "\n"
-            + "New Game: " + GameManager.Instance.GetGameData().newGame; 
-
+            + "Clicker Game Var:\n"
+            + "ItemBaseIncome: " + GameManager.Instance.GetGameData().ItemBaseIncome + "\n"
+            + "ItemCount: " + GameManager.Instance.GetGameData().ItemCount + "\n"
+            + "ItemMulti: " + GameManager.Instance.GetGameData().ItemMulti;
     }
 
 }
+
+/*
+     //Data For only Cookie Clicker Game:
+    public float ItemBaseIncome = 1.67f;
+    public int ItemCount = 1;
+    public int ItemMulti = 2;
+ 
+ */

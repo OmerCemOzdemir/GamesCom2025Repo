@@ -1,8 +1,11 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 public class Bridge : MonoBehaviour
 {
+    public static event Action onBridgeDone;
+
     private BoxCollider2D bridgeBlock;
     private TextMeshProUGUI bridgeText_0;
     private TextMeshProUGUI bridgeText_1;
@@ -76,6 +79,8 @@ public class Bridge : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             BridgeTextClose();
+            //Player can use the interaction for Bridge again
+            onBridgeDone?.Invoke();
         }
     }
 

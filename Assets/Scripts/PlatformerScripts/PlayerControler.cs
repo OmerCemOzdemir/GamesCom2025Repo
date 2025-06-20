@@ -20,7 +20,7 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private float playerSpeed = 5; // default value is 5
     [SerializeField] private float playerSprintMultiplier = 1.5f; // default value is 1.5f
     [SerializeField] private float playerJumpPower = 13; // default value is 13
-    [SerializeField] private float playerJumpPowerMultiplier = 1.5f ; // default value is 1.5f
+    [SerializeField] private float playerJumpPowerMultiplier = 1.5f; // default value is 1.5f
     [SerializeField] private float playerGravityActivationTime = 0.6f; // default value is 0.6
     [SerializeField] private float playerDefaultGravityScale = 5; // default value is 5
     [SerializeField] private float playerMaxGravityMultiplier = 7; // default value is 7
@@ -46,7 +46,7 @@ public class PlayerControler : MonoBehaviour
     private bool isJumping = false;
     private bool climb = false;
     private bool toggleClimb = true;
-
+    private bool interactionToggle = true;
     public InputSystem PlayerInputAction { get => playerInputAction; set => playerInputAction = value; }
 
     private void Awake()
@@ -91,7 +91,11 @@ public class PlayerControler : MonoBehaviour
         PlatformerManager.onLadderExit += DismountLadder;
         PlatformerManager.onInteract += SetUpInteraction;
         UpgradeShop.onItemExchange += UpdateLocalItems;
-
+        //-----------------------------------------------------
+        //Elevator Operation is Done
+        Elevator.onElevatorDone += ToggleInteraction;
+        //Bridge is Passed 
+        Bridge.onBridgeDone += ToggleInteraction;
     }
 
     private void OnDisable()
@@ -121,6 +125,11 @@ public class PlayerControler : MonoBehaviour
         PlatformerManager.onLadderExit -= DismountLadder;
         PlatformerManager.onInteract -= SetUpInteraction;
         UpgradeShop.onItemExchange -= UpdateLocalItems;
+        //-----------------------------------------------------
+        //Elevator Operation is Done
+        Elevator.onElevatorDone -= ToggleInteraction;
+        //Bridge is Passed 
+        Bridge.onBridgeDone -= ToggleInteraction;
 
     }
 
@@ -205,6 +214,7 @@ public class PlayerControler : MonoBehaviour
                 //Debug.Log("No Interaction");
                 break;
             case Interaction.Ladder:
+                //Interaction Toggle Not needed
                 Debug.Log("Mount Ladder");
                 if (toggleClimb)
                 {
@@ -218,24 +228,35 @@ public class PlayerControler : MonoBehaviour
                 }
                 break;
             case Interaction.Door:
+                //Interaction Toggle Not needed
                 Debug.Log("Open Door");
                 onPlayerOpenDoor?.Invoke();
                 break;
             case Interaction.Key:
                 Debug.Log("PickUp Key");
+                //Interaction Toggle Not needed
                 onPlayerPickUp?.Invoke();
                 platformerManager.KeyNumber++;
                 interaction = Interaction.Empty;
                 break;
             case Interaction.Elevator:
-                Debug.Log("Use Elevator");
-                onPlayerUseElevator?.Invoke();
+                if (interactionToggle)
+                {
+                    Debug.Log("Use Elevator");
+                    onPlayerUseElevator?.Invoke();
+                    interactionToggle = false;
+                }
                 break;
             case Interaction.Bridge:
-                Debug.Log("PassBridge");
-                onPlayerPassBridge?.Invoke();
+                if (interactionToggle)
+                {
+                    Debug.Log("PassBridge");
+                    onPlayerPassBridge?.Invoke();
+                    interactionToggle = false;
+                }
                 break;
             case Interaction.Shop:
+                //Interaction Toggle Not needed
                 Debug.Log("Open Shop");
                 onPlayerOpenShop?.Invoke();
                 break;
@@ -269,6 +290,11 @@ public class PlayerControler : MonoBehaviour
         }
         climb = true;
         AnimSetClimbing();
+    }
+
+    private void ToggleInteraction()
+    {
+        interactionToggle = true;
     }
 
     #endregion
@@ -396,7 +422,11 @@ public class PlayerControler : MonoBehaviour
 
     private bool isGround()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, LayerMask.GetMask("Ground"));
+        Vector2 size = groundCheck.GetComponent<CapsuleCollider2D>().size;
+        Vector2 point = groundCheck.position;
+        CapsuleDirection2D direction = groundCheck.GetComponent<CapsuleCollider2D>().direction;
+        return Physics2D.OverlapCapsule(point, size, direction, 0, LayerMask.GetMask("Ground"));
+        //return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, LayerMask.GetMask("Ground"));
     }
 
     #endregion

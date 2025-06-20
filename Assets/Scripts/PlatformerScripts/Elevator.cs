@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
+    public static event Action onElevatorDone;
+
     [SerializeField] private float elevatorCoolDown;
     private Animator elevatorAnimator;
     private LerpObject lerpObject;
@@ -79,6 +82,8 @@ public class Elevator : MonoBehaviour
     {
         yield return new WaitForSeconds(sec);
         allowElevatorOp = !allowElevatorOp;
+        //Player can use the interaction for elevator again
+        onElevatorDone?.Invoke();
     }
 
 
