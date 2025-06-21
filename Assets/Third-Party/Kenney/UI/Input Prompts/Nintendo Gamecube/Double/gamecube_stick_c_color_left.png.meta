@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gamecube_stick_c_color_left_0: -9057318385991736325
+      gamecube_stick_c_color_left_1: -8389173638678844664
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -197,7 +197,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      emote_sleeps_0: 4259682791390607986
+      emote_sleeps_1: 1225620687998040325
+      emote_sleeps_2: 5101998705186491663
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

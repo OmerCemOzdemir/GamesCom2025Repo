@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      touch_swipe_move_0: 2312979567846399496
+      touch_swipe_move_1: -5256484463454422274
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

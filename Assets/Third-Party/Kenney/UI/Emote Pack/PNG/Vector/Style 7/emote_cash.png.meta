@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      emote_cash_0: -7898729535493270506
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

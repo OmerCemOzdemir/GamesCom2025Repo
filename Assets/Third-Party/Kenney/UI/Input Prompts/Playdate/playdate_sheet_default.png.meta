@@ -972,7 +972,41 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playdate_sheet_default_0: -7303810491302895954
+      playdate_sheet_default_1: -8572645606879156209
+      playdate_sheet_default_10: 7298437776220933149
+      playdate_sheet_default_11: 4883145616659975483
+      playdate_sheet_default_12: 6540680687225906463
+      playdate_sheet_default_13: 7150514440264763879
+      playdate_sheet_default_14: 3540980287643266572
+      playdate_sheet_default_15: 5913846108962286968
+      playdate_sheet_default_16: 5563959317903371794
+      playdate_sheet_default_17: 861325574208098809
+      playdate_sheet_default_18: 3681459205380750892
+      playdate_sheet_default_19: -7564198536575082570
+      playdate_sheet_default_2: 671866694405820172
+      playdate_sheet_default_20: 8957305167620696865
+      playdate_sheet_default_21: -5854277829607295974
+      playdate_sheet_default_22: -1064391358962730970
+      playdate_sheet_default_23: 4444939250275092007
+      playdate_sheet_default_24: -3893333513897171977
+      playdate_sheet_default_25: 5881403466780203881
+      playdate_sheet_default_26: 9123986267828321880
+      playdate_sheet_default_27: 7894647926701078853
+      playdate_sheet_default_28: -1547200121953086155
+      playdate_sheet_default_29: -2831730829108498237
+      playdate_sheet_default_3: 5764798314319775755
+      playdate_sheet_default_30: -3522382959701327488
+      playdate_sheet_default_31: 4003991281423219251
+      playdate_sheet_default_32: 1834952230519732080
+      playdate_sheet_default_33: 1065087219013583200
+      playdate_sheet_default_4: 4457881689303678014
+      playdate_sheet_default_5: -7023246944933119247
+      playdate_sheet_default_6: 2424648783071163251
+      playdate_sheet_default_7: -4431998666661259464
+      playdate_sheet_default_8: 6850558047258298883
+      playdate_sheet_default_9: -1194948035422683301
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

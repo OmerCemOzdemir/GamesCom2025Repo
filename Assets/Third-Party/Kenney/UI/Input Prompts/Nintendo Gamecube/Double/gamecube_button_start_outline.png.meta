@@ -272,7 +272,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gamecube_button_start_outline_0: -257450350348811393
+      gamecube_button_start_outline_1: 8257949854659018415
+      gamecube_button_start_outline_2: 5739135578902587976
+      gamecube_button_start_outline_3: 6233034551416255055
+      gamecube_button_start_outline_4: -172863968503688221
+      gamecube_button_start_outline_5: 5698649943202840347
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

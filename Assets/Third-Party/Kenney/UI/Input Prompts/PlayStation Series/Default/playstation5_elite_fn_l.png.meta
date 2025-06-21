@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation5_elite_fn_l_0: -7663829116569755726
+      playstation5_elite_fn_l_1: 2630163997115707424
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

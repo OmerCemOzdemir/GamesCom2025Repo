@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gamecube_stick_grip_0: -7564437590663827705
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

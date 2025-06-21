@@ -222,7 +222,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      switch_joycon_left_mouse_outline_0: -2920307843136819929
+      switch_joycon_left_mouse_outline_1: -557606405486111586
+      switch_joycon_left_mouse_outline_2: -4691825756658591389
+      switch_joycon_left_mouse_outline_3: 4819441254555306060
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

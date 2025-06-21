@@ -247,7 +247,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation4_touchpad_swipe_vertical_0: 1975545309919273818
+      playstation4_touchpad_swipe_vertical_1: 6081733689704385867
+      playstation4_touchpad_swipe_vertical_2: -2745400429413247005
+      playstation4_touchpad_swipe_vertical_3: -646459416711866055
+      playstation4_touchpad_swipe_vertical_4: 6119405490789543218
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

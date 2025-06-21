@@ -747,7 +747,32 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      tilemap-characters_packed_0: -1826952330918056546
+      tilemap-characters_packed_1: 1614739782702853134
+      tilemap-characters_packed_10: 1966921021411408658
+      tilemap-characters_packed_11: -6731157714553388074
+      tilemap-characters_packed_12: 8457317091867523253
+      tilemap-characters_packed_13: 1393983961940299337
+      tilemap-characters_packed_14: 3558420409932701427
+      tilemap-characters_packed_15: -675203305069419174
+      tilemap-characters_packed_16: -8269734370686343364
+      tilemap-characters_packed_17: -7570114013367649233
+      tilemap-characters_packed_18: 7384444641785211527
+      tilemap-characters_packed_19: -5639822573491917062
+      tilemap-characters_packed_2: 493495314663242610
+      tilemap-characters_packed_20: -2447550017609294428
+      tilemap-characters_packed_21: -1095173734982062462
+      tilemap-characters_packed_22: -1682323079826078375
+      tilemap-characters_packed_23: 1748266406310441161
+      tilemap-characters_packed_24: -5060921679397524387
+      tilemap-characters_packed_3: -8912572294651161946
+      tilemap-characters_packed_4: 311352632598324967
+      tilemap-characters_packed_5: -4038945968399637897
+      tilemap-characters_packed_6: -8956270977150598950
+      tilemap-characters_packed_7: 2545538383540501887
+      tilemap-characters_packed_8: 9062880253625876658
+      tilemap-characters_packed_9: -1653262905747672068
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

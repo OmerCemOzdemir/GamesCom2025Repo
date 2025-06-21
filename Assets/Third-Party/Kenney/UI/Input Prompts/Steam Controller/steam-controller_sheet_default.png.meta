@@ -2072,7 +2072,85 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      steam-controller_sheet_default_0: 8386427280196713362
+      steam-controller_sheet_default_1: 420453335503095399
+      steam-controller_sheet_default_10: -3962423209719573924
+      steam-controller_sheet_default_11: 4261573613915008954
+      steam-controller_sheet_default_12: 5306193795808291817
+      steam-controller_sheet_default_13: 780883907075104130
+      steam-controller_sheet_default_14: 1697383470360235272
+      steam-controller_sheet_default_15: 1820942839316823195
+      steam-controller_sheet_default_16: 4160679916316022385
+      steam-controller_sheet_default_17: 475569087779954941
+      steam-controller_sheet_default_18: 7578177326744140004
+      steam-controller_sheet_default_19: -2913113259483712867
+      steam-controller_sheet_default_2: -2307420733432970816
+      steam-controller_sheet_default_20: 9115614272107804948
+      steam-controller_sheet_default_21: -1651835941436503875
+      steam-controller_sheet_default_22: 5234289935269235380
+      steam-controller_sheet_default_23: 8075126235805035227
+      steam-controller_sheet_default_24: 6434090824464343967
+      steam-controller_sheet_default_25: -3861405491323101521
+      steam-controller_sheet_default_26: -4652292931377371977
+      steam-controller_sheet_default_27: 6822283204433712691
+      steam-controller_sheet_default_28: 8294761623699187402
+      steam-controller_sheet_default_29: 6089360572312496120
+      steam-controller_sheet_default_3: 8092719024232783080
+      steam-controller_sheet_default_30: 846968747260773075
+      steam-controller_sheet_default_31: -5815569296054570717
+      steam-controller_sheet_default_32: -8928879463264137488
+      steam-controller_sheet_default_33: -5194797933339385082
+      steam-controller_sheet_default_34: -7688303197810417390
+      steam-controller_sheet_default_35: 8437948465622655821
+      steam-controller_sheet_default_36: -269679970538853585
+      steam-controller_sheet_default_37: 6516916370623936054
+      steam-controller_sheet_default_38: 712261871427341490
+      steam-controller_sheet_default_39: -7955214737439879647
+      steam-controller_sheet_default_4: -7938202222209168790
+      steam-controller_sheet_default_40: 4129763839727789347
+      steam-controller_sheet_default_41: -204562883345000339
+      steam-controller_sheet_default_42: 1597777619927576115
+      steam-controller_sheet_default_43: 257657755861573774
+      steam-controller_sheet_default_44: -214013045468984265
+      steam-controller_sheet_default_45: 3359151507583785697
+      steam-controller_sheet_default_46: -7794727746219476715
+      steam-controller_sheet_default_47: 6548183679184197461
+      steam-controller_sheet_default_48: 6336905857591917227
+      steam-controller_sheet_default_49: -9124596252410856016
+      steam-controller_sheet_default_5: -8725765226949158538
+      steam-controller_sheet_default_50: 1962889813719527133
+      steam-controller_sheet_default_51: 4385224700625041047
+      steam-controller_sheet_default_52: -4295878191624381296
+      steam-controller_sheet_default_53: 1759842418691961687
+      steam-controller_sheet_default_54: -1360869256568187070
+      steam-controller_sheet_default_55: -8971470859745156572
+      steam-controller_sheet_default_56: 1613807545638177095
+      steam-controller_sheet_default_57: -4806024885863749446
+      steam-controller_sheet_default_58: -3026249438253102077
+      steam-controller_sheet_default_59: -4970374872568010000
+      steam-controller_sheet_default_6: -6071205445687053709
+      steam-controller_sheet_default_60: 1931907850433759349
+      steam-controller_sheet_default_61: -1792014746380407841
+      steam-controller_sheet_default_62: -3922116942540230172
+      steam-controller_sheet_default_63: -5469857500636948135
+      steam-controller_sheet_default_64: -8217873388820841741
+      steam-controller_sheet_default_65: 4638685787605926031
+      steam-controller_sheet_default_66: -845564442497818633
+      steam-controller_sheet_default_67: -6800570736006226501
+      steam-controller_sheet_default_68: -1825118414001205643
+      steam-controller_sheet_default_69: 2297555963987611421
+      steam-controller_sheet_default_7: 5341638109523519527
+      steam-controller_sheet_default_70: 6956780412293468195
+      steam-controller_sheet_default_71: 3789375165136669428
+      steam-controller_sheet_default_72: 4969483477509744410
+      steam-controller_sheet_default_73: 8522773246268900549
+      steam-controller_sheet_default_74: 8474643305658153989
+      steam-controller_sheet_default_75: 6488065834938834814
+      steam-controller_sheet_default_76: -7959927534450624134
+      steam-controller_sheet_default_77: -4348548677296337933
+      steam-controller_sheet_default_8: -8030494408447159713
+      steam-controller_sheet_default_9: 7138654433042685388
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

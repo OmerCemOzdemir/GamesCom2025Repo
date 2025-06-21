@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      xbox_elite_paddle_top_left_outline_0: 2052906872674558768
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

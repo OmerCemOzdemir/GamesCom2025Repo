@@ -1622,7 +1622,67 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      generic_sheet_default_0: 6407325010040205806
+      generic_sheet_default_1: 6961028738462268376
+      generic_sheet_default_10: -4899196447099269669
+      generic_sheet_default_11: 4737079064968874214
+      generic_sheet_default_12: 5912697430004605081
+      generic_sheet_default_13: -6765688571336306387
+      generic_sheet_default_14: 234149816048966061
+      generic_sheet_default_15: 2073609651849023901
+      generic_sheet_default_16: 5692464702399446120
+      generic_sheet_default_17: -4319509524469539769
+      generic_sheet_default_18: 4234578984929061729
+      generic_sheet_default_19: -2605875606173572671
+      generic_sheet_default_2: -7449963664453599812
+      generic_sheet_default_20: 1803202359864783691
+      generic_sheet_default_21: -4227632526020654491
+      generic_sheet_default_22: 1582272144349880040
+      generic_sheet_default_23: -2340982681365546831
+      generic_sheet_default_24: -484038131209230482
+      generic_sheet_default_25: -1091126091777895032
+      generic_sheet_default_26: 3761238284156363028
+      generic_sheet_default_27: 6258442272233098876
+      generic_sheet_default_28: 6157126729527016486
+      generic_sheet_default_29: 3937376182419095997
+      generic_sheet_default_3: 7634423690015126935
+      generic_sheet_default_30: 996455767311164704
+      generic_sheet_default_31: 4187456984688430730
+      generic_sheet_default_32: 4945080816881580798
+      generic_sheet_default_33: -3350506633608189114
+      generic_sheet_default_34: 1455611913245207869
+      generic_sheet_default_35: -431051828386480134
+      generic_sheet_default_36: -4692057191060578458
+      generic_sheet_default_37: 4198090961744372816
+      generic_sheet_default_38: 1586809449714364966
+      generic_sheet_default_39: -8182128206275092187
+      generic_sheet_default_4: -6366746973307237753
+      generic_sheet_default_40: -2631315339093166012
+      generic_sheet_default_41: -3043935020543915641
+      generic_sheet_default_42: 2315708545053951024
+      generic_sheet_default_43: -5508447155946209458
+      generic_sheet_default_44: 3814789190874817571
+      generic_sheet_default_45: 7115418867677368506
+      generic_sheet_default_46: 5158785266469353629
+      generic_sheet_default_47: -2541295734052846655
+      generic_sheet_default_48: 1788843716388359060
+      generic_sheet_default_49: 9134055033316508123
+      generic_sheet_default_5: 5417153783338091146
+      generic_sheet_default_50: -7407194879162677520
+      generic_sheet_default_51: -4068608429303857704
+      generic_sheet_default_52: -4027602546314153046
+      generic_sheet_default_53: 562874701648320916
+      generic_sheet_default_54: -819993935239586317
+      generic_sheet_default_55: -5764257381002242588
+      generic_sheet_default_56: 4298981327447405109
+      generic_sheet_default_57: -3007941496149249389
+      generic_sheet_default_58: -3566220878755515060
+      generic_sheet_default_59: 6300766728260492333
+      generic_sheet_default_6: 8268279251466323141
+      generic_sheet_default_7: -3594509732824388170
+      generic_sheet_default_8: 6634984618238441646
+      generic_sheet_default_9: 7711649058559661131
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

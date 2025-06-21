@@ -197,7 +197,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      emote_bars_0: 6845032635103780719
+      emote_bars_1: -6983435819491297762
+      emote_bars_2: -4230889406468627050
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

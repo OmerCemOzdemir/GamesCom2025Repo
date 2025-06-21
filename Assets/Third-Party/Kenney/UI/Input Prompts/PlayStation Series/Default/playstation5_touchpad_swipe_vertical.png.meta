@@ -247,7 +247,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation5_touchpad_swipe_vertical_0: -4205170057399163937
+      playstation5_touchpad_swipe_vertical_1: -4251178805908551984
+      playstation5_touchpad_swipe_vertical_2: 1898329382984246790
+      playstation5_touchpad_swipe_vertical_3: -952517498831534702
+      playstation5_touchpad_swipe_vertical_4: 1590985196277011439
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

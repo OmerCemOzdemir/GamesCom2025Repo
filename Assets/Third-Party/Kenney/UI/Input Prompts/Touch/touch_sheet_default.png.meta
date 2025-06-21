@@ -1597,7 +1597,66 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      touch_sheet_default_0: -4343733164943697600
+      touch_sheet_default_1: 4670208177006288817
+      touch_sheet_default_10: 4050066095290841453
+      touch_sheet_default_11: -5150655721536341752
+      touch_sheet_default_12: 8339574491850908779
+      touch_sheet_default_13: 2515679572126570071
+      touch_sheet_default_14: 1267771924441008702
+      touch_sheet_default_15: -7553573069917059307
+      touch_sheet_default_16: -2038470665447603946
+      touch_sheet_default_17: -7692256748432904551
+      touch_sheet_default_18: 7375261652259690531
+      touch_sheet_default_19: 5975954676722698562
+      touch_sheet_default_2: 2045426938360775855
+      touch_sheet_default_20: 5526327381445320802
+      touch_sheet_default_21: -4423447076842991957
+      touch_sheet_default_22: -8130486770924074540
+      touch_sheet_default_23: 6657377837000980480
+      touch_sheet_default_24: 5746420527330179318
+      touch_sheet_default_25: -357428476343460319
+      touch_sheet_default_26: 5909776410498792774
+      touch_sheet_default_27: -8924903245811113845
+      touch_sheet_default_28: -5804463112546831649
+      touch_sheet_default_29: -675621780476680583
+      touch_sheet_default_3: -354366679359233175
+      touch_sheet_default_30: -4475846586024189368
+      touch_sheet_default_31: -6782000704331697114
+      touch_sheet_default_32: 1248270690944626011
+      touch_sheet_default_33: 5090292672420272935
+      touch_sheet_default_34: -5172722393238113923
+      touch_sheet_default_35: 6594007383727514014
+      touch_sheet_default_36: 1219013198986748341
+      touch_sheet_default_37: 3206261163894670434
+      touch_sheet_default_38: -2080259137895258914
+      touch_sheet_default_39: -2881371155040340664
+      touch_sheet_default_4: -4708955612234790612
+      touch_sheet_default_40: -8065531795686427162
+      touch_sheet_default_41: 221458593968581569
+      touch_sheet_default_42: -2164491724212934905
+      touch_sheet_default_43: -1613547681333479877
+      touch_sheet_default_44: -6727084821374351794
+      touch_sheet_default_45: -666641889504183756
+      touch_sheet_default_46: 8759486044912167585
+      touch_sheet_default_47: 1569770001545210522
+      touch_sheet_default_48: 5676355520419105959
+      touch_sheet_default_49: 2729858601869513669
+      touch_sheet_default_5: -3589452459013222086
+      touch_sheet_default_50: -4312843298007563940
+      touch_sheet_default_51: -3456037618046874027
+      touch_sheet_default_52: 6054163905091945211
+      touch_sheet_default_53: 3310454685689109583
+      touch_sheet_default_54: -5306504540370528641
+      touch_sheet_default_55: 387114416447912754
+      touch_sheet_default_56: 3829702796751776021
+      touch_sheet_default_57: 4301618609415532417
+      touch_sheet_default_58: -5069477533048576839
+      touch_sheet_default_6: 2661561970165999785
+      touch_sheet_default_7: 7807229680051076438
+      touch_sheet_default_8: -4503932015624250275
+      touch_sheet_default_9: -9139469937791340450
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

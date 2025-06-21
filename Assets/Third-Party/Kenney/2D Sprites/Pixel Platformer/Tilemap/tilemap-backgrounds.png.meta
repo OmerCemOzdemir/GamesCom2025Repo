@@ -722,7 +722,31 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      tilemap-backgrounds_0: 8523463431782284839
+      tilemap-backgrounds_1: -7804485613704085597
+      tilemap-backgrounds_10: -1348291558716953026
+      tilemap-backgrounds_11: 5765279534758284815
+      tilemap-backgrounds_12: -7027977152163780206
+      tilemap-backgrounds_13: -1778932987755098747
+      tilemap-backgrounds_14: 4770261942167674150
+      tilemap-backgrounds_15: -5573692905615531435
+      tilemap-backgrounds_16: 4916015305879872947
+      tilemap-backgrounds_17: 8223653770730284090
+      tilemap-backgrounds_18: 5892257113609104191
+      tilemap-backgrounds_19: 368286334322239457
+      tilemap-backgrounds_2: -4791707026126036179
+      tilemap-backgrounds_20: -1398486692274438936
+      tilemap-backgrounds_21: -265095897852792306
+      tilemap-backgrounds_22: -6306680540390944888
+      tilemap-backgrounds_23: -5830144969393810128
+      tilemap-backgrounds_3: -4213131736387900552
+      tilemap-backgrounds_4: -7958990423193953562
+      tilemap-backgrounds_5: -684465467591590235
+      tilemap-backgrounds_6: -7788966371411729588
+      tilemap-backgrounds_7: -1826286101037105372
+      tilemap-backgrounds_8: 199195203618375034
+      tilemap-backgrounds_9: 2443519981283443392
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

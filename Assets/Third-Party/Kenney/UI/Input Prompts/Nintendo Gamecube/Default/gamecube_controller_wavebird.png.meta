@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gamecube_controller_wavebird_0: -176972369630283975
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

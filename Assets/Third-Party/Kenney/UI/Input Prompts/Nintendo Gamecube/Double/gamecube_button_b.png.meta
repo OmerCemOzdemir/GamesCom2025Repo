@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gamecube_button_b_0: 2996074093495872877
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

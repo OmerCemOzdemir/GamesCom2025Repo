@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      emote_heartBroken_0: -1676687230151606190
+      emote_heartBroken_1: 6593704034028529061
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

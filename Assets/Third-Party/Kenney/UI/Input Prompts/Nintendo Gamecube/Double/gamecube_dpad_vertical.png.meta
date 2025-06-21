@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gamecube_dpad_vertical_0: -4870381500715665463
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

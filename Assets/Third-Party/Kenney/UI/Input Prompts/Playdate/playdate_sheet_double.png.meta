@@ -972,7 +972,41 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playdate_sheet_double_0: -7344910352851378607
+      playdate_sheet_double_1: 1845542954496058828
+      playdate_sheet_double_10: -6870616412232644658
+      playdate_sheet_double_11: 4339588308689857423
+      playdate_sheet_double_12: -8600003580334025528
+      playdate_sheet_double_13: 4434601368576867265
+      playdate_sheet_double_14: -1917375823466032898
+      playdate_sheet_double_15: 1723905346132924065
+      playdate_sheet_double_16: 1976256471049812873
+      playdate_sheet_double_17: 8147304661990338799
+      playdate_sheet_double_18: 7057696379097554700
+      playdate_sheet_double_19: 1534478279868191894
+      playdate_sheet_double_2: 934831218259344893
+      playdate_sheet_double_20: 5204172016898957663
+      playdate_sheet_double_21: -4671439301859414111
+      playdate_sheet_double_22: -1252094931029023328
+      playdate_sheet_double_23: -8195559113080096918
+      playdate_sheet_double_24: 2962493740985512704
+      playdate_sheet_double_25: -7824990735404246457
+      playdate_sheet_double_26: 430258997015386093
+      playdate_sheet_double_27: -981156499736428904
+      playdate_sheet_double_28: -5005777862837619427
+      playdate_sheet_double_29: -4915541226133271139
+      playdate_sheet_double_3: 3137135347562333662
+      playdate_sheet_double_30: -4072030692590850719
+      playdate_sheet_double_31: -5683689162023371416
+      playdate_sheet_double_32: 6597611588642821368
+      playdate_sheet_double_33: 7986552699856491342
+      playdate_sheet_double_4: 8755392513812495596
+      playdate_sheet_double_5: -2964172304359805783
+      playdate_sheet_double_6: -6183689674115834774
+      playdate_sheet_double_7: -8605918569209371613
+      playdate_sheet_double_8: -505737436532574949
+      playdate_sheet_double_9: 4828527395240286811
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

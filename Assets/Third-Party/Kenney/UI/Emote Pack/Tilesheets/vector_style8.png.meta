@@ -1422,7 +1422,59 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      vector_style8_0: 6620604184041768809
+      vector_style8_1: -2877059389396967599
+      vector_style8_10: -2596728576475572368
+      vector_style8_11: 6184443244241335679
+      vector_style8_12: 7926086520553256126
+      vector_style8_13: 7732562352484064253
+      vector_style8_14: 652709422566472547
+      vector_style8_15: -8486893648467372592
+      vector_style8_16: -6517433622942030202
+      vector_style8_17: 594696862134296746
+      vector_style8_18: -5554039879071909890
+      vector_style8_19: -8714231112564202635
+      vector_style8_2: 7668119453165108921
+      vector_style8_20: -9161822988649319382
+      vector_style8_21: 3007772375983764152
+      vector_style8_22: 7425432106352939261
+      vector_style8_23: -4262111202283196456
+      vector_style8_24: -161712280904664978
+      vector_style8_25: 2959279230345575526
+      vector_style8_26: -7182672178295297506
+      vector_style8_27: -7774904845306773688
+      vector_style8_28: 3846743480364890511
+      vector_style8_29: -43676507302031340
+      vector_style8_3: -7268858456151150532
+      vector_style8_30: -6111408621147603850
+      vector_style8_31: -7650233768602322171
+      vector_style8_32: -1960149561330684302
+      vector_style8_33: -7515601999812611293
+      vector_style8_34: -3961388857265470610
+      vector_style8_35: 5079697655304995371
+      vector_style8_36: 7062211668597035058
+      vector_style8_37: 3266739780981579159
+      vector_style8_38: 9083703649591699508
+      vector_style8_39: 5650134758651441066
+      vector_style8_4: -8583150262326572680
+      vector_style8_40: -4326811791608142444
+      vector_style8_41: 3745821807989186350
+      vector_style8_42: 4665932224885576295
+      vector_style8_43: 4971734843497757775
+      vector_style8_44: 6547203967607761887
+      vector_style8_45: 3359359103954584108
+      vector_style8_46: -3783860901944442800
+      vector_style8_47: 8335253190824147534
+      vector_style8_48: -8496851476913505882
+      vector_style8_49: -2287982128985755612
+      vector_style8_5: 8283717833697745822
+      vector_style8_50: 5285575205404475071
+      vector_style8_51: -2720236107877322306
+      vector_style8_6: -3548656501350547291
+      vector_style8_7: 6970733857900388577
+      vector_style8_8: 9131784727687614483
+      vector_style8_9: -6742544923342583481
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

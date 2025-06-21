@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      emote_exclamation_0: -2114278708614456287
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

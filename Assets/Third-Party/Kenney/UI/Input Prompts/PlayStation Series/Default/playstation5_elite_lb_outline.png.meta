@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation5_elite_lb_outline_0: 5911109240227162281
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

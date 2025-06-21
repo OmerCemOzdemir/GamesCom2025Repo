@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gamecube_button_y_tilted_0: 5200866400596037314
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
