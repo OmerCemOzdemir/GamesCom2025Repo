@@ -10,6 +10,8 @@ TagManager:
   - Elevator
   - Bridge
   - Shop
+  - Taxi
+  - Sign
   layers:
   - Default
   - TransparentFX
@@ -23,8 +25,8 @@ TagManager:
   - Key
   - Elevator
   - Bridge
-  - 
-  - 
+  - Taxi
+  - Sign
   - 
   - 
   - 

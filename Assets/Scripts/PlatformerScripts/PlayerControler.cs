@@ -24,7 +24,7 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private float playerDefaultGravityScale = 5; // default value is 5
     [SerializeField] private float playerMaxGravityMultiplier = 7; // default value is 7
     private float playerGravityActivationTimeTemp;
-    private float groundCheckRadius = 0.2f;
+    //private float groundCheckRadius = 0.2f;
 
     [SerializeField] private Transform playerModel;
     [SerializeField] private Transform groundCheck; // assign groundcheck gameObject
@@ -37,7 +37,7 @@ public class PlayerControler : MonoBehaviour
 
 
     private Vector2 flipSpriteVector;
-    private Vector3 currentLocalScale;
+    //private Vector3 currentLocalScale;
 
     private GameObject currentInteractedGameObject;
 
@@ -141,7 +141,7 @@ public class PlayerControler : MonoBehaviour
     private void Start()
     {
         playerAnimator.SetTrigger("Idle");
-        currentLocalScale = transform.localScale;
+        //currentLocalScale = transform.localScale;
     }
     private void Update()
     {
@@ -162,15 +162,15 @@ public class PlayerControler : MonoBehaviour
         }
     }
 
-    private void TeleportPlayer(Vector3 pos,float sec)
+    private void TeleportPlayer(Vector3 pos, float sec)
     {
         DisableInput();
         //playerRigid2D.MovePosition(pos);
         //StartCoroutine(DelayOnTeleport(sec));
-        transform.position = pos;        
+        transform.position = pos;
         EnableInput();
     }
-    
+
     IEnumerator DelayOnTeleport(float sec)
     {
         yield return new WaitForSeconds(sec);
@@ -237,6 +237,7 @@ public class PlayerControler : MonoBehaviour
 
     private void Interact(InputAction.CallbackContext context)
     {
+
         switch (interaction)
         {
             case Interaction.Empty:
@@ -292,6 +293,7 @@ public class PlayerControler : MonoBehaviour
             default:
                 break;
         }
+
     }
 
     //When called player dismounts the ladder by enabling the climb value to false.
@@ -307,10 +309,12 @@ public class PlayerControler : MonoBehaviour
     private void MountLadder()
     {
         toggleClimb = false;
+        DisableMovement();
         if (currentInteractedGameObject != null)
         {
             transform.position = new Vector2(currentInteractedGameObject.transform.position.x, transform.position.y);
         }
+        EnableMovement();
         if (localItems != null)
         {
             // ClimbGloves: 3 = Climbing ladders becomes free
@@ -470,6 +474,12 @@ public class PlayerControler : MonoBehaviour
         enableMove = false;
         playerRigid2D.linearVelocity = Vector3.zero;
     }
+
+    private void EnableMovement()
+    {
+        enableMove = true;
+    }
+
 
     //This function disables the player inputs. It is triggered by platform manager when money is below or equal to 0.
     protected void DisableInput()
