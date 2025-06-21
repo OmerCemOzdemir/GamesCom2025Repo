@@ -11,7 +11,7 @@ public class TestScript : MonoBehaviour
     private void Start()
     {
 
-        totalMoneyText.text = "" + GameManager.Instance.GetGameData().totalMoney;
+        //totalMoneyText.text = "" + GameManager.Instance.GetGameData().totalMoney;
     }
 
     public void IncreaseMoney()

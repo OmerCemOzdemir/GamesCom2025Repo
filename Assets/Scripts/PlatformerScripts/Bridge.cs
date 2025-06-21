@@ -9,6 +9,10 @@ public class Bridge : MonoBehaviour
     private BoxCollider2D bridgeBlock;
     private TextMeshProUGUI bridgeText_0;
     private TextMeshProUGUI bridgeText_1;
+    [SerializeField] private bool payOnce;
+    private bool passOnce = false;
+
+
     private void Awake()
     {
         bridgeBlock = transform.GetChild(1).GetComponent<BoxCollider2D>();
@@ -19,7 +23,10 @@ public class Bridge : MonoBehaviour
     private void OnEnable()
     {
         PlayerControler.onPlayerPassBridge += unBlockBridge;
-        PlatformerManager.onBridgeExit += BlockBridge;
+        if (!payOnce)
+        {
+            PlatformerManager.onBridgeExit += BlockBridge;
+        }
     }
 
     private void OnDisable()
@@ -43,7 +50,7 @@ public class Bridge : MonoBehaviour
     private void BridgeTextClose()
     {
         bridgeText_0.gameObject.SetActive(false);
-        bridgeText_1.gameObject.SetActive(false);   
+        bridgeText_1.gameObject.SetActive(false);
 
     }
 
@@ -70,7 +77,18 @@ public class Bridge : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            BridgeTextOpenToll();
+            if (payOnce)
+            {
+                if (passOnce)
+                {
+                    BridgeTextOpenToll();
+                    passOnce = false;
+                }
+            }
+            else
+            {
+                BridgeTextOpenToll();
+            }
         }
     }
 
@@ -78,9 +96,13 @@ public class Bridge : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            BridgeTextClose();
-            //Player can use the interaction for Bridge again
-            onBridgeDone?.Invoke();
+            if (!payOnce)
+            {
+                BridgeTextClose();
+                //Player can use the interaction for Bridge again
+                onBridgeDone?.Invoke();
+            }
+
         }
     }
 
