@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: ab1649ed8c214cb47a9c2b06b940dbcc
+guid: 9cbee2e89380f07458f4100497b1ec79
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3334738622998220081
-    second: Sign_0
+      213: -207043210030178969
+    second: crosswalk_0
+  - first:
+      213: -4034010414845100656
+    second: crosswalk_1
+  - first:
+      213: -7785930384902478232
+    second: crosswalk_2
+  - first:
+      213: -320226620637816080
+    second: crosswalk_3
+  - first:
+      213: -5871214322441918686
+    second: crosswalk_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,19 +109,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -126,13 +125,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sign_0
+      name: crosswalk_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 14
-        width: 156
-        height: 127
+        x: 811
+        y: 139
+        width: 230
+        height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +140,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 13d85920c1f574e20800000000000000
-      internalID: 3334738622998220081
+      spriteID: 76d9ef42c4f602df0800000000000000
+      internalID: -207043210030178969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crosswalk_1
+      rect:
+        serializedVersion: 2
+        x: 787
+        y: 115
+        width: 278
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09d7eea96e05408c0800000000000000
+      internalID: -4034010414845100656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crosswalk_2
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 83
+        width: 342
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 866a7f90191d2f390800000000000000
+      internalID: -7785930384902478232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crosswalk_3
+      rect:
+        serializedVersion: 2
+        x: 711
+        y: 39
+        width: 430
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fa524dc5935e8bf0800000000000000
+      internalID: -320226620637816080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crosswalk_4
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 0
+        width: 510
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 227e9a64ea1458ea0800000000000000
+      internalID: -5871214322441918686
       vertices: []
       indices: 
       edges: []
@@ -160,8 +247,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Sign_0: 3334738622998220081
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
