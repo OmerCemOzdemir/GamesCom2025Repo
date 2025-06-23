@@ -31,6 +31,12 @@ public class PauseMenu : MonoBehaviour
 
     }
 
+    public void Return()
+    {
+        debugPanel.SetActive(false);
+        settingPanel.SetActive(false);
+    }
+
     private void PauseGame(InputAction.CallbackContext context)
     {
         if (togglePauseGame)
