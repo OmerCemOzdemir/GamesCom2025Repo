@@ -75,6 +75,8 @@ public class PlatformerManager : MonoBehaviour
     private void Awake()
     {
         playerControler = GetComponent<PlayerControler>();
+
+
     }
 
     private void Update()

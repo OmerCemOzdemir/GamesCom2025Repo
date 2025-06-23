@@ -6,7 +6,7 @@ public class Ladder : MonoBehaviour
 {
     [SerializeField] private GameObject ladderModel;
     private Vector2 ladderSize = new Vector2(1, 2);
-    private bool toggleLadder = true;
+    //private bool toggleLadder = true;
     private GameObject[] ladderModels;
 
 

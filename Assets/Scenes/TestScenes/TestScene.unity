@@ -2825,7 +2825,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b08cbb5abb84064591c9f2e4441c410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  totalMoneyText: {fileID: 655799372}
   printText: {fileID: 1805697844}
+  inputField: {fileID: 0}
 --- !u!1 &1805697842
 GameObject:
   m_ObjectHideFlags: 0
