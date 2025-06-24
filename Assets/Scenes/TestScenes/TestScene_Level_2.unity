@@ -1582,8 +1582,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b08cbb5abb84064591c9f2e4441c410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalMoneyText: {fileID: 0}
+  totalMoneyText: {fileID: 1699273685}
   printText: {fileID: 0}
+  inputField: {fileID: 0}
+  parentInputField: {fileID: 0}
 --- !u!114 &2017595138
 MonoBehaviour:
   m_ObjectHideFlags: 0

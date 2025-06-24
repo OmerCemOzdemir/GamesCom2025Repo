@@ -27,6 +27,12 @@ public class UpgradeShop : MonoBehaviour
         platformerUI = GetComponent<PlatformerUI>();    
     }
 
+    private void Start()
+    {
+        GameManager.Instance.GetGameData().platformItems = itemSlots;
+        onItemExchange?.Invoke(itemSlots);
+    }
+
     public void JumpBootsSelected()
     {
         items = Items.JumpBoots;

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 [System.Serializable]
 public class GameData
 {
@@ -9,15 +7,10 @@ public class GameData
     public int walletLevel = 0;
 
     //Data For only Platforming Game:
-    public bool[] platformItems;
-   // public bool jumpBoots = false;
-   //public bool sprintBoots = false;
-   // public bool springSoles = false;
-    //public bool climbGloves = false;
+    public bool[] platformItems = new bool[4];
 
     //Data For only Cookie Clicker Game:
     public float ItemBaseIncome = 1.67f;
     public int ItemCount = 1;
     public int ItemMulti = 2;
-
 }
