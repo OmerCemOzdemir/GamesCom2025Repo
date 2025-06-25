@@ -12,6 +12,7 @@ TagManager:
   - Shop
   - Taxi
   - Sign
+  - CheckpointCollector
   layers:
   - Default
   - TransparentFX
