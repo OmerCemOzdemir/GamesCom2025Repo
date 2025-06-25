@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class PlatformerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lostMoneyText;
     [SerializeField] private GameObject keyImage;
     [SerializeField] private GameObject upgradeShopPanel;
+    [SerializeField] private GameObject taxiPanel;
+    [SerializeField] private GameObject outOfMoneyPanel;
     [Space(10)]
 
     [Header("Item Images")]
@@ -20,7 +23,6 @@ public class PlatformerUI : MonoBehaviour
     [Header("Item Buttons")]
     [Tooltip("This Array holds the BUTTONS of game items:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
     [SerializeField] private GameObject[] itemSlotButtons;
-
 
     private void Awake()
     {
@@ -34,7 +36,8 @@ public class PlatformerUI : MonoBehaviour
         PlayerControler.onPlayerOpenShop += OpenShop;
         UpgradeShop.onItemExchange += UpdateItemSlotImages;
         Door.onDoorTravel += StartFadeEffect;
-
+        PlatformerManager.onMoneyZero += OpenOutOfMoneyPanel;
+        PlayerControler.onPlayerGetInTaxi += OpenTaxi;
     }
 
     private void OnDisable()
@@ -44,7 +47,8 @@ public class PlatformerUI : MonoBehaviour
         PlayerControler.onPlayerOpenShop -= OpenShop;
         UpgradeShop.onItemExchange -= UpdateItemSlotImages;
         Door.onDoorTravel -= StartFadeEffect;
-
+        PlatformerManager.onMoneyZero -= OpenOutOfMoneyPanel;
+        PlayerControler.onPlayerGetInTaxi -= OpenTaxi;
 
     }
 
@@ -66,6 +70,16 @@ public class PlatformerUI : MonoBehaviour
     private void OpenShop()
     {
         upgradeShopPanel.SetActive(true);
+    }
+
+    private void OpenTaxi()
+    {
+        taxiPanel.SetActive(true);
+    }
+
+    public void CloseTaxi()
+    {
+        taxiPanel.SetActive(false);
     }
 
     public void UpdateLostMoney(float money)
@@ -120,6 +134,15 @@ public class PlatformerUI : MonoBehaviour
         lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
     }
 
+    private void OpenOutOfMoneyPanel()
+    {
+        outOfMoneyPanel.SetActive(true);
+    }
+
+    public void Grind()
+    {
+        GameManager.Instance.NextLevel(1);
+    }
 
     private void UpdateItemSlotImages(bool[] itemSlots)
     {

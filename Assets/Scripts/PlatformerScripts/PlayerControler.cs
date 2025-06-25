@@ -14,6 +14,7 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerUseElevator;
     public static event Action onPlayerPassBridge;
     public static event Action onPlayerOpenShop;
+    public static event Action onPlayerGetInTaxi;
 
 
     [SerializeField] private float playerSpeed = 5; // default value is 5
@@ -101,6 +102,7 @@ public class PlayerControler : MonoBehaviour
         //
         PlatformerManager.onGameObjectInteract += SetUpGameObjectInteraction;
         Door.onDoorTravel += TeleportPlayer;
+        TaxiUI.onPlayerTravel += TeleportPlayer;
     }
 
     private void OnDisable()
@@ -136,6 +138,8 @@ public class PlayerControler : MonoBehaviour
         Bridge.onBridgeDone -= ToggleInteraction;
         PlatformerManager.onGameObjectInteract -= SetUpGameObjectInteraction;
         Door.onDoorTravel -= TeleportPlayer;
+        TaxiUI.onPlayerTravel -= TeleportPlayer;
+
     }
 
     private void Start()
@@ -164,6 +168,7 @@ public class PlayerControler : MonoBehaviour
 
     private void TeleportPlayer(Vector3 pos, float sec)
     {
+        //Debug.Log("Teleport to ")
         DisableInput();
         //playerRigid2D.MovePosition(pos);
         //StartCoroutine(DelayOnTeleport(sec));
@@ -175,8 +180,6 @@ public class PlayerControler : MonoBehaviour
     {
         yield return new WaitForSeconds(sec);
     }
-
-
 
     //These Functions handle basic movement and sprint
     #region HorizontalMovement
@@ -226,7 +229,6 @@ public class PlayerControler : MonoBehaviour
     //Take the interacted gameobject and assigns it to  currentInteractedGameObject to use it in ladder positioning.s
     private void SetUpGameObjectInteraction(GameObject obj)
     {
-
         currentInteractedGameObject = obj;
     }
 
@@ -237,7 +239,6 @@ public class PlayerControler : MonoBehaviour
 
     private void Interact(InputAction.CallbackContext context)
     {
-
         switch (interaction)
         {
             case Interaction.Empty:
@@ -289,6 +290,11 @@ public class PlayerControler : MonoBehaviour
                 //Interaction Toggle Not needed
                 Debug.Log("Open Shop");
                 onPlayerOpenShop?.Invoke();
+                break;
+            case Interaction.Taxi:
+                //Interaction Toggle Not needed
+                Debug.Log("Get in Taxi");
+                onPlayerGetInTaxi?.Invoke();
                 break;
             default:
                 break;
@@ -532,7 +538,8 @@ public enum Interaction
     Key,
     Elevator,
     Bridge,
-    Shop
+    Shop,
+    Taxi
 
 }
 

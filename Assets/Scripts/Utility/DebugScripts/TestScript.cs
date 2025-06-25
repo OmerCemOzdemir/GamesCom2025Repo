@@ -3,11 +3,12 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 
 public class TestScript : MonoBehaviour
 {
+    public static event Action onDataChange;
+
     [SerializeField] private TextMeshProUGUI totalMoneyText;
     [SerializeField] private TextMeshProUGUI printText;
     [SerializeField] private GameObject inputFieldPrefab;
@@ -185,8 +186,10 @@ public class TestScript : MonoBehaviour
         }
 
         GameManager.Instance.SetGameData(gameData);
+        onDataChange?.Invoke();
         //fieldInfos[0].SetValue(gameData, 432);
         //Debug.Log("Value in 0: " + fieldInfos[0].GetValue(gameData));
+
     }
 
     public void PrintGameData()
@@ -336,6 +339,11 @@ public class TestScript : MonoBehaviour
             + "ItemBaseIncome: " + GameManager.Instance.GetGameData().ItemBaseIncome + "\n"
             + "ItemCount: " + GameManager.Instance.GetGameData().ItemCount + "\n"
             + "ItemMulti: " + GameManager.Instance.GetGameData().ItemMulti;
+        Debug.Log("GameData: " + GameManager.Instance.GetGameData().totalMoney);
+        foreach (var item in GameManager.Instance.GetGameData().platformItems)
+        {
+            Debug.Log("GameData: " + item);
+        }
 
 
  */

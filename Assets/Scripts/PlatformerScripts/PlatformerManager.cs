@@ -52,6 +52,7 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpStart += ToggleElevatorActive;
         //------------------------------------------------------------------
         UpgradeShop.onItemExchange += SaveGameData;
+        TestScript.onDataChange += LoadGameData;
     }
 
     private void OnDisable()
@@ -68,15 +69,13 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpStart -= ToggleElevatorActive;
         //------------------------------------------------------------------
         UpgradeShop.onItemExchange -= SaveGameData;
-
+        TestScript.onDataChange -= LoadGameData;
 
     }
 
     private void Awake()
     {
         playerControler = GetComponent<PlayerControler>();
-
-
     }
 
     private void Update()
@@ -84,13 +83,23 @@ public class PlatformerManager : MonoBehaviour
         CameraFollow();
     }
 
-
     //THis Functions makes the main camera in the Scene to follow the player.
     private void CameraFollow()
     {
         Vector3 targetPosition = transform.position + cameraOffset; // apply offset to camera position
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, Time.deltaTime * 3f);
     }
+
+    private void LoadGameData()
+    {
+        //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
+        //GameManager.Instance.GetGameData().platformItems;
+        GameManager.Instance.SaveGame();
+        GameManager.Instance.LoadGame();
+        onMoneyChange?.Invoke(0);
+
+    }
+
 
     private void SaveGameData(bool[] items)
     {
@@ -261,6 +270,14 @@ public class PlatformerManager : MonoBehaviour
             EnableInteractText("Upgrade Shop");
 
         }
+
+        if (collision.CompareTag("Taxi"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Taxi);
+            EnableInteractText("Taxi");
+
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -321,6 +338,14 @@ public class PlatformerManager : MonoBehaviour
         }
 
         if (collision.CompareTag("Shop"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
+        }
+
+        if (collision.CompareTag("Taxi"))
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Empty);
