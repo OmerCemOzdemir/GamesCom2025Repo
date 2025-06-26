@@ -1,15 +1,23 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class ClickerManager : MonoBehaviour
 {
-    [SerializeField] private GameRule _gameRule;
     [SerializeField] private ClickerUI clickerUI;
-    [SerializeField] private int Level;
-
+    private GameRule gameRule;
+    private ClickerEffect effect;
     [SerializeField] private animationManager anim;
 
+    [SerializeField] private int Level;
+    [Tooltip("Increase this to longer the time of idle money")]
+    [SerializeField] private float baseIdleTime = 1;
+    [SerializeField] private float baseActiveTime = 1;
+    private bool idleToggle = true;
+    private bool activeToggle = true;
     private bool mouseEnable = false;
+    private float clickTimer = 0;
+
     private InputSystem _inputSystem;
 
     private void OnEnable()
@@ -26,30 +34,90 @@ public class ClickerManager : MonoBehaviour
     }
     private void Awake()
     {
-      SetUpData();
-      _inputSystem = new InputSystem();
+        SetUpData();
+        effect = transform.GetChild(0).gameObject.GetComponent<ClickerEffect>();
+        gameRule = transform.GetChild(1).gameObject.GetComponent<GameRule>();
+        _inputSystem = new InputSystem();
+    }
+
+    private void FixedUpdate()
+    {
+        IdleMoney();
+    }
+
+    private void IdleMoney()
+    {
+        if (idleToggle)
+        {
+            StartCoroutine(IdleClicker());
+            idleToggle = false;
+        }
+
+        clickTimer += Time.deltaTime + 1;
+        Debug.Log("clickTimer: " + clickTimer);
+        if (clickTimer > 10)
+        {
+            StopActiveClicker();
+        }
+    }
+
+    IEnumerator IdleClicker()
+    {
+        yield return new WaitForSeconds(baseIdleTime);
+        gameRule.IncreaseScore();
+        clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
+        idleToggle = true;
+    }
+
+    private void ActiveMoney()
+    {
+        if (activeToggle && mouseEnable)
+        {
+            StartCoroutine(ActiveClicker());
+            clickTimer = 0;
+            activeToggle = false;
+        }
+    }
+
+    IEnumerator ActiveClicker()
+    {
+        yield return new WaitForSeconds(baseActiveTime);
+        gameRule.IncreaseScore();
+        anim.playAnimation();
+        clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
+        effect.IncreaseClickEffect(10);
+        activeToggle = true;
+    }
+
+
+
+    private void StopActiveClicker()
+    {
+        effect.IncreaseClickEffect(2);
+    }
+
+    private void StopActiveClicker(InputAction.CallbackContext context)
+    {
+        effect.IncreaseClickEffect(2);
     }
 
     public void AddItemLvl()
     {
-        _gameRule.AddItemLvl(Level);
+        gameRule.AddItemLvl(Level);
         clickerUI.currentLevel.text = GameManager.Instance.GetGameData().ItemCount.ToString();
     }
 
     public void OnClickIncreaseMoney(InputAction.CallbackContext context)
     {
-        if (mouseEnable)
-        {
-            _gameRule.IncreaseScore();
-            anim.playAnimation();
-            clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
-        }
+        ActiveMoney();
     }
+
     public void NextScene(int index)
     {
         GameManager.Instance.SaveGame();
         GameManager.Instance.NextLevel(index);
     }
+
     private void CheckMousePos(bool checkMouseEnable)
     {
         mouseEnable = checkMouseEnable;
