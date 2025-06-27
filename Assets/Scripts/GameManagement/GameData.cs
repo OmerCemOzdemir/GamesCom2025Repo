@@ -10,7 +10,13 @@ public class GameData
     public bool[] platformItems = new bool[4];
 
     //Data For only Cookie Clicker Game:
-    public float ItemBaseIncome = 1.67f;
+    public ClickerItem[] clickerItem = new ClickerItem[4];
+
+
+}
+
+/*
+     public float ItemBaseIncome = 1.67f;
     public int ItemCount = 1;
     public int ItemMulti = 2;
-}
+ */
