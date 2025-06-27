@@ -1,15 +1,21 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class ClickerManager : MonoBehaviour
 {
-    [SerializeField] private ClickerUI clickerUI;
-    private GameRule gameRule;
-    private ClickerEffect effect;
-    [SerializeField] private animationManager anim;
+    public static event Action onActiveClick;
+    public static event Action onIdleClick;
 
-    [SerializeField] private int Level;
+    private ClickerEffect effect;
+
+    [SerializeField] private float baseActiveMoneyIncrement = 1; //Defualt is 1
+    [SerializeField] private float baseActiveMoneyMultiplier = 1; //Defualt is 1
+    [SerializeField] private float baseIdleMoneyIncrement = 0; //Defualt is 0
+    [SerializeField] private float baseIdleMoneyMultiplier = 1; //Defualt is 1
+
+
     [Tooltip("Increase this to longer the time of idle money")]
     [SerializeField] private float baseIdleTime = 1;
     [SerializeField] private float baseActiveTime = 1;
@@ -18,32 +24,42 @@ public class ClickerManager : MonoBehaviour
     private bool mouseEnable = false;
     private float clickTimer = 0;
 
-    private InputSystem _inputSystem;
+
+
+    private InputSystem inputSystem;
 
     private void OnEnable()
     {
-        _inputSystem.PlayerCookie.GetMoney.Enable();
-        _inputSystem.PlayerCookie.GetMoney.performed += OnClickIncreaseMoney;
+        inputSystem.PlayerCookie.GetMoney.Enable();
+        inputSystem.PlayerCookie.GetMoney.performed += OnButtonClick;
         global::CheckMousePos.onMouseOver += CheckMousePos;
+        onActiveClick += IncreaseActiveMoney;
+        onIdleClick += IncreaseIdleMoney;
+        ClickerUpgrade.onItemExchange += UpdateUpgrades;
+
     }
     private void OnDisable()
     {
-        _inputSystem.PlayerCookie.GetMoney.Disable();
-        _inputSystem.PlayerCookie.GetMoney.performed -= OnClickIncreaseMoney;
+        inputSystem.PlayerCookie.GetMoney.Disable();
+        inputSystem.PlayerCookie.GetMoney.performed -= OnButtonClick;
         global::CheckMousePos.onMouseOver -= CheckMousePos;
+        onActiveClick -= IncreaseActiveMoney;
+        onIdleClick -= IncreaseIdleMoney;
+        ClickerUpgrade.onItemExchange -= UpdateUpgrades;
     }
     private void Awake()
     {
         SetUpData();
         effect = transform.GetChild(0).gameObject.GetComponent<ClickerEffect>();
-        gameRule = transform.GetChild(1).gameObject.GetComponent<GameRule>();
-        _inputSystem = new InputSystem();
+        inputSystem = new InputSystem();
     }
 
     private void FixedUpdate()
     {
         IdleMoney();
     }
+
+    #region Active&IdleLogic
 
     private void IdleMoney()
     {
@@ -54,7 +70,7 @@ public class ClickerManager : MonoBehaviour
         }
 
         clickTimer += Time.deltaTime + 1;
-        Debug.Log("clickTimer: " + clickTimer);
+        //Debug.Log("clickTimer: " + clickTimer);
         if (clickTimer > 10)
         {
             StopActiveClicker();
@@ -64,8 +80,7 @@ public class ClickerManager : MonoBehaviour
     IEnumerator IdleClicker()
     {
         yield return new WaitForSeconds(baseIdleTime);
-        gameRule.IncreaseScore();
-        clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
+        onIdleClick?.Invoke();
         idleToggle = true;
     }
 
@@ -82,35 +97,99 @@ public class ClickerManager : MonoBehaviour
     IEnumerator ActiveClicker()
     {
         yield return new WaitForSeconds(baseActiveTime);
-        gameRule.IncreaseScore();
-        anim.playAnimation();
-        clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
+        onActiveClick?.Invoke();
         effect.IncreaseClickEffect(10);
         activeToggle = true;
     }
-
-
 
     private void StopActiveClicker()
     {
         effect.IncreaseClickEffect(2);
     }
 
-    private void StopActiveClicker(InputAction.CallbackContext context)
-    {
-        effect.IncreaseClickEffect(2);
-    }
-
-    public void AddItemLvl()
-    {
-        gameRule.AddItemLvl(Level);
-        clickerUI.currentLevel.text = GameManager.Instance.GetGameData().ItemCount.ToString();
-    }
-
-    public void OnClickIncreaseMoney(InputAction.CallbackContext context)
+    public void OnButtonClick(InputAction.CallbackContext context)
     {
         ActiveMoney();
     }
+
+
+
+
+    #endregion
+
+
+    private void IncreaseActiveMoney()
+    {
+        float max = GameManager.Instance.GetGameData().maxTotalMoney;
+        float money = GameManager.Instance.GetGameData().totalMoney;
+
+        money += (baseActiveMoneyIncrement * baseActiveMoneyMultiplier);
+        if (money >= max)
+        {
+            money = max;
+            GameManager.Instance.GetGameData().totalMoney = money;
+        }
+        else
+        {
+            GameManager.Instance.GetGameData().totalMoney = money;
+        }
+
+        //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
+    }
+
+    private void IncreaseIdleMoney()
+    {
+        float max = GameManager.Instance.GetGameData().maxTotalMoney;
+        float money = GameManager.Instance.GetGameData().totalMoney;
+
+        money += (baseIdleMoneyIncrement * baseIdleMoneyMultiplier);
+        if (money >= max)
+        {
+            money = max;
+            GameManager.Instance.GetGameData().totalMoney = money;
+        }
+        else
+        {
+            GameManager.Instance.GetGameData().totalMoney = money;
+        }
+
+        //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
+    }
+
+
+
+    private void UpdateUpgrades(int index, ClickerItem[] items)
+    {
+
+        switch (index)
+        {
+            case 0: //Improve Recipe
+                baseActiveMoneyIncrement += (2 * items[index].tier);
+                //Debug.Log("baseMoneyIncrement: " + baseActiveMoneyIncrement);
+                break; 
+            case 1: //Better Packing
+                baseActiveMoneyMultiplier *= (1 * items[index].tier);
+                break;
+            case 2: //Offshore Cheap Worker
+                baseIdleMoneyIncrement += (1 + items[index].tier);
+                break;
+            case 3: //Hire Better Offshore Worker 
+                baseIdleMoneyMultiplier *= (0.5f * items[index].tier);
+                break;
+            case 4: //Better Sales Algorithm
+                baseIdleTime = (baseIdleTime / 2);
+                break;
+            case 5: //Better Delivery/Courier
+                baseIdleMoneyIncrement *= (1 + items[index].tier);
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
+
 
     public void NextScene(int index)
     {
@@ -122,10 +201,46 @@ public class ClickerManager : MonoBehaviour
     {
         mouseEnable = checkMouseEnable;
     }
+
     private void SetUpData()
     {
         GameManager.Instance.GetGameData();
-        clickerUI.currentLevel.text = GameManager.Instance.GetGameData().ItemCount.ToString();
-        clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
+
+
+        int walletLevel = GameManager.Instance.GetGameData().walletLevel;
+        float maxTotalMoney = 0;
+        Debug.Log("max Money: " + walletLevel);
+        //This feels stupid.
+        switch (walletLevel)
+        {
+            case 0:
+                maxTotalMoney = 10000;
+                Debug.Log("max Money: " + maxTotalMoney);
+                break;
+            case 1:
+                maxTotalMoney = 100000;
+                break;
+            case 2:
+                maxTotalMoney = 1000000;
+                break;
+            default:
+                break;
+        }
+
+        GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
+        onActiveClick?.Invoke();
     }
 }
+
+
+/*
+ 
+    public void AddItemLvl()
+    {
+        gameRule.AddItemLvl(Level);
+    }
+ 
+        clickerUI.currentLevel.text = GameManager.Instance.GetGameData().ItemCount.ToString();
+        clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
+
+ */

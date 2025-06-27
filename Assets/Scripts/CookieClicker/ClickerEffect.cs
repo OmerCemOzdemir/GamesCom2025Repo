@@ -4,6 +4,16 @@ public class ClickerEffect : MonoBehaviour
 {
     private ParticleSystem clickerEffect;
 
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
     private void Awake()
     {
         clickerEffect = GetComponent<ParticleSystem>();
