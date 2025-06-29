@@ -7,4 +7,7 @@ public class ClickerItem
     public string description;
     public float cost;
     public float tier;
+
+
+
 }
