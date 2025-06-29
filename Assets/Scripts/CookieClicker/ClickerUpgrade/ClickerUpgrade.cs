@@ -29,6 +29,7 @@ public class ClickerUpgrade : MonoBehaviour
 
     private void Awake()
     {
+        SetUpData();
         CreateUpgradeButtons();
     }
 
@@ -103,7 +104,10 @@ public class ClickerUpgrade : MonoBehaviour
         else
         {
             GameManager.Instance.GetGameData().totalMoney = calcMoney;
-            items[clickerIndex].cost = cost * baseCostMultiplier;
+            cost = (float)Math.Pow(cost, baseCostMultiplier);
+            cost = (float)Math.Round(cost);
+            items[clickerIndex].cost = cost;
+            Debug.Log("Cost: " + cost + "Exponent: " + baseCostMultiplier);
             items[clickerIndex].tier++;
             Debug.Log("Bought Item: " + items[clickerIndex].name + "The current tier: " + items[clickerIndex].tier + "\n"
                 + "The new Item Cost");
@@ -111,7 +115,37 @@ public class ClickerUpgrade : MonoBehaviour
 
         UpdateUpgradeButtons();
         onItemExchange?.Invoke(clickerIndex, items);
+        GameManager.Instance.GetGameData().clickerItems = items;
+
     }
 
+    private void SetUpData()
+    {
 
+        if (GameManager.Instance.GetGameData().newGame)
+        {
+            GameManager.Instance.GetGameData().newGame = false;
+            GameManager.Instance.GetGameData().clickerItems = items;
+        }
+        else
+        {
+            items = GameManager.Instance.GetGameData().clickerItems;
+        }
+
+
+    }
 }
+
+
+/*
+             if (items[clickerIndex].tier == 0)
+            {
+                newCostMultiplier[clickerIndex] = (float)Math.Pow(cost, baseCostMultiplier);
+                items[clickerIndex].cost = newCostMultiplier[clickerIndex];
+            }
+            else
+            {
+                newCostMultiplier[clickerIndex] = (float)Math.Pow(cost, newCostMultiplier[clickerIndex]);
+                items[clickerIndex].cost = newCostMultiplier[clickerIndex];
+            }
+ */

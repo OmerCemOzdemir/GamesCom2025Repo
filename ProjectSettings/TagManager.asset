@@ -13,6 +13,7 @@ TagManager:
   - Taxi
   - Sign
   - CheckpointCollector
+  - Wallet
   layers:
   - Default
   - TransparentFX

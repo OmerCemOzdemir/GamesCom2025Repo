@@ -2,6 +2,7 @@
 public class GameData
 {
     //Data For Multi-Scene;
+    public bool newGame = true;
     public float totalMoney;
     public float maxTotalMoney;
     public int walletLevel = 0;
@@ -10,7 +11,7 @@ public class GameData
     public bool[] platformItems = new bool[4];
 
     //Data For only Cookie Clicker Game:
-    public ClickerItem[] clickerItem = new ClickerItem[4];
+    public ClickerItem[] clickerItems = new ClickerItem[4];
 
 
 }

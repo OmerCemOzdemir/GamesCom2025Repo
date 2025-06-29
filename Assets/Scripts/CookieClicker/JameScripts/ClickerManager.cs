@@ -35,7 +35,7 @@ public class ClickerManager : MonoBehaviour
         global::CheckMousePos.onMouseOver += CheckMousePos;
         onActiveClick += IncreaseActiveMoney;
         onIdleClick += IncreaseIdleMoney;
-        ClickerUpgrade.onItemExchange += UpdateUpgrades;
+        ClickerUpgrade.onItemExchange += ImplementUpgrades;
 
     }
     private void OnDisable()
@@ -45,7 +45,7 @@ public class ClickerManager : MonoBehaviour
         global::CheckMousePos.onMouseOver -= CheckMousePos;
         onActiveClick -= IncreaseActiveMoney;
         onIdleClick -= IncreaseIdleMoney;
-        ClickerUpgrade.onItemExchange -= UpdateUpgrades;
+        ClickerUpgrade.onItemExchange -= ImplementUpgrades;
     }
     private void Awake()
     {
@@ -158,7 +158,7 @@ public class ClickerManager : MonoBehaviour
 
 
 
-    private void UpdateUpgrades(int index, ClickerItem[] items)
+    private void ImplementUpgrades(int index, ClickerItem[] items)
     {
 
         switch (index)
@@ -166,15 +166,15 @@ public class ClickerManager : MonoBehaviour
             case 0: //Improve Recipe
                 baseActiveMoneyIncrement += (2 * items[index].tier);
                 //Debug.Log("baseMoneyIncrement: " + baseActiveMoneyIncrement);
-                break; 
+                break;
             case 1: //Better Packing
-                baseActiveMoneyMultiplier *= (1 * items[index].tier);
+                baseActiveMoneyMultiplier *= (1.5f * items[index].tier);
                 break;
             case 2: //Offshore Cheap Worker
-                baseIdleMoneyIncrement += (1 + items[index].tier);
+                baseIdleMoneyIncrement += (1.5f + items[index].tier);
                 break;
             case 3: //Hire Better Offshore Worker 
-                baseIdleMoneyMultiplier *= (0.5f * items[index].tier);
+                baseIdleMoneyMultiplier *= (0.5f + items[index].tier);
                 break;
             case 4: //Better Sales Algorithm
                 baseIdleTime = (baseIdleTime / 2);
@@ -186,6 +186,67 @@ public class ClickerManager : MonoBehaviour
                 break;
         }
 
+
+    }
+
+    private void UpdateUpgrades(ClickerItem[] items)
+    {
+        for (int index = 0; index < items.Length; index++)
+        {
+            switch (index)
+            {
+                case 0: //Improve Recipe
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseActiveMoneyIncrement += (2 * items[index].tier);
+                        PrintFields();
+                    }
+                    break;
+                case 1: //Better Packing
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseActiveMoneyMultiplier *= (1.5f * items[index].tier);
+                        PrintFields();
+
+                    }
+                    break;
+                case 2: //Offshore Cheap Worker
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseIdleMoneyIncrement += (1.5f + items[index].tier);
+                        PrintFields();
+
+                    }
+                    break;
+                case 3: //Hire Better Offshore Worker 
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseIdleMoneyMultiplier *= (0.5f + items[index].tier);
+                        PrintFields();
+
+                    }
+                    break;
+                case 4: //Better Sales Algorithm
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseIdleTime = (baseIdleTime / 2);
+                        PrintFields();
+
+                    }
+                    break;
+                case 5: //Better Delivery/Courier
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseIdleMoneyIncrement *= (1 + items[index].tier);
+                        PrintFields();
+
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
 
     }
 
@@ -202,11 +263,14 @@ public class ClickerManager : MonoBehaviour
         mouseEnable = checkMouseEnable;
     }
 
+
+
+
     private void SetUpData()
     {
         GameManager.Instance.GetGameData();
 
-
+        UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems);
         int walletLevel = GameManager.Instance.GetGameData().walletLevel;
         float maxTotalMoney = 0;
         Debug.Log("max Money: " + walletLevel);
@@ -219,6 +283,7 @@ public class ClickerManager : MonoBehaviour
                 break;
             case 1:
                 maxTotalMoney = 100000;
+                Debug.Log("max Money: " + maxTotalMoney);
                 break;
             case 2:
                 maxTotalMoney = 1000000;
@@ -229,7 +294,21 @@ public class ClickerManager : MonoBehaviour
 
         GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
         onActiveClick?.Invoke();
+
     }
+
+    private void PrintFields()
+    {
+        Debug.Log(" baseActiveMoneyIncrement: " + baseActiveMoneyIncrement + "\n"
+    + " baseActiveMoneyMultiplier: " + baseActiveMoneyMultiplier + "\n"
+    + " baseIdleMoneyIncrement: " + baseIdleMoneyIncrement + "\n"
+    + " baseIdleMoneyMultiplier: " + baseIdleMoneyMultiplier + "\n"
+    + " baseIdleTime: " + baseIdleTime + "\n"
+    + " baseActiveTime:" + baseActiveTime + "\n"
+
+    );
+    }
+
 }
 
 
@@ -243,4 +322,13 @@ public class ClickerManager : MonoBehaviour
         clickerUI.currentLevel.text = GameManager.Instance.GetGameData().ItemCount.ToString();
         clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
 
+    [SerializeField] private float baseActiveMoneyIncrement = 1; //Defualt is 1
+    [SerializeField] private float baseActiveMoneyMultiplier = 1; //Defualt is 1
+    [SerializeField] private float baseIdleMoneyIncrement = 0; //Defualt is 0
+    [SerializeField] private float baseIdleMoneyMultiplier = 1; //Defualt is 1
+
+
+    [Tooltip("Increase this to longer the time of idle money")]
+    [SerializeField] private float baseIdleTime = 1;
+    [SerializeField] private float baseActiveTime = 1;
  */

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerControler : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerMove;
     public static event Action onPlayerClimb;
 
-    public static event Action onPlayerPickUp;
+    public static event Action onPlayerPickUpKey;
+    public static event Action onPlayerPickUpWallet;
+
     public static event Action onPlayerOpenDoor;
     public static event Action onPlayerUseElevator;
     public static event Action onPlayerPassBridge;
@@ -266,7 +269,7 @@ public class PlayerControler : MonoBehaviour
             case Interaction.Key:
                 Debug.Log("PickUp Key");
                 //Interaction Toggle Not needed
-                onPlayerPickUp?.Invoke();
+                onPlayerPickUpKey?.Invoke();
                 platformerManager.KeyNumber++;
                 interaction = Interaction.Empty;
                 break;
@@ -296,10 +299,35 @@ public class PlayerControler : MonoBehaviour
                 Debug.Log("Get in Taxi");
                 onPlayerGetInTaxi?.Invoke();
                 break;
+            case Interaction.Sign:
+                //Interaction Toggle Not needed
+                Debug.Log("Travel");
+                if (currentInteractedGameObject.GetComponent<Sign>().nextLevel)
+                {
+                    NextLevel(SceneManager.GetActiveScene().buildIndex + 1);
+                }
+                else
+                {
+                    NextLevel(1);
+                }
+                break;
+            case Interaction.Wallet:
+                //Interaction Toggle Not needed
+                Debug.Log("Get Wallet");
+                GameManager.Instance.GetGameData().walletLevel++;
+                Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
+                onPlayerPickUpWallet?.Invoke();
+                break;
             default:
                 break;
         }
 
+    }
+
+    private void NextLevel(int index)
+    {
+        GameManager.Instance.SaveGame();
+        GameManager.Instance.NextLevel(index);
     }
 
     //When called player dismounts the ladder by enabling the climb value to false.
@@ -539,7 +567,9 @@ public enum Interaction
     Elevator,
     Bridge,
     Shop,
-    Taxi
+    Taxi,
+    Sign,
+    Wallet
 
 }
 
