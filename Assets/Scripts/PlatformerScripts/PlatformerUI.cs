@@ -32,7 +32,7 @@ public class PlatformerUI : MonoBehaviour
     private void OnEnable()
     {
         PlatformerManager.onMoneyChange += UpdateLostMoney;
-        PlayerControler.onPlayerPickUp += EnableKeyImage;
+        PlayerControler.onPlayerPickUpKey += EnableKeyImage;
         PlayerControler.onPlayerOpenShop += OpenShop;
         UpgradeShop.onItemExchange += UpdateItemSlotImages;
         Door.onDoorTravel += StartFadeEffect;
@@ -43,7 +43,7 @@ public class PlatformerUI : MonoBehaviour
     private void OnDisable()
     {
         PlatformerManager.onMoneyChange -= UpdateLostMoney;
-        PlayerControler.onPlayerPickUp -= EnableKeyImage;
+        PlayerControler.onPlayerPickUpKey -= EnableKeyImage;
         PlayerControler.onPlayerOpenShop -= OpenShop;
         UpgradeShop.onItemExchange -= UpdateItemSlotImages;
         Door.onDoorTravel -= StartFadeEffect;

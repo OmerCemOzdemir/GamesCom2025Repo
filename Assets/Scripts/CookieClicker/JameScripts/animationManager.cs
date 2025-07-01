@@ -13,6 +13,16 @@ public class animationManager : MonoBehaviour
     public float baseAnimationSpeed = 1.0f;
     public float clickSpeedMultiplier = 1.0f;
 
+    private void OnEnable()
+    {
+        ClickerManager.onActiveClick += playAnimation;
+    }
+
+    private void OnDisable()
+    {
+        ClickerManager.onActiveClick -= playAnimation;
+    }
+
     private void Awake()
     {
         lastClickTime = Time.time;
@@ -41,13 +51,13 @@ public class animationManager : MonoBehaviour
 
     }
 
-    public void playAnimation()
+    private void playAnimation()
     {
         if(animator.enabled == false)
         {
             animator.enabled = true;
         }
         animationSpeedCul();
-        animator.Play("Click2", 0, 0f);
+        animator.Play("Click3", 0, 0f);
     }
 }

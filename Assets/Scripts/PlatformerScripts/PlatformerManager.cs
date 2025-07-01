@@ -42,7 +42,7 @@ public class PlatformerManager : MonoBehaviour
         PlayerControler.onPlayerJump += ReduceMoneyJump;
         PlayerControler.onPlayerMove += ReduceMoneyMove;
         PlayerControler.onPlayerClimb += ReduceMoneyClimb;
-        PlayerControler.onPlayerPickUp += ReduceMoneyPickUp;
+        PlayerControler.onPlayerPickUpKey += ReduceMoneyPickUp;
         PlayerControler.onPlayerOpenDoor += ReduceMoneyDoorOpen;
         PlayerControler.onPlayerUseElevator += ReduceMoneyUseElevator;
         PlayerControler.onPlayerPassBridge += ReduceMoneyPassBridge;
@@ -60,7 +60,7 @@ public class PlatformerManager : MonoBehaviour
         PlayerControler.onPlayerJump -= ReduceMoneyJump;
         PlayerControler.onPlayerMove -= ReduceMoneyMove;
         PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
-        PlayerControler.onPlayerPickUp -= ReduceMoneyPickUp;
+        PlayerControler.onPlayerPickUpKey -= ReduceMoneyPickUp;
         PlayerControler.onPlayerOpenDoor -= ReduceMoneyDoorOpen;
         PlayerControler.onPlayerPassBridge -= ReduceMoneyPassBridge;
         //------------------------------------------------------------------
@@ -278,6 +278,21 @@ public class PlatformerManager : MonoBehaviour
             EnableInteractText("Taxi");
 
         }
+
+        if (collision.CompareTag("Sign"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Sign);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("");
+        }
+
+        if (collision.CompareTag("Wallet"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Wallet);
+            EnableInteractText("");
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -353,6 +368,21 @@ public class PlatformerManager : MonoBehaviour
 
         }
 
+        if (collision.CompareTag("Sign"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
+        }
+
+        if (collision.CompareTag("Wallet"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
+        }
     }
 
 }

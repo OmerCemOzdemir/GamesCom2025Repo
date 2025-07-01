@@ -13,6 +13,7 @@ TagManager:
   - Taxi
   - Sign
   - CheckpointCollector
+  - Wallet
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - Bridge
   - Taxi
   - Sign
-  - 
+  - ClickerEffect
   - 
   - 
   - 

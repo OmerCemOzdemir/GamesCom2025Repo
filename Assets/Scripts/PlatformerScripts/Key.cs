@@ -4,12 +4,12 @@ public class Key : MonoBehaviour
 {
     private void OnEnable()
     {
-        PlayerControler.onPlayerPickUp += PickUpKey;
+        PlayerControler.onPlayerPickUpKey += PickUpKey;
     }
 
     private void OnDisable()
     {
-        PlayerControler.onPlayerPickUp -= PickUpKey;
+        PlayerControler.onPlayerPickUpKey -= PickUpKey;
     }
 
     private void PickUpKey()
