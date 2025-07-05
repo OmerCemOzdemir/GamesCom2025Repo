@@ -96,12 +96,11 @@ public class Bridge : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (!payOnce)
-            {
-                BridgeTextClose();
-                //Player can use the interaction for Bridge again
-                onBridgeDone?.Invoke();
-            }
+            BridgeTextClose();
+            //Player can use the interaction for Bridge again
+            Debug.Log("Out of Bridge");
+            onBridgeDone?.Invoke();
+
 
         }
     }

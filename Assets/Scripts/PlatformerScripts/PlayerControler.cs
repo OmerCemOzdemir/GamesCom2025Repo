@@ -3,12 +3,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEditor.PlayerSettings;
 
 public class PlayerControler : MonoBehaviour
 {
     public static event Action onPlayerJump;
     public static event Action onPlayerMove;
     public static event Action onPlayerClimb;
+    public static event Action<MoneySpent> onMoneySpent;
 
     public static event Action onPlayerPickUpKey;
     public static event Action onPlayerPickUpWallet;
@@ -176,14 +178,16 @@ public class PlayerControler : MonoBehaviour
         //Debug.Log("Teleport to ")
         DisableInput();
         //playerRigid2D.MovePosition(pos);
-        //StartCoroutine(DelayOnTeleport(sec));
-        transform.position = pos;
-        EnableInput();
+        StartCoroutine(DelayOnTeleport(sec, pos));
+
     }
 
-    IEnumerator DelayOnTeleport(float sec)
+    IEnumerator DelayOnTeleport(float sec, Vector3 pos)
     {
-        yield return new WaitForSeconds(sec);
+
+        yield return new WaitForSeconds(sec / 2);
+        transform.position = pos;
+        EnableInput();
     }
 
     //These Functions handle basic movement and sprint
@@ -211,6 +215,7 @@ public class PlayerControler : MonoBehaviour
     private void PlayerMoved(InputAction.CallbackContext context)
     {
         onPlayerMove?.Invoke();
+        onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
     }
 
     private void SprintStart(InputAction.CallbackContext context)
@@ -266,19 +271,25 @@ public class PlayerControler : MonoBehaviour
             case Interaction.Door:
                 //Interaction Toggle Not needed
                 Debug.Log("Open Door");
+                onMoneySpent?.Invoke(MoneySpent.moneySpentOpenDoor);
                 onPlayerOpenDoor?.Invoke();
                 break;
             case Interaction.Key:
                 Debug.Log("PickUp Key");
                 //Interaction Toggle Not needed
                 onPlayerPickUpKey?.Invoke();
+                onMoneySpent?.Invoke(MoneySpent.moneySpentPickUp);
+
                 platformerManager.KeyNumber++;
                 interaction = Interaction.Empty;
                 break;
             case Interaction.Elevator:
+                Debug.Log("interactionToggle: " + interactionToggle);
+
                 if (interactionToggle)
                 {
                     Debug.Log("Use Elevator");
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
                     onPlayerUseElevator?.Invoke();
                     interactionToggle = false;
                 }
@@ -287,6 +298,7 @@ public class PlayerControler : MonoBehaviour
                 if (interactionToggle)
                 {
                     Debug.Log("PassBridge");
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentPassBridge);
                     onPlayerPassBridge?.Invoke();
                     interactionToggle = false;
                 }
@@ -378,6 +390,7 @@ public class PlayerControler : MonoBehaviour
             {
                 //Reduce Money
                 onPlayerClimb?.Invoke();
+                onMoneySpent?.Invoke(MoneySpent.moneySpentClimb);
                 Debug.Log("Reduce Monay For Climbing");
             }
         }
@@ -471,7 +484,8 @@ public class PlayerControler : MonoBehaviour
                 {
                     //Reduce Money
                     onPlayerJump?.Invoke();
-                    Debug.Log("Reduce Monay For Climbing");
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentJump);
+                    Debug.Log("Reduce Monay For Jumping");
                 }
             }
             //Debug.Log("Jump Pressed");

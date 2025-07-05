@@ -39,13 +39,7 @@ public class PlatformerManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerControler.onPlayerJump += ReduceMoneyJump;
-        PlayerControler.onPlayerMove += ReduceMoneyMove;
-        PlayerControler.onPlayerClimb += ReduceMoneyClimb;
-        PlayerControler.onPlayerPickUpKey += ReduceMoneyPickUp;
-        PlayerControler.onPlayerOpenDoor += ReduceMoneyDoorOpen;
-        PlayerControler.onPlayerUseElevator += ReduceMoneyUseElevator;
-        PlayerControler.onPlayerPassBridge += ReduceMoneyPassBridge;
+        PlayerControler.onMoneySpent += SpentMoney;
         //------------------------------------------------------------------
         LerpObject.onlerpOpStart += DisableInteractText;
         LerpObject.onlerpOpDone += ToggleElevatorActive;
@@ -57,12 +51,7 @@ public class PlatformerManager : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerControler.onPlayerJump -= ReduceMoneyJump;
-        PlayerControler.onPlayerMove -= ReduceMoneyMove;
-        PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
-        PlayerControler.onPlayerPickUpKey -= ReduceMoneyPickUp;
-        PlayerControler.onPlayerOpenDoor -= ReduceMoneyDoorOpen;
-        PlayerControler.onPlayerPassBridge -= ReduceMoneyPassBridge;
+        PlayerControler.onMoneySpent -= SpentMoney;
         //------------------------------------------------------------------
         LerpObject.onlerpOpStart -= DisableInteractText;
         LerpObject.onlerpOpDone -= ToggleElevatorActive;
@@ -183,6 +172,60 @@ public class PlatformerManager : MonoBehaviour
         {
             onMoneyZero?.Invoke();
         }
+    }
+
+
+    //These Functions calculate the money spent and reduce the money.
+    private void SpentMoney(MoneySpent moneySpent)
+    {
+        switch (moneySpent)
+        {
+            case MoneySpent.moneySpentMove:
+                RecudeMoney(moneyRequiredMove);
+                break;
+            case MoneySpent.moneySpentJump:
+                RecudeMoney(moneyRequiredJump);
+
+                break;
+            case MoneySpent.moneySpentClimb:
+                RecudeMoney(moneyRequiredClimb);
+
+                break;
+            case MoneySpent.moneySpentPickUp:
+                RecudeMoney(moneyRequiredPickUp);
+
+                break;
+            case MoneySpent.moneySpentOpenDoor:
+                RecudeMoney(moneyRequiredOpenDoor);
+
+                break;
+            case MoneySpent.moneySpentPassBridge:
+                RecudeMoney(moneyRequiredPassBridge);
+
+                break;
+            case MoneySpent.moneySpentUseElevator:
+                RecudeMoney(moneyRequiredUseElevator);
+
+                break;
+        }
+    }
+
+    private void RecudeMoney(float moneyReq)
+    {
+        float money = GameManager.Instance.GetGameData().totalMoney;
+        float calcMoney = money - moneyReq;
+        if (calcMoney <= 0)
+        {
+            GameManager.Instance.GetGameData().totalMoney = 0;
+            onMoneyChange?.Invoke(moneyReq);
+            onMoneyZero?.Invoke();
+        }
+        else
+        {
+            GameManager.Instance.GetGameData().totalMoney = calcMoney;
+            onMoneyChange?.Invoke(moneyReq);
+        }
+
     }
 
 
@@ -400,6 +443,18 @@ public class PlatformerManager : MonoBehaviour
 
 }
 
+public enum MoneySpent
+{
+    moneySpentMove,
+    moneySpentJump,
+    moneySpentClimb,
+    moneySpentPickUp,
+    moneySpentOpenDoor,
+    moneySpentUseElevator,
+    moneySpentPassBridge
+}
+
+
 /*
    if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -446,4 +501,19 @@ public class PlatformerManager : MonoBehaviour
     {
         Debug.Log("Disable Input : " + playerInputAction.PlayerPlatform.Move.enabled);
     }
+
+        PlayerControler.onPlayerJump += ReduceMoneyJump;
+        PlayerControler.onPlayerMove += ReduceMoneyMove;
+        PlayerControler.onPlayerClimb += ReduceMoneyClimb;
+        PlayerControler.onPlayerPickUpKey += ReduceMoneyPickUp;
+        PlayerControler.onPlayerOpenDoor += ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerUseElevator += ReduceMoneyUseElevator;
+        PlayerControler.onPlayerPassBridge += ReduceMoneyPassBridge;
+
+        PlayerControler.onPlayerJump -= ReduceMoneyJump;
+        PlayerControler.onPlayerMove -= ReduceMoneyMove;
+        PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
+        PlayerControler.onPlayerPickUpKey -= ReduceMoneyPickUp;
+        PlayerControler.onPlayerOpenDoor -= ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerPassBridge -= ReduceMoneyPassBridge;
  */
