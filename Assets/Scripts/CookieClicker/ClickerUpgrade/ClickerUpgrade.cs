@@ -206,6 +206,7 @@ public class ClickerUpgrade : MonoBehaviour
             {
                 Debug.Log("itemsData: " + i + ": " + upgradeItems[i].baseItemCost);
                 itemsData[i] = new ClickerItemSaveData();
+                itemsData[i].ID = upgradeItems[i].name;
                 itemsData[i].cost = upgradeItems[i].baseItemCost;
                 itemsData[i].tier = 0;
                 itemsData[i].unlock = upgradeItems[i].itemUnlocked;
