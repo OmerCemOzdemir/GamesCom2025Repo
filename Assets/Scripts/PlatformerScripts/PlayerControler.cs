@@ -12,12 +12,14 @@ public class PlayerControler : MonoBehaviour
 
     public static event Action onPlayerPickUpKey;
     public static event Action onPlayerPickUpWallet;
+    public static event Action onPlayerPickUpItem;
 
     public static event Action onPlayerOpenDoor;
     public static event Action onPlayerUseElevator;
     public static event Action onPlayerPassBridge;
     public static event Action onPlayerOpenShop;
     public static event Action onPlayerGetInTaxi;
+
 
 
     [SerializeField] private float playerSpeed = 5; // default value is 5
@@ -318,10 +320,30 @@ public class PlayerControler : MonoBehaviour
                 Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
                 onPlayerPickUpWallet?.Invoke();
                 break;
+            case Interaction.Item:
+                //Interaction Toggle Not needed
+                Debug.Log("Get Item");
+                ItemPickUp();
+                break;
             default:
                 break;
         }
 
+    }
+
+
+    private void ItemPickUp()
+    {
+        ClickerItemSaveData[] currentItemData = GameManager.Instance.GetGameData().clickerItems;
+
+        for (int i = 0; i < currentItemData.Length; i++)
+        {
+            if (currentInteractedGameObject.GetComponent<TempPlaformItem>().Item.name == currentItemData[i].ID)
+            {
+                GameManager.Instance.GetGameData().clickerItems[i].unlock = true;
+            }
+        }
+        onPlayerPickUpItem?.Invoke();
     }
 
     private void NextLevel(int index)
@@ -569,7 +591,8 @@ public enum Interaction
     Shop,
     Taxi,
     Sign,
-    Wallet
+    Wallet,
+    Item
 
 }
 

@@ -293,6 +293,14 @@ public class PlatformerManager : MonoBehaviour
             onInteract?.Invoke(Interaction.Wallet);
             EnableInteractText("");
         }
+
+        if (collision.CompareTag("Item"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Item);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("");
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -373,7 +381,6 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Empty);
             DisableInteractText();
-
         }
 
         if (collision.CompareTag("Wallet"))
@@ -381,7 +388,13 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Empty);
             DisableInteractText();
+        }
 
+        if (collision.CompareTag("Item"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
         }
     }
 
