@@ -16,12 +16,12 @@ public class PlatformerUI : MonoBehaviour
     [Space(10)]
 
     [Header("Item Images")]
-    [Tooltip("This Array holds the IMAGES of game items:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [Tooltip("This Array holds the IMAGES of game itemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
     [SerializeField] private GameObject[] itemSlotImages;
     [Space(10)]
 
     [Header("Item Buttons")]
-    [Tooltip("This Array holds the BUTTONS of game items:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [Tooltip("This Array holds the BUTTONS of game itemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
     [SerializeField] private GameObject[] itemSlotButtons;
 
     private void Awake()
