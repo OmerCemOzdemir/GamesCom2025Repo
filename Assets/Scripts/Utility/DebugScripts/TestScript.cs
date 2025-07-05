@@ -262,7 +262,7 @@ public class TestScript : MonoBehaviour
     public void ResetGameData()
     {
         GameManager.Instance.ResetGameData();
-
+        GameManager.Instance.NextLevel(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ResetMoneyData()

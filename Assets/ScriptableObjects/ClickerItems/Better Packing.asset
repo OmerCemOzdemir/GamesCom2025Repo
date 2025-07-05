@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Better Packing
   itemDescription: More units sold per active click.
+  itemUnlocked: 1
   maxTier: 20
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 1741425923, guid: 7dc86e4aa0ba55f47b2ad7da43aec657, type: 3}
   itemEffector: 1
   itemOperationOnItemEffector: 0
   baseItemEffect: 2

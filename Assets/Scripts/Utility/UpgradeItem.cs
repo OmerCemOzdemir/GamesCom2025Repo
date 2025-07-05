@@ -7,8 +7,9 @@ public class UpgradeItem : ScriptableObject
 {
     public string itemName;
     public string itemDescription;
+    public bool itemUnlocked = true;
     public int maxTier;
-    public Image itemIcon;
+    public Sprite itemIcon;
     public ItemEffetors itemEffector;
     public Operations itemOperationOnItemEffector;
     public float baseItemEffect;
