@@ -10,7 +10,7 @@ public class UpgradeShop : MonoBehaviour
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private TextMeshProUGUI costInfoText;
 
-    [Tooltip("This Array holds the cost of game items:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [Tooltip("This Array holds the cost of game itemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
     [SerializeField] private PlatformItem[] platformItems;
 
 

@@ -11,7 +11,7 @@ public class GameData
     public bool[] platformItems = new bool[4];
 
     //Data For only Cookie Clicker Game:
-    public ClickerItem[] clickerItems = new ClickerItem[4];
+    public ClickerItemSaveData[] clickerItems;
 
 
 }

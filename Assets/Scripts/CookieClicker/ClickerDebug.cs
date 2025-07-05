@@ -1,24 +1,63 @@
 using System;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ClickerDebug : MonoBehaviour
 {
 
     private Type type;
     private FieldInfo[] fieldInfos;
-    private ClickerItem clickerItem;
-    private ClickerItem[] clickerItemArray;
+    private ClickerItemSaveData clickerItem;
+    private ClickerItemSaveData[] clickerItemArray;
+    [SerializeField] private GameObject debugPanel;
+    [SerializeField] private ClickerManager clickerManager;
+    [SerializeField] private TextMeshProUGUI debugText;
+    private bool toggle = false;
 
     private void Start()
     {
-        clickerItem = new ClickerItem();
+        clickerItem = new ClickerItemSaveData();
         clickerItemArray = GameManager.Instance.GetGameData().clickerItems;
         //PrintArray();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (toggle)
+            {
+                OpenDebugPanel();
+                toggle = false;
+            }
+            else
+            {
+                CloseDebugPanel();
+                toggle = true;
+            }
+        }
+    }
+
+    public void OpenDebugPanel()
+    {
+        debugPanel.SetActive(true);
+        UpdateDebugText();
+    }
+
+    public void CloseDebugPanel()
+    {
+        debugPanel.SetActive(false);
+    }
+
+    private void UpdateDebugText()
+    {
+        debugText.text = clickerManager.PrintFields();
+
+    }
+
 
     private void PrintArray()
     {
