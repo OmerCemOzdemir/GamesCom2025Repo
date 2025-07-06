@@ -32,10 +32,8 @@ public class PlatformerUI : MonoBehaviour
     private void OnEnable()
     {
         PlatformerManager.onMoneyChange += UpdateLostMoney;
-        PlayerControler.onPlayerPickUpKey += EnableKeyImage;
         PlayerControler.onPlayerOpenShop += OpenShop;
         UpgradeShop.onItemExchange += UpdateItemSlotImages;
-        Door.onDoorTravel += StartFadeEffect;
         PlatformerManager.onMoneyZero += OpenOutOfMoneyPanel;
         PlayerControler.onPlayerGetInTaxi += OpenTaxi;
     }
@@ -43,10 +41,8 @@ public class PlatformerUI : MonoBehaviour
     private void OnDisable()
     {
         PlatformerManager.onMoneyChange -= UpdateLostMoney;
-        PlayerControler.onPlayerPickUpKey -= EnableKeyImage;
         PlayerControler.onPlayerOpenShop -= OpenShop;
         UpgradeShop.onItemExchange -= UpdateItemSlotImages;
-        Door.onDoorTravel -= StartFadeEffect;
         PlatformerManager.onMoneyZero -= OpenOutOfMoneyPanel;
         PlayerControler.onPlayerGetInTaxi -= OpenTaxi;
 
@@ -110,30 +106,6 @@ public class PlatformerUI : MonoBehaviour
         lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
     }
 
-    private void StartFadeEffect(Vector3 pos, float sec)
-    {
-        Debug.Log("FadeEffect");
-    }
-
-    //Will be done
-    IEnumerator FadeEffect(float sec)
-    {
-        Color originalColor = lostMoneyText.color;
-        float startAlpha = originalColor.a;
-        float elapsed = 0f;
-
-        while (elapsed < sec)
-        {
-            elapsed += Time.deltaTime;
-            float newAlpha = Mathf.Lerp(startAlpha, 0f, elapsed / sec);
-            lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
-            yield return null; // wait for next frame
-        }
-
-        // Ensure it's fully transparent at the end
-        lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
-    }
-
     private void OpenOutOfMoneyPanel()
     {
         outOfMoneyPanel.SetActive(true);
@@ -180,5 +152,26 @@ public class PlatformerUI : MonoBehaviour
             lostMoneyText.color -= new Color(0, 0, 0, 0.1f);
             yield return new WaitForSeconds(sec);
         }
+
+
+    IEnumerator FadeText(int timer, GameObject obj)
+    {
+        obj.GetComponent<Image>().color = Color.black;
+        while (timer > 0)
+        {
+            timer--;
+            yield return new WaitForSeconds(1f);
+            obj.GetComponent<Image>().color -= new Color(0, 0, 0, 0.1f);
+            obj.GetComponentInChildren<TextMeshProUGUI>().color -= new Color(0, 0, 0, 0.1f);
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        Destroy(obj);
+        obj = null;
+
+    }
+
+
 
  */

@@ -26,7 +26,6 @@ public class TaxiUI : MonoBehaviour
     [Header("Stats: ")]
     [SerializeField] private float baseTravelCostLevel = 10000;
     [SerializeField] private float baseTravelCostCheckpoint = 1000;
-    [SerializeField] private float travelCostMultiplier = 1;
 
     private PlatformerUI platformerUI;
 
@@ -161,7 +160,7 @@ public class TaxiUI : MonoBehaviour
     {
         if (checkpointsPanel.activeSelf)
         {
-            float moneyReduced = GameManager.Instance.GetGameData().totalMoney - baseTravelCostCheckpoint * (checkpointIndex + 1);
+            double moneyReduced = GameManager.Instance.GetGameData().totalMoney - baseTravelCostCheckpoint * (checkpointIndex + 1);
             if (moneyReduced < 0)
             {
                 Debug.Log("Not enought money");
@@ -175,7 +174,7 @@ public class TaxiUI : MonoBehaviour
         }
         else
         {
-            float moneyReduced = GameManager.Instance.GetGameData().totalMoney - baseTravelCostLevel * (levelIndex + 1);
+            double moneyReduced = GameManager.Instance.GetGameData().totalMoney - baseTravelCostLevel * (levelIndex + 1);
             if (moneyReduced < 0)
             {
                 Debug.Log("Not enought money");

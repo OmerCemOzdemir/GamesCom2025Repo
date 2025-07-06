@@ -5,8 +5,11 @@ public class Door : MonoBehaviour
 {
     private GameObject keyText;
     private Animator doorAnimator;
+    private Animator targetAnimator;
+
     private bool isDoorOpen = false;
     private bool hasKey = false;
+    private bool toggleDoor = true;
     public static event Action<Vector3, float> onDoorTravel;
 
     private Transform doorTravelPosition;
@@ -16,6 +19,8 @@ public class Door : MonoBehaviour
     private void Awake()
     {
         doorAnimator = GetComponent<Animator>();
+        targetAnimator = transform.GetChild(0).GetComponent<Animator>();
+
         keyText = transform.GetChild(1).GetChild(0).gameObject;
         doorTravelPosition = transform.GetChild(0).gameObject.transform;
     }
@@ -27,9 +32,6 @@ public class Door : MonoBehaviour
             PlatformerManager.onDoorEnter += DoorOpenAnimPlay;
             PlatformerManager.onDoorExit += DoorCloseAnimPlay;
         }
-
-        PlayerControler.onPlayerOpenDoor += CheckDoor;
-        PlatformerManager.onDoorCheck += CheckKey;
     }
 
     private void OnDisable()
@@ -37,9 +39,6 @@ public class Door : MonoBehaviour
 
         PlatformerManager.onDoorEnter -= DoorOpenAnimPlay;
         PlatformerManager.onDoorExit -= DoorCloseAnimPlay;
-
-        PlayerControler.onPlayerOpenDoor -= CheckDoor;
-        PlatformerManager.onDoorCheck -= CheckKey;
     }
 
     private void DoorOpenAnimPlay()
@@ -47,6 +46,7 @@ public class Door : MonoBehaviour
         if (!isDoorOpen)
         {
             doorAnimator.SetTrigger("DoorOpen");
+            targetAnimator.SetTrigger("DoorOpen");
             isDoorOpen = true;
         }
     }
@@ -56,25 +56,45 @@ public class Door : MonoBehaviour
         if (isDoorOpen)
         {
             doorAnimator.SetTrigger("DoorClose");
+            targetAnimator.SetTrigger("DoorClose");
             isDoorOpen = false;
         }
     }
 
-    private void OpenDoor()
+    public void OpenDoor()
     {
-        onDoorTravel.Invoke(doorTravelPosition.position, delayOnTeleport);
+        if (toggleDoor)
+        {
+            onDoorTravel.Invoke(doorTravelPosition.position, delayOnTeleport);
+            toggleDoor = false;
+        }
+        else
+        {
+            onDoorTravel.Invoke(transform.position, delayOnTeleport);
+            toggleDoor = true;
+        }
+
     }
 
     private void OpenDoorWithKey()
     {
         if (hasKey)
         {
-            onDoorTravel.Invoke(doorTravelPosition.position, delayOnTeleport);
+            if (toggleDoor)
+            {
+                onDoorTravel.Invoke(doorTravelPosition.position, delayOnTeleport);
+                toggleDoor = false;
+            }
+            else
+            {
+                onDoorTravel.Invoke(transform.position, delayOnTeleport);
+                toggleDoor = true;
+            }
         }
     }
 
 
-    private void CheckKey(int key)
+    public void CheckKey(int key)
     {
         if (key == 0)
         {
@@ -88,7 +108,7 @@ public class Door : MonoBehaviour
         }
     }
 
-    private void CheckDoor()
+    public void CheckDoor()
     {
         if (requireKey)
         {

@@ -16,7 +16,6 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onBridgeExit;
 
     private int keyNumber;
-    private bool elevatorActive = false;
     private PlayerControler playerControler;
 
     public int KeyNumber { get => keyNumber; set => keyNumber = value; }
@@ -39,17 +38,10 @@ public class PlatformerManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerControler.onPlayerJump += ReduceMoneyJump;
-        PlayerControler.onPlayerMove += ReduceMoneyMove;
-        PlayerControler.onPlayerClimb += ReduceMoneyClimb;
-        PlayerControler.onPlayerPickUpKey += ReduceMoneyPickUp;
-        PlayerControler.onPlayerOpenDoor += ReduceMoneyDoorOpen;
-        PlayerControler.onPlayerUseElevator += ReduceMoneyUseElevator;
-        PlayerControler.onPlayerPassBridge += ReduceMoneyPassBridge;
+        PlayerControler.onMoneySpent += SpentMoney;
         //------------------------------------------------------------------
         LerpObject.onlerpOpStart += DisableInteractText;
-        LerpObject.onlerpOpDone += ToggleElevatorActive;
-        LerpObject.onlerpOpStart += ToggleElevatorActive;
+
         //------------------------------------------------------------------
         UpgradeShop.onItemExchange += SaveGameData;
         TestScript.onDataChange += LoadGameData;
@@ -57,16 +49,10 @@ public class PlatformerManager : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerControler.onPlayerJump -= ReduceMoneyJump;
-        PlayerControler.onPlayerMove -= ReduceMoneyMove;
-        PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
-        PlayerControler.onPlayerPickUpKey -= ReduceMoneyPickUp;
-        PlayerControler.onPlayerOpenDoor -= ReduceMoneyDoorOpen;
-        PlayerControler.onPlayerPassBridge -= ReduceMoneyPassBridge;
+        PlayerControler.onMoneySpent -= SpentMoney;
         //------------------------------------------------------------------
         LerpObject.onlerpOpStart -= DisableInteractText;
-        LerpObject.onlerpOpDone -= ToggleElevatorActive;
-        LerpObject.onlerpOpStart -= ToggleElevatorActive;
+
         //------------------------------------------------------------------
         UpgradeShop.onItemExchange -= SaveGameData;
         TestScript.onDataChange -= LoadGameData;
@@ -186,6 +172,60 @@ public class PlatformerManager : MonoBehaviour
     }
 
 
+    //These Functions calculate the money spent and reduce the money.
+    private void SpentMoney(MoneySpent moneySpent)
+    {
+        switch (moneySpent)
+        {
+            case MoneySpent.moneySpentMove:
+                RecudeMoney(moneyRequiredMove);
+                break;
+            case MoneySpent.moneySpentJump:
+                RecudeMoney(moneyRequiredJump);
+
+                break;
+            case MoneySpent.moneySpentClimb:
+                RecudeMoney(moneyRequiredClimb);
+
+                break;
+            case MoneySpent.moneySpentPickUp:
+                RecudeMoney(moneyRequiredPickUp);
+
+                break;
+            case MoneySpent.moneySpentOpenDoor:
+                RecudeMoney(moneyRequiredOpenDoor);
+
+                break;
+            case MoneySpent.moneySpentPassBridge:
+                RecudeMoney(moneyRequiredPassBridge);
+
+                break;
+            case MoneySpent.moneySpentUseElevator:
+                RecudeMoney(moneyRequiredUseElevator);
+
+                break;
+        }
+    }
+
+    private void RecudeMoney(float moneyReq)
+    {
+        double money = GameManager.Instance.GetGameData().totalMoney;
+        double calcMoney = money - moneyReq;
+        if (calcMoney <= 0)
+        {
+            GameManager.Instance.GetGameData().totalMoney = 0;
+            onMoneyChange?.Invoke(moneyReq);
+            onMoneyZero?.Invoke();
+        }
+        else
+        {
+            GameManager.Instance.GetGameData().totalMoney = calcMoney;
+            onMoneyChange?.Invoke(moneyReq);
+        }
+
+    }
+
+
     private void EnableInteractText(string txt)
     {
         interactText.SetActive(true);
@@ -199,10 +239,6 @@ public class PlatformerManager : MonoBehaviour
         requiredMoneyText.SetActive(false);
     }
 
-    private void ToggleElevatorActive()
-    {
-        elevatorActive = !elevatorActive;
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -232,6 +268,7 @@ public class PlatformerManager : MonoBehaviour
             onInteract?.Invoke(Interaction.Door);
             onDoorEnter?.Invoke();
             onDoorCheck?.Invoke(keyNumber);
+            onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("$" + moneyRequiredOpenDoor);
 
         }
@@ -241,24 +278,26 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Key);
             onKeyEnter?.Invoke();
+            onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("$" + moneyRequiredPickUp);
 
         }
 
         if (collision.CompareTag("Elevator"))
         {
-            if (!elevatorActive)
-            {
-                //Debug.Log("Ladder can NOT be used");
-                onInteract?.Invoke(Interaction.Elevator);
-                EnableInteractText("$" + moneyRequiredUseElevator);
-            }
+
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Elevator);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("$" + moneyRequiredUseElevator);
+
         }
 
         if (collision.CompareTag("Bridge"))
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Bridge);
+            onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("$" + moneyRequiredPassBridge);
 
         }
@@ -291,6 +330,7 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Wallet);
+            onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("");
         }
 
@@ -343,12 +383,11 @@ public class PlatformerManager : MonoBehaviour
 
         if (collision.CompareTag("Elevator"))
         {
-            if (!elevatorActive)
-            {
-                //Debug.Log("Ladder can NOT be used");
-                onInteract?.Invoke(Interaction.Empty);
-                DisableInteractText();
-            }
+
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
         }
 
         if (collision.CompareTag("Bridge"))
@@ -400,6 +439,18 @@ public class PlatformerManager : MonoBehaviour
 
 }
 
+public enum MoneySpent
+{
+    moneySpentMove,
+    moneySpentJump,
+    moneySpentClimb,
+    moneySpentPickUp,
+    moneySpentOpenDoor,
+    moneySpentUseElevator,
+    moneySpentPassBridge
+}
+
+
 /*
    if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -446,4 +497,19 @@ public class PlatformerManager : MonoBehaviour
     {
         Debug.Log("Disable Input : " + playerInputAction.PlayerPlatform.Move.enabled);
     }
+
+        PlayerControler.onPlayerJump += ReduceMoneyJump;
+        PlayerControler.onPlayerMove += ReduceMoneyMove;
+        PlayerControler.onPlayerClimb += ReduceMoneyClimb;
+        PlayerControler.onPlayerPickUpKey += ReduceMoneyPickUp;
+        PlayerControler.onPlayerOpenDoor += ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerUseElevator += ReduceMoneyUseElevator;
+        PlayerControler.onPlayerPassBridge += ReduceMoneyPassBridge;
+
+        PlayerControler.onPlayerJump -= ReduceMoneyJump;
+        PlayerControler.onPlayerMove -= ReduceMoneyMove;
+        PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
+        PlayerControler.onPlayerPickUpKey -= ReduceMoneyPickUp;
+        PlayerControler.onPlayerOpenDoor -= ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerPassBridge -= ReduceMoneyPassBridge;
  */

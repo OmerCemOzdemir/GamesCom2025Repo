@@ -3,23 +3,18 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEditor.PlayerSettings;
 
 public class PlayerControler : MonoBehaviour
 {
     public static event Action onPlayerJump;
     public static event Action onPlayerMove;
     public static event Action onPlayerClimb;
-
-    public static event Action onPlayerPickUpKey;
-    public static event Action onPlayerPickUpWallet;
+    public static event Action<MoneySpent> onMoneySpent;
     public static event Action onPlayerPickUpItem;
 
-    public static event Action onPlayerOpenDoor;
-    public static event Action onPlayerUseElevator;
-    public static event Action onPlayerPassBridge;
     public static event Action onPlayerOpenShop;
     public static event Action onPlayerGetInTaxi;
-
 
 
     [SerializeField] private float playerSpeed = 5; // default value is 5
@@ -176,14 +171,16 @@ public class PlayerControler : MonoBehaviour
         //Debug.Log("Teleport to ")
         DisableInput();
         //playerRigid2D.MovePosition(pos);
-        //StartCoroutine(DelayOnTeleport(sec));
-        transform.position = pos;
-        EnableInput();
+        StartCoroutine(DelayOnTeleport(sec, pos));
+
     }
 
-    IEnumerator DelayOnTeleport(float sec)
+    IEnumerator DelayOnTeleport(float sec, Vector3 pos)
     {
-        yield return new WaitForSeconds(sec);
+
+        yield return new WaitForSeconds(sec / 2);
+        transform.position = pos;
+        EnableInput();
     }
 
     //These Functions handle basic movement and sprint
@@ -211,6 +208,7 @@ public class PlayerControler : MonoBehaviour
     private void PlayerMoved(InputAction.CallbackContext context)
     {
         onPlayerMove?.Invoke();
+        onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
     }
 
     private void SprintStart(InputAction.CallbackContext context)
@@ -266,28 +264,48 @@ public class PlayerControler : MonoBehaviour
             case Interaction.Door:
                 //Interaction Toggle Not needed
                 Debug.Log("Open Door");
-                onPlayerOpenDoor?.Invoke();
+                onMoneySpent?.Invoke(MoneySpent.moneySpentOpenDoor);
+                if (currentInteractedGameObject.GetComponent<Door>() == null)
+                {
+                    currentInteractedGameObject.transform.root.GetComponent<Door>().CheckDoor();
+                    currentInteractedGameObject.transform.root.GetComponent<Door>().CheckKey(platformerManager.KeyNumber);
+
+                }
+                else
+                {
+                    currentInteractedGameObject.GetComponent<Door>().CheckDoor();
+                    currentInteractedGameObject.GetComponent<Door>().CheckKey(platformerManager.KeyNumber);
+                }
                 break;
             case Interaction.Key:
                 Debug.Log("PickUp Key");
                 //Interaction Toggle Not needed
-                onPlayerPickUpKey?.Invoke();
+                currentInteractedGameObject.GetComponent<Key>().PickUpKey();
+                onMoneySpent?.Invoke(MoneySpent.moneySpentPickUp);
+
                 platformerManager.KeyNumber++;
                 interaction = Interaction.Empty;
                 break;
             case Interaction.Elevator:
+                Debug.Log("interactionToggle: " + interactionToggle);
                 if (interactionToggle)
                 {
                     Debug.Log("Use Elevator");
-                    onPlayerUseElevator?.Invoke();
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
+                    currentInteractedGameObject.GetComponent<Elevator>().ToggleElevator();
                     interactionToggle = false;
                 }
                 break;
             case Interaction.Bridge:
                 if (interactionToggle)
                 {
+                    if (!currentInteractedGameObject.GetComponent<Bridge>().BridgePaid)
+                    {
+                        onMoneySpent?.Invoke(MoneySpent.moneySpentPassBridge);
+                        currentInteractedGameObject.GetComponent<Bridge>().unBlockBridge();
+                    }
                     Debug.Log("PassBridge");
-                    onPlayerPassBridge?.Invoke();
+
                     interactionToggle = false;
                 }
                 break;
@@ -318,7 +336,7 @@ public class PlayerControler : MonoBehaviour
                 Debug.Log("Get Wallet");
                 GameManager.Instance.GetGameData().walletLevel++;
                 Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
-                onPlayerPickUpWallet?.Invoke();
+                currentInteractedGameObject.GetComponent<Wallet>().PickUpWallet();
                 break;
             case Interaction.Item:
                 //Interaction Toggle Not needed
@@ -378,6 +396,7 @@ public class PlayerControler : MonoBehaviour
             {
                 //Reduce Money
                 onPlayerClimb?.Invoke();
+                onMoneySpent?.Invoke(MoneySpent.moneySpentClimb);
                 Debug.Log("Reduce Monay For Climbing");
             }
         }
@@ -471,7 +490,8 @@ public class PlayerControler : MonoBehaviour
                 {
                     //Reduce Money
                     onPlayerJump?.Invoke();
-                    Debug.Log("Reduce Monay For Climbing");
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentJump);
+                    Debug.Log("Reduce Monay For Jumping");
                 }
             }
             //Debug.Log("Jump Pressed");
@@ -753,5 +773,14 @@ Old Interaction Logic:
 
             Vector2 verticalVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower);
             Vector2 verticalDoubleVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower * 2);
+
+
+    public static event Action onPlayerPickUpKey;
+    public static event Action onPlayerPickUpWallet;
+
+    public static event Action onPlayerOpenDoor;
+    public static event Action onPlayerUseElevator;
+    public static event Action onPlayerPassBridge;
+
 
  */
