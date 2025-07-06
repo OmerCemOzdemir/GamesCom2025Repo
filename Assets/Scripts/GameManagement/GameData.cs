@@ -3,7 +3,7 @@ public class GameData
 {
     //Data For Multi-Scene;
     public bool newGame = true;
-    public float totalMoney;
+    public double totalMoney;
     public float maxTotalMoney;
     public int walletLevel = 0;
 

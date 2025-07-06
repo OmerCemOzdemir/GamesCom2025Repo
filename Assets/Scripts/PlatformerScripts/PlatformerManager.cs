@@ -16,7 +16,6 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onBridgeExit;
 
     private int keyNumber;
-    private bool elevatorActive = false;
     private PlayerControler playerControler;
 
     public int KeyNumber { get => keyNumber; set => keyNumber = value; }
@@ -42,8 +41,7 @@ public class PlatformerManager : MonoBehaviour
         PlayerControler.onMoneySpent += SpentMoney;
         //------------------------------------------------------------------
         LerpObject.onlerpOpStart += DisableInteractText;
-        LerpObject.onlerpOpDone += ToggleElevatorActive;
-        LerpObject.onlerpOpStart += ToggleElevatorActive;
+
         //------------------------------------------------------------------
         UpgradeShop.onItemExchange += SaveGameData;
         TestScript.onDataChange += LoadGameData;
@@ -54,8 +52,7 @@ public class PlatformerManager : MonoBehaviour
         PlayerControler.onMoneySpent -= SpentMoney;
         //------------------------------------------------------------------
         LerpObject.onlerpOpStart -= DisableInteractText;
-        LerpObject.onlerpOpDone -= ToggleElevatorActive;
-        LerpObject.onlerpOpStart -= ToggleElevatorActive;
+
         //------------------------------------------------------------------
         UpgradeShop.onItemExchange -= SaveGameData;
         TestScript.onDataChange -= LoadGameData;
@@ -212,8 +209,8 @@ public class PlatformerManager : MonoBehaviour
 
     private void RecudeMoney(float moneyReq)
     {
-        float money = GameManager.Instance.GetGameData().totalMoney;
-        float calcMoney = money - moneyReq;
+        double money = GameManager.Instance.GetGameData().totalMoney;
+        double calcMoney = money - moneyReq;
         if (calcMoney <= 0)
         {
             GameManager.Instance.GetGameData().totalMoney = 0;
@@ -242,10 +239,6 @@ public class PlatformerManager : MonoBehaviour
         requiredMoneyText.SetActive(false);
     }
 
-    private void ToggleElevatorActive()
-    {
-        elevatorActive = !elevatorActive;
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -275,6 +268,7 @@ public class PlatformerManager : MonoBehaviour
             onInteract?.Invoke(Interaction.Door);
             onDoorEnter?.Invoke();
             onDoorCheck?.Invoke(keyNumber);
+            onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("$" + moneyRequiredOpenDoor);
 
         }
@@ -284,24 +278,26 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Key);
             onKeyEnter?.Invoke();
+            onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("$" + moneyRequiredPickUp);
 
         }
 
         if (collision.CompareTag("Elevator"))
         {
-            if (!elevatorActive)
-            {
-                //Debug.Log("Ladder can NOT be used");
-                onInteract?.Invoke(Interaction.Elevator);
-                EnableInteractText("$" + moneyRequiredUseElevator);
-            }
+
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Elevator);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("$" + moneyRequiredUseElevator);
+
         }
 
         if (collision.CompareTag("Bridge"))
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Bridge);
+            onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("$" + moneyRequiredPassBridge);
 
         }
@@ -334,6 +330,7 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Wallet);
+            onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("");
         }
 
@@ -386,12 +383,11 @@ public class PlatformerManager : MonoBehaviour
 
         if (collision.CompareTag("Elevator"))
         {
-            if (!elevatorActive)
-            {
-                //Debug.Log("Ladder can NOT be used");
-                onInteract?.Invoke(Interaction.Empty);
-                DisableInteractText();
-            }
+
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
         }
 
         if (collision.CompareTag("Bridge"))

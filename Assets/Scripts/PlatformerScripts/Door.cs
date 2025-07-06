@@ -32,9 +32,6 @@ public class Door : MonoBehaviour
             PlatformerManager.onDoorEnter += DoorOpenAnimPlay;
             PlatformerManager.onDoorExit += DoorCloseAnimPlay;
         }
-
-        PlayerControler.onPlayerOpenDoor += CheckDoor;
-        PlatformerManager.onDoorCheck += CheckKey;
     }
 
     private void OnDisable()
@@ -42,9 +39,6 @@ public class Door : MonoBehaviour
 
         PlatformerManager.onDoorEnter -= DoorOpenAnimPlay;
         PlatformerManager.onDoorExit -= DoorCloseAnimPlay;
-
-        PlayerControler.onPlayerOpenDoor -= CheckDoor;
-        PlatformerManager.onDoorCheck -= CheckKey;
     }
 
     private void DoorOpenAnimPlay()
@@ -67,7 +61,7 @@ public class Door : MonoBehaviour
         }
     }
 
-    private void OpenDoor()
+    public void OpenDoor()
     {
         if (toggleDoor)
         {
@@ -100,7 +94,7 @@ public class Door : MonoBehaviour
     }
 
 
-    private void CheckKey(int key)
+    public void CheckKey(int key)
     {
         if (key == 0)
         {
@@ -114,7 +108,7 @@ public class Door : MonoBehaviour
         }
     }
 
-    private void CheckDoor()
+    public void CheckDoor()
     {
         if (requireKey)
         {

@@ -32,7 +32,6 @@ public class PlatformerUI : MonoBehaviour
     private void OnEnable()
     {
         PlatformerManager.onMoneyChange += UpdateLostMoney;
-        PlayerControler.onPlayerPickUpKey += EnableKeyImage;
         PlayerControler.onPlayerOpenShop += OpenShop;
         UpgradeShop.onItemExchange += UpdateItemSlotImages;
         PlatformerManager.onMoneyZero += OpenOutOfMoneyPanel;
@@ -42,7 +41,6 @@ public class PlatformerUI : MonoBehaviour
     private void OnDisable()
     {
         PlatformerManager.onMoneyChange -= UpdateLostMoney;
-        PlayerControler.onPlayerPickUpKey -= EnableKeyImage;
         PlayerControler.onPlayerOpenShop -= OpenShop;
         UpgradeShop.onItemExchange -= UpdateItemSlotImages;
         PlatformerManager.onMoneyZero -= OpenOutOfMoneyPanel;

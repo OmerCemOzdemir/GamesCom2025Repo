@@ -137,7 +137,7 @@ public class ClickerManager : MonoBehaviour
     private void IncreaseActiveMoney()
     {
         float max = GameManager.Instance.GetGameData().maxTotalMoney;
-        float money = GameManager.Instance.GetGameData().totalMoney;
+        double money = GameManager.Instance.GetGameData().totalMoney;
 
         money += (activeMoneyIncrement * activeMoneyMultiplier);
         if (money >= max)
@@ -159,7 +159,7 @@ public class ClickerManager : MonoBehaviour
     private void IncreaseIdleMoney()
     {
         float max = GameManager.Instance.GetGameData().maxTotalMoney;
-        float money = GameManager.Instance.GetGameData().totalMoney;
+        double money = GameManager.Instance.GetGameData().totalMoney;
 
         money += (idleMoneyIncrement * idleMoneyMultiplier);
         if (money >= max)
@@ -293,21 +293,10 @@ public class ClickerManager : MonoBehaviour
 
         UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems, upgradeItems);
 
-        switch (walletLevel)
+        maxTotalMoney = 10000;
+        for (int i = 0; i < walletLevel; i++)
         {
-            case 0:
-                maxTotalMoney = 10000;
-                //Debug.Log("max Money: " + maxTotalMoney);
-                break;
-            case 1:
-                maxTotalMoney = 100000;
-                //Debug.Log("max Money: " + maxTotalMoney);
-                break;
-            case 2:
-                maxTotalMoney = 1000000;
-                break;
-            default:
-                break;
+            maxTotalMoney *= 10;
         }
 
         GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
@@ -434,6 +423,25 @@ public class ClickerManager : MonoBehaviour
             }
 
         }
+
+
+        switch (walletLevel)
+        {
+            case 0:
+                maxTotalMoney = 10000;
+                //Debug.Log("max Money: " + maxTotalMoney);
+                break;
+            case 1:
+                maxTotalMoney = 100000;
+                //Debug.Log("max Money: " + maxTotalMoney);
+                break;
+            case 2:
+                maxTotalMoney = 1000000;
+                break;
+            default:
+                break;
+        }
+
 
 
  */

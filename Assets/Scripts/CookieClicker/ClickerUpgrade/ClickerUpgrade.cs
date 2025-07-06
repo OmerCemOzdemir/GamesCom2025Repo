@@ -67,7 +67,7 @@ public class ClickerUpgrade : MonoBehaviour
         upgradeItemInstances = new GameObject[upgradeItems.Count];
 
         float cost;
-        float money = GameManager.Instance.GetGameData().totalMoney;
+        double money = GameManager.Instance.GetGameData().totalMoney;
         for (int i = 0; i < upgradeItemInstances.Length; i++)
         {
             upgradeItemInstances[i] = Instantiate(upgradeItemPrefab, parentContext.position, Quaternion.identity);
@@ -88,7 +88,7 @@ public class ClickerUpgrade : MonoBehaviour
             upgradeItemInstances[i].transform.GetChild(4).gameObject.GetComponent<Image>().sprite = upgradeItems[i].itemIcon;
 
             cost = itemsData[i].cost;
-            float calcMoney = money - cost;
+            double calcMoney = money - cost;
             if (calcMoney <= 0)
             {
                 upgradeItemInstances[i].GetComponent<Button>().interactable = false;
@@ -119,12 +119,12 @@ public class ClickerUpgrade : MonoBehaviour
     private void UpdateUpgradeButtons()
     {
         float cost;
-        float money = GameManager.Instance.GetGameData().totalMoney;
+        double money = GameManager.Instance.GetGameData().totalMoney;
 
         for (int i = 0; i < upgradeItemInstances.Length; i++)
         {
             cost = itemsData[i].cost;
-            float calcMoney = money - cost;
+            double calcMoney = money - cost;
             upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
             upgradeItemInstances[i].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "" + itemsData[i].tier;
             if (calcMoney <= 0)
@@ -168,8 +168,8 @@ public class ClickerUpgrade : MonoBehaviour
         Debug.Log("Item index: " + clickerIndex);
 
         float cost = itemsData[clickerIndex].cost;
-        float money = GameManager.Instance.GetGameData().totalMoney;
-        float calcMoney = money - cost;
+        double money = GameManager.Instance.GetGameData().totalMoney;
+        double calcMoney = money - cost;
         //Debug.Log("maxTierReached: " + maxTierReached);
         if (calcMoney <= 0)
         {

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class LerpObject : MonoBehaviour
 {
@@ -14,6 +13,7 @@ public class LerpObject : MonoBehaviour
     public static event Action onlerpOpDone;  //Triggered when the lerp operation is done
     public static event Action onlerpOpStart;  //Triggered when the lerp operation is done
     private bool toggleElevator = true;
+    private Elevator elevator;
 
 
     private void Start()
@@ -21,6 +21,7 @@ public class LerpObject : MonoBehaviour
         startVector = transform.position;
         endVector = transform.GetChild(0).position;
         rb = GetComponent<Rigidbody2D>();
+        elevator = GetComponent<Elevator>();
     }
 
     public void LerpObjectToPoint()
@@ -94,6 +95,7 @@ public class LerpObject : MonoBehaviour
             yield return null;
         }
         rb.MovePosition(target);
+        elevator.ElevatorStop();
         onlerpOpDone?.Invoke();
         toggleElevator = true;
     }

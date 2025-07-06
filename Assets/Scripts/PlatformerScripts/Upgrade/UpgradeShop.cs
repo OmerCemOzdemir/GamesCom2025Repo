@@ -126,7 +126,7 @@ public class UpgradeShop : MonoBehaviour
                 if (GameManager.Instance.GetGameData().totalMoney > 0 && platformItems != null && !itemSlots[0])
                 {
                     //Check if the enouch money to buy the product, if failed give error, if not reduce the total money
-                    float newTotalMoney = GameManager.Instance.GetGameData().totalMoney - platformItems[itemIndex].cost;
+                    double newTotalMoney = GameManager.Instance.GetGameData().totalMoney - platformItems[itemIndex].cost;
                     if (newTotalMoney < 0)
                     {
                         Debug.LogError("Not Enough Money");
@@ -144,7 +144,7 @@ public class UpgradeShop : MonoBehaviour
                 if (GameManager.Instance.GetGameData().totalMoney > 0 && platformItems != null && !itemSlots[1])
                 {
                     //Check if the enouch money to buy the product, if failed give error, if not reduce the total money
-                    float newTotalMoney = GameManager.Instance.GetGameData().totalMoney - platformItems[itemIndex].cost;
+                    double newTotalMoney = GameManager.Instance.GetGameData().totalMoney - platformItems[itemIndex].cost;
                     if (newTotalMoney < 0)
                     {
                         Debug.LogError("Not Enough Money");
@@ -161,7 +161,7 @@ public class UpgradeShop : MonoBehaviour
                 if (GameManager.Instance.GetGameData().totalMoney > 0 && platformItems != null && !itemSlots[2])
                 {
                     //Check if the enouch money to buy the product, if failed give error, if not reduce the total money
-                    float newTotalMoney = GameManager.Instance.GetGameData().totalMoney - platformItems[itemIndex].cost;
+                    double newTotalMoney = GameManager.Instance.GetGameData().totalMoney - platformItems[itemIndex].cost;
                     if (newTotalMoney < 0)
                     {
                         Debug.LogError("Not Enough Money");
@@ -178,7 +178,7 @@ public class UpgradeShop : MonoBehaviour
                 if (GameManager.Instance.GetGameData().totalMoney > 0 && platformItems != null && !itemSlots[3])
                 {
                     //Check if the enouch money to buy the product, if failed give error, if not reduce the total money
-                    float newTotalMoney = GameManager.Instance.GetGameData().totalMoney - platformItems[itemIndex].cost;
+                    double newTotalMoney = GameManager.Instance.GetGameData().totalMoney - platformItems[itemIndex].cost;
                     if (newTotalMoney < 0)
                     {
                         Debug.LogError("Not Enough Money");

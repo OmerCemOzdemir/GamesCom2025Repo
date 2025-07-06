@@ -16,7 +16,7 @@ MonoBehaviour:
   itemDescription: ads
   itemUnlocked: 0
   maxTier: 5
-  itemIcon: {fileID: 6937817954938267909, guid: 5999de705f6ee8b4c842bee25af47d57, type: 3}
+  itemIcon: {fileID: -3950103776136749925, guid: e686ecee89cc2a14087b2c69ee21d41a, type: 3}
   itemEffector: 2
   itemOperationOnItemEffector: 2
   baseItemEffect: 2
