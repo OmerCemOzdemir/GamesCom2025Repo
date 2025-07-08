@@ -110,7 +110,8 @@ public class ClickerUpgrade : MonoBehaviour
         {
             if (!itemsData[j].unlock)
             {
-                upgradeItemInstances[j].SetActive(false);
+                upgradeItemInstances[j].GetComponent<Button>().interactable = false;
+                upgradeItemInstances[j].GetComponent<Image>().color = new Color(1, 0, 0, 0.5f);
             }
         }
 
@@ -127,35 +128,39 @@ public class ClickerUpgrade : MonoBehaviour
             double calcMoney = money - cost;
             upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
             upgradeItemInstances[i].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "" + itemsData[i].tier;
-            if (calcMoney <= 0)
+            if (itemsData[i].unlock)
             {
-                upgradeItemInstances[i].GetComponent<Button>().interactable = false;
-                upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                if (calcMoney <= 0)
+                {
+                    upgradeItemInstances[i].GetComponent<Button>().interactable = false;
+                    upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                }
+                else
+                {
+                    upgradeItemInstances[i].GetComponent<Button>().interactable = true;
+                    upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                }
             }
-            else
-            {
-                upgradeItemInstances[i].GetComponent<Button>().interactable = true;
-                upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
-            }
+          
         }
 
 
         for (int j = 0; j < upgradeItemInstances.Length; j++)
         {
-            if (itemsData[j].unlock)
-            {
-                upgradeItemInstances[j].SetActive(true);
-            }
 
             int maxTier = upgradeItems[j].maxTier;
             int currentTier = itemsData[j].tier;
+            //Debug.Log("currentTier: " + currentTier);
+            currentTier++;
             bool maxTierReached = maxTier <= currentTier;
             if (maxTierReached)
             {
                 upgradeItemInstances[j].GetComponent<Image>().color = new Color(0, 1, 0, 1);
                 upgradeItemInstances[j].GetComponent<Button>().interactable = false;
+                upgradeItemInstances[j].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "max";
 
             }
+            //Debug.Log(" after currentTier: " + currentTier);
 
         }
 
@@ -170,8 +175,14 @@ public class ClickerUpgrade : MonoBehaviour
         float cost = itemsData[clickerIndex].cost;
         double money = GameManager.Instance.GetGameData().totalMoney;
         double calcMoney = money - cost;
-        //Debug.Log("maxTierReached: " + maxTierReached);
-        if (calcMoney <= 0)
+        int maxTier = upgradeItems[clickerIndex].maxTier;
+        int currentTier = itemsData[clickerIndex].tier;
+        currentTier++;
+        Debug.Log("itemsData[clickerIndex].tier: " + itemsData[clickerIndex].tier);
+        Debug.Log("currentTier: " + currentTier);
+        bool maxTierReached = maxTier <= currentTier;
+        Debug.Log("maxTierReached: " + maxTierReached);
+        if (calcMoney <= 0 || maxTierReached)
         {
             Debug.Log("Not Enough Money Or Already fully Upgraded");
         }
@@ -182,6 +193,7 @@ public class ClickerUpgrade : MonoBehaviour
             cost = (float)Math.Round(cost);
             itemsData[clickerIndex].cost = cost;
             Debug.Log("Cost: " + cost + "Exponent: " + upgradeItems[clickerIndex].costMultiplier);
+
             itemsData[clickerIndex].tier++;
             Debug.Log("Bought Item: " + upgradeItems[clickerIndex].itemName + "The current tier: " + itemsData[clickerIndex].tier + "\n"
                 + "The new Item Cost");

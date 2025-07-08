@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a6b54f993d8d8b418758e10269c62fe, type: 3}
-  m_Name: TestItem
+  m_Name: TestItem_2
   m_EditorClassIdentifier: 
-  itemName: test item
-  itemDescription: htyndfh
-  itemUnlocked: 0
+  itemName: ' test item 2'
+  itemDescription: ads
+  itemUnlocked: 1
   maxTier: 5
   itemIcon: {fileID: -3950103776136749925, guid: e686ecee89cc2a14087b2c69ee21d41a, type: 3}
   itemEffector: 2
@@ -28,8 +28,8 @@ MonoBehaviour:
   - 1000000
   baseItemCost: 1
   costMultiplier:
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
+  - 10
+  - 2
+  - 1.4
+  - 1.2
+  - 1.1
