@@ -19,7 +19,17 @@ MonoBehaviour:
   itemIcon: {fileID: -3950103776136749925, guid: e686ecee89cc2a14087b2c69ee21d41a, type: 3}
   itemEffector: 2
   itemOperationOnItemEffector: 2
-  baseItemEffect: 2
-  tierMultiplier: 1
-  baseItemCost: 100
-  costMultiplier: 1
+  baseItemEffect: 1
+  tierMultiplier:
+  - 100
+  - 1000
+  - 10000
+  - 100000
+  - 1000000
+  baseItemCost: 1
+  costMultiplier:
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000

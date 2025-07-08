@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,14 +9,14 @@ public class UpgradeItem : ScriptableObject
     public string itemName;
     public string itemDescription;
     public bool itemUnlocked = true;
-    public int maxTier;
+    public int maxTier = 0;
     public Sprite itemIcon;
     public ItemEffetors itemEffector;
     public Operations itemOperationOnItemEffector;
     public float baseItemEffect;
-    public float tierMultiplier;
+    public float[] tierMultiplier;
     public float baseItemCost;
-    public float costMultiplier;
+    public float[] costMultiplier;
 
 }
 

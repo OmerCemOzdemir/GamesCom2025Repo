@@ -11,17 +11,7 @@ public class TempPlaformItem : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = item.itemIcon;
     }
 
-    private void OnEnable()
-    {
-        PlayerControler.onPlayerPickUpItem += OnPickUpItem;
-    }
-
-    private void OnDisable()
-    {
-        PlayerControler.onPlayerPickUpItem -= OnPickUpItem;
-    }
-
-    private void OnPickUpItem()
+    public void OnPickUpItem()
     {
         Destroy(gameObject);
     }

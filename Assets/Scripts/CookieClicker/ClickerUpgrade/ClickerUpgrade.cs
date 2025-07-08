@@ -178,7 +178,7 @@ public class ClickerUpgrade : MonoBehaviour
         else
         {
             GameManager.Instance.GetGameData().totalMoney = calcMoney;
-            cost = itemsData[clickerIndex].cost * upgradeItems[clickerIndex].costMultiplier;
+            cost = itemsData[clickerIndex].cost * upgradeItems[clickerIndex].costMultiplier[itemsData[clickerIndex].tier];
             cost = (float)Math.Round(cost);
             itemsData[clickerIndex].cost = cost;
             Debug.Log("Cost: " + cost + "Exponent: " + upgradeItems[clickerIndex].costMultiplier);
@@ -220,6 +220,7 @@ public class ClickerUpgrade : MonoBehaviour
         else
         {
             itemsData = GameManager.Instance.GetGameData().clickerItems;
+            PrintArr(itemsData);
         }
 
     }
@@ -228,7 +229,11 @@ public class ClickerUpgrade : MonoBehaviour
     {
         foreach (var item in arr)
         {
-            Debug.Log("item: " + item.cost);
+            Debug.Log("item ID: " + item.ID);
+            Debug.Log("item Cost: " + item.cost);
+            Debug.Log("item Tier: " + item.tier);
+            Debug.Log("item Unlock: " + item.unlock);
+
         }
     }
 
