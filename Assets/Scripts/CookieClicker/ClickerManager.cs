@@ -177,7 +177,6 @@ public class ClickerManager : MonoBehaviour
         //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
     }
 
-
     private void ImplementUpgrades(int index, ClickerItemSaveData[] itemsData, List<UpgradeItem> upgradeItems)
     {
         switch (upgradeItems[index].itemEffector)
@@ -229,7 +228,6 @@ public class ClickerManager : MonoBehaviour
         return fieldEffected;
     }
 
-
     private void UpdateUpgrades(ClickerItemSaveData[] itemsData, List<UpgradeItem> upgradeItems)
     {
         for (int i = 0; i < itemsData.Length; i++)
@@ -237,8 +235,6 @@ public class ClickerManager : MonoBehaviour
             ImplementUpgrades(i, itemsData, upgradeItems);
         }
     }
-
-
 
     public void NextScene(int index)
     {

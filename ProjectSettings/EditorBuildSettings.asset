@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CookieClickerScene.unity
     guid: 69a33db2b19e4e2468a2400c10101388
   - enabled: 1
+    path: Assets/Scenes/MainHub.unity
+    guid: ac5b12883909d6846891e2a78e07a531
+  - enabled: 1
     path: Assets/Scenes/PlatformScenes/PlatformScene.unity
     guid: 7d5cca5414fce674ba73c10b868f85e0
   - enabled: 1
