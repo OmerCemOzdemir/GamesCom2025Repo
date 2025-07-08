@@ -10,7 +10,7 @@ public class Bridge : MonoBehaviour
     private TextMeshProUGUI bridgeText_0;
     private TextMeshProUGUI bridgeText_1;
     private bool bridgePaid = false;
-
+    
     public bool BridgePaid { get => bridgePaid; set => bridgePaid = value; }
 
     private void Awake()

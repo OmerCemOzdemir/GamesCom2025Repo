@@ -342,6 +342,7 @@ public class PlayerControler : MonoBehaviour
                 //Interaction Toggle Not needed
                 Debug.Log("Get Item");
                 ItemPickUp();
+                currentInteractedGameObject.GetComponent<TempPlaformItem>().OnPickUpItem();
                 break;
             default:
                 break;
@@ -359,9 +360,10 @@ public class PlayerControler : MonoBehaviour
             if (currentInteractedGameObject.GetComponent<TempPlaformItem>().Item.name == currentItemData[i].ID)
             {
                 GameManager.Instance.GetGameData().clickerItems[i].unlock = true;
+                Debug.Log("Get Item " + GameManager.Instance.GetGameData().clickerItems[i].unlock);
+
             }
         }
-        onPlayerPickUpItem?.Invoke();
     }
 
     private void NextLevel(int index)

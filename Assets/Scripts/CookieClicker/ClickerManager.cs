@@ -210,16 +210,16 @@ public class ClickerManager : MonoBehaviour
             switch (upgradeItems[index].itemOperationOnItemEffector)
             {
                 case Operations.Add:
-                    fieldEffected = fieldEffected + (upgradeItems[index].baseItemEffect * (upgradeItems[index].tierMultiplier + itemsData[index].tier));
+                    fieldEffected = fieldEffected + (upgradeItems[index].baseItemEffect * upgradeItems[index].tierMultiplier[itemsData[index].tier]);
                     break;
                 case Operations.Multiply:
-                    fieldEffected = fieldEffected * (upgradeItems[index].baseItemEffect * (upgradeItems[index].tierMultiplier + itemsData[index].tier));
+                    fieldEffected = fieldEffected * (upgradeItems[index].baseItemEffect * upgradeItems[index].tierMultiplier[itemsData[index].tier]);
                     break;
                 case Operations.Subtract:
-                    fieldEffected = fieldEffected - (upgradeItems[index].baseItemEffect * (upgradeItems[index].tierMultiplier + itemsData[index].tier));
+                    fieldEffected = fieldEffected - (upgradeItems[index].baseItemEffect * upgradeItems[index].tierMultiplier[itemsData[index].tier]);
                     break;
                 case Operations.Divide:
-                    fieldEffected = fieldEffected / (upgradeItems[index].baseItemEffect * (upgradeItems[index].tierMultiplier + itemsData[index].tier));
+                    fieldEffected = fieldEffected / (upgradeItems[index].baseItemEffect * upgradeItems[index].tierMultiplier[itemsData[index].tier]);
                     break;
                 default:
                     break;
@@ -267,14 +267,8 @@ public class ClickerManager : MonoBehaviour
 
         }
 
-        foreach (var item in upgradeItems)
-        {
-            Debug.Log("Test: " + item.name);
-        }
 
     }
-
-
 
     private void SetUpData()
     {
@@ -302,6 +296,15 @@ public class ClickerManager : MonoBehaviour
         GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
         onActiveClick?.Invoke();
 
+
+        ClickerItemSaveData[] clickerItemSaveData = GameManager.Instance.GetGameData().clickerItems;
+        foreach (var item in clickerItemSaveData)
+        {
+            Debug.Log("item: " + item.ID);
+            Debug.Log("item: " + item.unlock);
+        }
+
+
     }
 
     public string PrintFields()
@@ -316,6 +319,8 @@ public class ClickerManager : MonoBehaviour
 
         return text;
     }
+
+
 
 }
 
