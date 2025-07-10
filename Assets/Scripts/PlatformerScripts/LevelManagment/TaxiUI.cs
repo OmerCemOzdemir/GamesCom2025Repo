@@ -18,6 +18,7 @@ public class TaxiUI : MonoBehaviour
     [SerializeField] private GameObject levelButtonPrefab;
     [Space(10)]
     [Header("UI: ")]
+    [SerializeField] private GameObject taxiPanel;
     [SerializeField] private TextMeshProUGUI moneyRequired;
     [SerializeField] private TextMeshProUGUI levelTitle;
     [SerializeField] private GameObject levelsPanel;
@@ -46,11 +47,13 @@ public class TaxiUI : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayerControler.onPlayerGetInTaxi += OpenTaxi;
         Taxi.onCheckpointLoad += SetupCheckpoints;
     }
 
     private void OnDisable()
     {
+        PlayerControler.onPlayerGetInTaxi -= OpenTaxi;
         Taxi.onCheckpointLoad -= SetupCheckpoints;
     }
 
@@ -63,6 +66,17 @@ public class TaxiUI : MonoBehaviour
     }
 
     #region UI
+
+    private void OpenTaxi()
+    {
+        taxiPanel.SetActive(true);
+    }
+
+    public void CloseTaxi()
+    {
+        taxiPanel.SetActive(false);
+    }
+
     public void OpenLevelsPanel()
     {
         levelsPanel.SetActive(true);
@@ -169,7 +183,7 @@ public class TaxiUI : MonoBehaviour
             {
                 GameManager.Instance.GetGameData().totalMoney = moneyReduced;
                 onPlayerTravel?.Invoke(checpointPositions[checkpointIndex], 0);
-                platformerUI.CloseTaxi();
+                CloseTaxi();
             }
         }
         else

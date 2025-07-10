@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c461c3c92a14f45845bb4abff5c9e4, type: 3}
+  m_Name: TestItem 2
+  m_EditorClassIdentifier: 
+  itemName: item 2
+  itemDescription: gfhdfg
+  itemIcon: {fileID: -100712731447974267, guid: 9bdd0850e598864498aca409153135e4, type: 3}
+  itemCost: 500
+  itemType: 0
+  hasItemEffectOnMoney: 1
+  hasItemEffectOnMovement: 1
+  itemEffectOnMoney:
+    value: 0
+    operations: 4
+    moneySpent: 0
+  itemEffectOnMovement:
+    value: 10
+    operations: 2
+    playerMovement: 0
+  itemEffectSpecial: 0
+  hasTier: 0
+  effectTiers: []
+  costTiers: []

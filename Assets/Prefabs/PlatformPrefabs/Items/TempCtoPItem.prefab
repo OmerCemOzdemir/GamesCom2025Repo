@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5233483798338831364}
   - component: {fileID: 1521694042466840091}
   m_Layer: 0
-  m_Name: TempPlatformItem
+  m_Name: TempCtoPItem
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

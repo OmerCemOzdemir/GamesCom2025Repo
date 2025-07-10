@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,17 +10,16 @@ public class PlatformerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lostMoneyText;
     [SerializeField] private GameObject keyImage;
     [SerializeField] private GameObject upgradeShopPanel;
-    [SerializeField] private GameObject taxiPanel;
     [SerializeField] private GameObject outOfMoneyPanel;
     [Space(10)]
 
     [Header("Item Images")]
-    [Tooltip("This Array holds the IMAGES of game itemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [Tooltip("This Array holds the IMAGES of game upgradeItemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
     [SerializeField] private GameObject[] itemSlotImages;
     [Space(10)]
 
     [Header("Item Buttons")]
-    [Tooltip("This Array holds the BUTTONS of game itemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [Tooltip("This Array holds the BUTTONS of game upgradeItemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
     [SerializeField] private GameObject[] itemSlotButtons;
 
     private void Awake()
@@ -33,18 +31,16 @@ public class PlatformerUI : MonoBehaviour
     {
         PlatformerManager.onMoneyChange += UpdateLostMoney;
         PlayerControler.onPlayerOpenShop += OpenShop;
-        UpgradeShop.onItemExchange += UpdateItemSlotImages;
+        PlatformUpgradeShop.onItemExchange += UpdateItemSlotImages;
         PlatformerManager.onMoneyZero += OpenOutOfMoneyPanel;
-        PlayerControler.onPlayerGetInTaxi += OpenTaxi;
     }
 
     private void OnDisable()
     {
         PlatformerManager.onMoneyChange -= UpdateLostMoney;
         PlayerControler.onPlayerOpenShop -= OpenShop;
-        UpgradeShop.onItemExchange -= UpdateItemSlotImages;
+        PlatformUpgradeShop.onItemExchange -= UpdateItemSlotImages;
         PlatformerManager.onMoneyZero -= OpenOutOfMoneyPanel;
-        PlayerControler.onPlayerGetInTaxi -= OpenTaxi;
 
     }
 
@@ -68,15 +64,6 @@ public class PlatformerUI : MonoBehaviour
         upgradeShopPanel.SetActive(true);
     }
 
-    private void OpenTaxi()
-    {
-        taxiPanel.SetActive(true);
-    }
-
-    public void CloseTaxi()
-    {
-        taxiPanel.SetActive(false);
-    }
 
     public void UpdateLostMoney(float money)
     {

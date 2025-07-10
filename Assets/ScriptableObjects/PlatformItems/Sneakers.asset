@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c461c3c92a14f45845bb4abff5c9e4, type: 3}
+  m_Name: Sneakers
+  m_EditorClassIdentifier: 
+  itemName: Sneakers
+  itemDescription: Increases movement speed
+  itemIcon: {fileID: -4523831514545042849, guid: b68925930388d7f4592076ef15765868, type: 3}
+  itemCost: 300
+  itemType: 0
+  hasItemEffectOnMoney: 0
+  hasItemEffectOnMovement: 1
+  itemEffectOnMoney:
+    value: 0
+    operations: 0
+    moneySpent: 0
+  itemEffectOnMovement:
+    value: 0.5
+    operations: 2
+    playerMovement: 0
+  itemEffectSpecial: 0
+  hasTier: 1
+  effectTiersPercentage: []
+  costTiers:
+  - 100
+  - 200

@@ -8,13 +8,13 @@ using UnityEngine.UI;
 
 public class ClickerUpgrade : MonoBehaviour
 {
-    public static event Action<int, ClickerItemSaveData[], List<UpgradeItem>> onItemExchange;
+    public static event Action<int, ClickerItemSaveData[], List<ClickerUpgradeItem>> onItemExchange;
 
     [SerializeField] private GameObject upgradeItemPrefab;
     [SerializeField] private Transform parentContext;
     private ClickerItemSaveData[] itemsData = new ClickerItemSaveData[0];
     //private UpgradeItem[] upgradeItems;
-    private List<UpgradeItem> upgradeItems = new List<UpgradeItem>();
+    private List<ClickerUpgradeItem> upgradeItems = new List<ClickerUpgradeItem>();
     private GameObject[] upgradeItemInstances;
     private int clickerIndex = 0;
 
@@ -48,7 +48,7 @@ public class ClickerUpgrade : MonoBehaviour
         {
             if (!files[i].EndsWith(".meta"))
             {
-                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<UpgradeItem>(files[i]));
+                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<ClickerUpgradeItem>(files[i]));
                 //Debug.Log("Test: " + files[i]);
             }
 
@@ -178,7 +178,7 @@ public class ClickerUpgrade : MonoBehaviour
         int maxTier = upgradeItems[clickerIndex].maxTier;
         int currentTier = itemsData[clickerIndex].tier;
         currentTier++;
-        Debug.Log("itemsData[clickerIndex].tier: " + itemsData[clickerIndex].tier);
+        Debug.Log("upgradeItemsData[clickerIndex].tier: " + itemsData[clickerIndex].tier);
         Debug.Log("currentTier: " + currentTier);
         bool maxTierReached = maxTier <= currentTier;
         Debug.Log("maxTierReached: " + maxTierReached);
@@ -208,15 +208,15 @@ public class ClickerUpgrade : MonoBehaviour
     private void SetUpData()
     {
         //Debug.Log("New Game: " + GameManager.Instance.GetGameData().newGame);
-        if (GameManager.Instance.GetGameData().newGame)
+        if (GameManager.Instance.GetGameData().clickerNewGame)
         {
             itemsData = new ClickerItemSaveData[upgradeItems.Count];
-            Debug.Log("New Game: " + GameManager.Instance.GetGameData().newGame);
+            Debug.Log("New Game: " + GameManager.Instance.GetGameData().clickerNewGame);
 
 
             for (int i = 0; i < itemsData.Length; i++)
             {
-                Debug.Log("itemsData: " + i + ": " + upgradeItems[i].baseItemCost);
+                Debug.Log("upgradeItemsData: " + i + ": " + upgradeItems[i].baseItemCost);
                 itemsData[i] = new ClickerItemSaveData();
                 itemsData[i].ID = upgradeItems[i].name;
                 itemsData[i].cost = upgradeItems[i].baseItemCost;
@@ -227,7 +227,7 @@ public class ClickerUpgrade : MonoBehaviour
 
             GameManager.Instance.GetGameData().clickerItems = itemsData;
             GameManager.Instance.SaveGame();
-            GameManager.Instance.GetGameData().newGame = false;
+            GameManager.Instance.GetGameData().clickerNewGame = false;
         }
         else
         {

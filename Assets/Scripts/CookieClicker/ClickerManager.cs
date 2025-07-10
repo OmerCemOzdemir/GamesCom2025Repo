@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +5,6 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.LookDev;
 
 public class ClickerManager : MonoBehaviour
 {
@@ -15,7 +12,8 @@ public class ClickerManager : MonoBehaviour
     public static event Action onIdleClick;
 
     private ClickerEffect effect;
-    private List<UpgradeItem> upgradeItems = new List<UpgradeItem>();
+    private List<ClickerUpgradeItem> upgradeClickerItems = new List<ClickerUpgradeItem>();
+    private List<PlatformUpgradeItem> upgradePlatformItems = new List<PlatformUpgradeItem>();
 
 
     [SerializeField] private float baseActiveMoneyIncrement = 1; //Defualt is 1
@@ -39,9 +37,9 @@ public class ClickerManager : MonoBehaviour
     private bool mouseEnable = false;
     private float clickTimer = 0;
 
-
-
     private InputSystem inputSystem;
+
+    #region UnityFunctions
 
     private void OnEnable()
     {
@@ -74,6 +72,11 @@ public class ClickerManager : MonoBehaviour
     {
         IdleMoney();
     }
+
+
+
+    #endregion
+
 
     #region Active&IdleLogic
 
@@ -177,23 +180,23 @@ public class ClickerManager : MonoBehaviour
         //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
     }
 
-    private void ImplementUpgrades(int index, ClickerItemSaveData[] itemsData, List<UpgradeItem> upgradeItems)
+    private void ImplementUpgrades(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems)
     {
         switch (upgradeItems[index].itemEffector)
         {
-            case ItemEffetors.baseActiveMoneyIncrement:
+            case ClickerItemEffetors.baseActiveMoneyIncrement:
                 activeMoneyIncrement = ImplementOperations(index, itemsData, upgradeItems, activeMoneyIncrement);
                 break;
-            case ItemEffetors.baseActiveMoneyMultiplier:
+            case ClickerItemEffetors.baseActiveMoneyMultiplier:
                 activeMoneyMultiplier = ImplementOperations(index, itemsData, upgradeItems, activeMoneyMultiplier);
                 break;
-            case ItemEffetors.baseIdleMoneyMultiplier:
+            case ClickerItemEffetors.baseIdleMoneyMultiplier:
                 idleMoneyMultiplier = ImplementOperations(index, itemsData, upgradeItems, idleMoneyMultiplier);
                 break;
-            case ItemEffetors.baseIdleMoneyIncrement:
+            case ClickerItemEffetors.baseIdleMoneyIncrement:
                 idleMoneyIncrement = ImplementOperations(index, itemsData, upgradeItems, idleMoneyIncrement);
                 break;
-            case ItemEffetors.baseIdleTime:
+            case ClickerItemEffetors.baseIdleTime:
                 idleTime = ImplementOperations(index, itemsData, upgradeItems, idleTime);
                 break;
             default:
@@ -202,7 +205,7 @@ public class ClickerManager : MonoBehaviour
         }
     }
 
-    private float ImplementOperations(int index, ClickerItemSaveData[] itemsData, List<UpgradeItem> upgradeItems, float fieldEffected)
+    private float ImplementOperations(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems, float fieldEffected)
     {
         if (itemsData[index].tier != 0)
         {
@@ -228,7 +231,7 @@ public class ClickerManager : MonoBehaviour
         return fieldEffected;
     }
 
-    private void UpdateUpgrades(ClickerItemSaveData[] itemsData, List<UpgradeItem> upgradeItems)
+    private void UpdateUpgrades(ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems)
     {
         for (int i = 0; i < itemsData.Length; i++)
         {
@@ -257,12 +260,22 @@ public class ClickerManager : MonoBehaviour
         {
             if (!files[i].EndsWith(".meta"))
             {
-                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<UpgradeItem>(files[i]));
+                upgradeClickerItems.Add(AssetDatabase.LoadAssetAtPath<ClickerUpgradeItem>(files[i]));
                 //Debug.Log("Test: " + files[i]);
             }
 
         }
 
+        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradePlatformItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
 
     }
 
@@ -274,32 +287,36 @@ public class ClickerManager : MonoBehaviour
         int walletLevel = GameManager.Instance.GetGameData().walletLevel;
         float maxTotalMoney = 0;
         //Debug.Log("max Money: " + walletLevel);
-        //This feels stupid.
         activeMoneyIncrement = baseActiveMoneyIncrement;
         activeMoneyMultiplier = baseActiveMoneyMultiplier;
         idleMoneyIncrement = baseIdleMoneyIncrement;
         idleMoneyMultiplier = baseIdleMoneyMultiplier;
         idleTime = baseIdleTime;
 
-        UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems, upgradeItems);
+        UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems, upgradeClickerItems);
 
         maxTotalMoney = 10000;
         for (int i = 0; i < walletLevel; i++)
         {
             maxTotalMoney *= 10;
         }
-
         GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
         onActiveClick?.Invoke();
 
-
-        ClickerItemSaveData[] clickerItemSaveData = GameManager.Instance.GetGameData().clickerItems;
-        foreach (var item in clickerItemSaveData)
+        PlatformItemSaveData[] platformItemData = GameManager.Instance.GetGameData().platformItems;
+        for (int i = 0; i < platformItemData.Length; i++)
         {
-            Debug.Log("item: " + item.ID);
-            Debug.Log("item: " + item.unlock);
+            switch (upgradePlatformItems[i].itemType)
+            {
+                case PlatformItemType.Permanent:
+                    break;
+                case PlatformItemType.Temporary:
+                    GameManager.Instance.GetGameData().platformItems[i].unlock = false;
+                    break;
+                case PlatformItemType.RepeatPurchase:
+                    break;
+            }
         }
-
 
     }
 
@@ -322,7 +339,19 @@ public class ClickerManager : MonoBehaviour
 
 
 /*
- 
+
+
+        ClickerItemSaveData[] clickerItemSaveData = GameManager.Instance.GetGameData().clickerItems;
+        foreach (var item in clickerItemSaveData)
+        {
+            Debug.Log("item: " + item.ID);
+            Debug.Log("item: " + item.unlock);
+        }
+
+
+
+
+
     public void AddItemLvl()
     {
         gameRule.AddItemLvl(Level);
@@ -425,7 +454,7 @@ public class ClickerManager : MonoBehaviour
 
         }
 
-
+         //This feels stupid.
         switch (walletLevel)
         {
             case 0:
