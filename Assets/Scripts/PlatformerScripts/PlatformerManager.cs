@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlatformerManager : MonoBehaviour
 {
@@ -43,7 +44,6 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpStart += DisableInteractText;
 
         //------------------------------------------------------------------
-        UpgradeShop.onItemExchange += SaveGameData;
         TestScript.onDataChange += LoadGameData;
     }
 
@@ -54,7 +54,6 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpStart -= DisableInteractText;
 
         //------------------------------------------------------------------
-        UpgradeShop.onItemExchange -= SaveGameData;
         TestScript.onDataChange -= LoadGameData;
 
     }
@@ -85,92 +84,6 @@ public class PlatformerManager : MonoBehaviour
         onMoneyChange?.Invoke(0);
 
     }
-
-
-    private void SaveGameData(bool[] items)
-    {
-        //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
-        GameManager.Instance.GetGameData().platformItems = items;
-        GameManager.Instance.SaveGame();
-    }
-
-    //This function is tied to player movement. When player presses a single movement key this function deducts a certain amount of money.
-    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
-    private void ReduceMoneyMove()
-    {
-        //Vector2 horizontalMovement = context.ReadValue<Vector2>();
-        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredMove;
-        onMoneyChange?.Invoke(moneyRequiredMove);
-        if (GameManager.Instance.GetGameData().totalMoney < 0)
-        {
-            onMoneyZero?.Invoke();
-        }
-    }
-
-    //This function is tied to player jump ability. When player succesfully initiates a jump action, this function deducts a certain amount of money.
-    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
-    private void ReduceMoneyJump()
-    {
-        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredJump;
-        onMoneyChange?.Invoke(moneyRequiredJump);
-        if (GameManager.Instance.GetGameData().totalMoney < 0)
-        {
-            onMoneyZero?.Invoke();
-        }
-    }
-
-    //This function is tied to player climb ability. When player succesfully mounts on a ladder, this function deducts a certain amount of money.
-    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
-    private void ReduceMoneyClimb()
-    {
-        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredClimb;
-        onMoneyChange?.Invoke(moneyRequiredClimb);
-        if (GameManager.Instance.GetGameData().totalMoney < 0)
-        {
-            onMoneyZero?.Invoke();
-        }
-    }
-
-    private void ReduceMoneyPickUp()
-    {
-        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredPickUp;
-        onMoneyChange?.Invoke(moneyRequiredPickUp);
-        if (GameManager.Instance.GetGameData().totalMoney < 0)
-        {
-            onMoneyZero?.Invoke();
-        }
-    }
-
-    private void ReduceMoneyDoorOpen()
-    {
-        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredOpenDoor;
-        onMoneyChange?.Invoke(moneyRequiredOpenDoor);
-        if (GameManager.Instance.GetGameData().totalMoney < 0)
-        {
-            onMoneyZero?.Invoke();
-        }
-    }
-
-    private void ReduceMoneyUseElevator()
-    {
-        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredUseElevator;
-        onMoneyChange?.Invoke(moneyRequiredUseElevator);
-        if (GameManager.Instance.GetGameData().totalMoney < 0)
-        {
-            onMoneyZero?.Invoke();
-        }
-    }
-
-    private void ReduceMoneyPassBridge()
-    {
-        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredPassBridge;
-        onMoneyChange?.Invoke(moneyRequiredPassBridge);
-        if (GameManager.Instance.GetGameData().totalMoney < 0)
-        {
-            onMoneyZero?.Invoke();
-        }
-    }
-
 
     //These Functions calculate the money spent and reduce the money.
     private void SpentMoney(MoneySpent moneySpent)
@@ -213,17 +126,62 @@ public class PlatformerManager : MonoBehaviour
         double calcMoney = money - moneyReq;
         if (calcMoney <= 0)
         {
-            GameManager.Instance.GetGameData().totalMoney = 0;
-            onMoneyChange?.Invoke(moneyReq);
-            onMoneyZero?.Invoke();
+            if (SceneManager.GetActiveScene().name != "MainHub")
+            {
+                GameManager.Instance.GetGameData().totalMoney = 0;
+                onMoneyChange?.Invoke(moneyReq);
+                onMoneyZero?.Invoke();
+            }
         }
         else
         {
-            GameManager.Instance.GetGameData().totalMoney = calcMoney;
-            onMoneyChange?.Invoke(moneyReq);
+            if (SceneManager.GetActiveScene().name != "MainHub")
+            {
+                GameManager.Instance.GetGameData().totalMoney = calcMoney;
+                onMoneyChange?.Invoke(moneyReq);
+            }
+
         }
 
     }
+
+    public void UpdateItemMoneyEffects(int index, MoneySpent moneySpent)
+    {
+        float value = playerControler.UpgradeItems[index].itemEffectOnMoney.value;
+        Operations op = playerControler.UpgradeItems[index].itemEffectOnMoney.operations;
+
+        switch (moneySpent)
+        {
+            case MoneySpent.moneySpentMove:
+                moneyRequiredMove = playerControler.ImplementOperations(value, op);
+                break;
+            case MoneySpent.moneySpentJump:
+                moneyRequiredJump = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentClimb:
+                moneyRequiredClimb = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentPickUp:
+                moneyRequiredPickUp = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentOpenDoor:
+                moneyRequiredOpenDoor = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentPassBridge:
+                moneyRequiredPassBridge = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentUseElevator:
+                moneyRequiredUseElevator = playerControler.ImplementOperations(value, op);
+
+                break;
+        }
+    }
+
 
 
     private void EnableInteractText(string txt)
@@ -247,19 +205,7 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Ladder);
-            if (playerControler.LocalItems != null)
-            {
-                // Climb Gloves: 3 = Climbing free
-                if (playerControler.LocalItems[3])
-                {
-                    EnableInteractText("FREE");
-                }
-                else
-                {
-                    EnableInteractText("$" + moneyRequiredClimb);
-                }
-            }
-
+            EnableInteractText("$" + moneyRequiredClimb);
         }
 
         if (collision.CompareTag("Door"))
@@ -452,6 +398,126 @@ public enum MoneySpent
 
 
 /*
+ * 
+    private void SaveGameData(bool[] items)
+    {
+        //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
+        GameManager.Instance.GetGameData()._platformItems = items;
+        GameManager.Instance.SaveGame();
+    }
+
+ * 
+ * 
+ * 
+ *     [SerializeField] private float moneyRequiredMove = 10;
+    [SerializeField] private float moneyRequiredJump = 100;
+    [SerializeField] private float moneyRequiredClimb = 1000;
+    [SerializeField] private float moneyRequiredPickUp = 2000;
+    [SerializeField] private float moneyRequiredOpenDoor = 3000;
+    [SerializeField] private float moneyRequiredUseElevator = 5000;
+    [SerializeField] private float moneyRequiredPassBridge = 6000;
+
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ *     //This function is tied to player movement. When player presses a single movement key this function deducts a certain amount of money.
+    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
+    private void ReduceMoneyMove()
+    {
+        //Vector2 horizontalMovement = context.ReadValue<Vector2>();
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredMove;
+        onMoneyChange?.Invoke(moneyRequiredMove);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    //This function is tied to player jump ability. When player succesfully initiates a jump action, this function deducts a certain amount of money.
+    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
+    private void ReduceMoneyJump()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredJump;
+        onMoneyChange?.Invoke(moneyRequiredJump);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    //This function is tied to player climb ability. When player succesfully mounts on a ladder, this function deducts a certain amount of money.
+    //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
+    private void ReduceMoneyClimb()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredClimb;
+        onMoneyChange?.Invoke(moneyRequiredClimb);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    private void ReduceMoneyPickUp()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredPickUp;
+        onMoneyChange?.Invoke(moneyRequiredPickUp);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    private void ReduceMoneyDoorOpen()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredOpenDoor;
+        onMoneyChange?.Invoke(moneyRequiredOpenDoor);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    private void ReduceMoneyUseElevator()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredUseElevator;
+        onMoneyChange?.Invoke(moneyRequiredUseElevator);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+    private void ReduceMoneyPassBridge()
+    {
+        GameManager.Instance.GetGameData().totalMoney -= moneyRequiredPassBridge;
+        onMoneyChange?.Invoke(moneyRequiredPassBridge);
+        if (GameManager.Instance.GetGameData().totalMoney < 0)
+        {
+            onMoneyZero?.Invoke();
+        }
+    }
+
+
+ * 
+ * 
+ * 
+ *             if (playerControler.LocalItems != null)
+            {
+                // Climb Gloves: 3 = Climbing free
+                if (playerControler.LocalItems[3])
+                {
+                    EnableInteractText("FREE");
+                }
+                else
+                {
+                    EnableInteractText("$" + moneyRequiredClimb);
+                }
+            }
+ * 
+ * 
    if (Input.GetKey(KeyCode.RightArrow))
         {
             onMoneyChange?.Invoke();

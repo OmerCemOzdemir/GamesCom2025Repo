@@ -1,17 +1,15 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 
-[CreateAssetMenu(fileName = "CreateItem", menuName = "ScriptableObjects/CreateItem")]
-public class UpgradeItem : ScriptableObject
+[CreateAssetMenu(fileName = "CreateClickerItem", menuName = "ScriptableObjects/CreateClickerItem")]
+public class ClickerUpgradeItem : ScriptableObject
 {
     public string itemName;
     public string itemDescription;
     public bool itemUnlocked = true;
     public int maxTier = 0;
     public Sprite itemIcon;
-    public ItemEffetors itemEffector;
+    public ClickerItemEffetors itemEffector;
     public Operations itemOperationOnItemEffector;
     public float baseItemEffect;
     public float[] tierMultiplier;
@@ -20,7 +18,7 @@ public class UpgradeItem : ScriptableObject
 
 }
 
-public enum ItemEffetors
+public enum ClickerItemEffetors
 {
     baseActiveMoneyIncrement,
     baseActiveMoneyMultiplier,
@@ -35,6 +33,7 @@ public enum Operations
     Divide,
     Add,
     Subtract,
+    Null
 }
 
 /*

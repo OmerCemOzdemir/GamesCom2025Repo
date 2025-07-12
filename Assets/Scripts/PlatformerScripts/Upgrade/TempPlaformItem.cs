@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class TempPlaformItem : MonoBehaviour
 {
-    [SerializeField] private UpgradeItem item;
+    [SerializeField] private ClickerUpgradeItem item;
 
-    public UpgradeItem Item { get => item; set => item = value; }
+    public ClickerUpgradeItem Item { get => item; set => item = value; }
 
     private void Awake()
     {

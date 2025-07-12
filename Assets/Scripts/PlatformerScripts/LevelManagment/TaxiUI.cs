@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,20 +17,21 @@ public class TaxiUI : MonoBehaviour
     [SerializeField] private GameObject levelButtonPrefab;
     [Space(10)]
     [Header("UI: ")]
+    [SerializeField] private GameObject taxiPanel;
     [SerializeField] private TextMeshProUGUI moneyRequired;
     [SerializeField] private TextMeshProUGUI levelTitle;
     [SerializeField] private GameObject levelsPanel;
     [SerializeField] private GameObject checkpointsPanel;
     [Space(10)]
     [Header("Stats: ")]
-    [SerializeField] private float baseTravelCostLevel = 10000;
-    [SerializeField] private float baseTravelCostCheckpoint = 1000;
+    [SerializeField] private float baseTravelCostLevel = 100;
+    [SerializeField] private float baseTravelCostCheckpoint = 10;
 
     private PlatformerUI platformerUI;
 
     //Checkpoint Var:
     private Button[] checkpointButtons;
-    private Vector3[] checpointPositions;
+    private Vector3[][] checpointPositions;
     private int checkpointIndex = 0;
     public int CheckpointIndex { get => checkpointIndex; set => checkpointIndex = value; }
 
@@ -46,23 +46,64 @@ public class TaxiUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Taxi.onCheckpointLoad += SetupCheckpoints;
+        PlayerControler.onPlayerGetInTaxi += OpenTaxi;
     }
 
     private void OnDisable()
     {
-        Taxi.onCheckpointLoad -= SetupCheckpoints;
+        PlayerControler.onPlayerGetInTaxi -= OpenTaxi;
     }
 
 
     private void Awake()
     {
         platformerUI = GetComponent<PlatformerUI>();
-        GetSceneInArray();
-        SetupLevels();
+        //GetSceneInArray();
+        //printLevelData();
     }
 
+    private void Start()
+    {
+        SetUpData();
+
+    }
+
+    private void SetUpData()
+    {
+        Debug.Log("Run SetUpData");
+        LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
+        printLevelData(levelData);
+        Vector3[][] checkpointsPos = new Vector3[levelData.Length][];
+        for (int i = 0; i < levelData.Length; i++)
+        {
+            if (levelData[i].unlock)
+            {
+                checkpointsPos[i] = new Vector3[levelData[i].checkpointX.Length];
+                for (int j = 0; j < levelData[i].checkpointX.Length; j++)
+                {
+                    checkpointsPos[i][j] = new Vector3(levelData[i].checkpointX[j], levelData[i].checkpointY[j], levelData[i].checkpointZ[j]);
+                }
+            }
+        }
+        checpointPositions = checkpointsPos;
+        SetupLevels(levelData);
+
+
+    }
+
+
     #region UI
+
+    private void OpenTaxi()
+    {
+        taxiPanel.SetActive(true);
+    }
+
+    public void CloseTaxi()
+    {
+        taxiPanel.SetActive(false);
+    }
+
     public void OpenLevelsPanel()
     {
         levelsPanel.SetActive(true);
@@ -88,11 +129,10 @@ public class TaxiUI : MonoBehaviour
     #endregion
 
     #region ButtonSetup
-    private void SetupCheckpoints(Vector3[] checkpointsPos)
+    private void SetupCheckpoints(Vector3[][] checkpointsPos, LevelSaveData[] levelData)
     {
-        checkpointButtons = new Button[checkpointsPos.Length];
-        checpointPositions = checkpointsPos;
-        for (int i = 0; i < checkpointsPos.Length; i++)
+        checkpointButtons = new Button[checkpointsPos[levelIndex].Length];
+        for (int i = 0; i < checkpointButtons.Length; i++)
         {
             checkpointButtons[i] = Instantiate(checkpointButtonPrefab).GetComponent<Button>();
             checkpointButtons[i].gameObject.transform.SetParent(checkpointButtonParent);
@@ -103,9 +143,176 @@ public class TaxiUI : MonoBehaviour
                 UpdateTexts(baseTravelCostCheckpoint * (checkpointIndex + 1));
             });
 
+            if (levelData[levelIndex].unlockCheckpoint[i])
+            {
+                checkpointButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                checkpointButtons[i].GetComponent<Button>().enabled = true;
+
+            }
+            else
+            {
+                checkpointButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                checkpointButtons[i].GetComponent<Button>().enabled = false;
+
+            }
+
         }
     }
-    private void GetSceneInArray()
+
+    private void SetupLevels(LevelSaveData[] levelData)
+    {
+        //printLevelData(levelData);
+        levelButtons = new Button[levelData.Length];
+
+        for (int i = 0; i < levelData.Length; i++)
+        {
+            levelButtons[i] = Instantiate(levelButtonPrefab.gameObject.GetComponent<Button>());
+            levelButtons[i].transform.SetParent(levelButtonParent);
+            levelButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = levelData[i].levelName;
+            levelButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().gameObject.name = "" + i;
+            levelButtons[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "" + (i + 1);
+            levelButtons[i].onClick.AddListener(() =>
+            {
+                UpdateTexts(baseTravelCostLevel * (levelIndex + 1));
+            });
+            // Debug.Log(levelData[i].levelName + " " + GameManager.Instance.GetGameData().levelData[i].unlock);
+            //Debug.Log(levelData[i].levelName + " " + levelData[i].unlock);
+
+
+            if (levelData[i].unlock)
+            {
+                levelButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                levelButtons[i].GetComponent<Button>().enabled = true;
+                //Debug.Log(levelButtons[i].name + " true");
+            }
+            else
+            {
+                //Debug.Log(levelButtons[i].name + " false");
+                levelButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                levelButtons[i].GetComponent<Button>().enabled = false;
+
+            }
+        }
+    }
+
+    public void UpdateCheckpoints()
+    {
+        if (checkpointButtonParent.childCount == 0)
+        {
+            SetupCheckpoints(checpointPositions, GameManager.Instance.GetGameData().levelData);
+        }
+        else
+        {
+            for (int i = 0; i < checkpointButtonParent.childCount; i++)
+            {
+                Destroy(checkpointButtonParent.GetChild(i).gameObject);
+            }
+            SetupCheckpoints(checpointPositions, GameManager.Instance.GetGameData().levelData);
+
+        }
+    }
+
+    #endregion
+
+    private void UpdateTexts(float money)
+    {
+        moneyRequired.text = "$" + money;
+        levelTitle.text = "LevelButton " + SceneManager.GetActiveScene().name;
+    }
+
+    private void printLevelData(LevelSaveData[] levelData)
+    {
+      //  = GameManager.Instance.GetGameData().levelData;
+
+        for (int i = 0; i < levelData.Length; i++)
+        {
+            Debug.Log("" + levelData[i].levelName
+                + "levelData[i].unlock: " + levelData[i].unlock
+                );
+        }
+
+    }
+
+    public void Travel()
+    {
+        LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
+        if (checkpointsPanel.activeSelf)
+        {
+            double moneyReduced = GameManager.Instance.GetGameData().totalMoney - baseTravelCostLevel * (levelIndex + 1);
+            if (moneyReduced < 0)
+            {
+                Debug.Log("Not enought money");
+            }
+            else
+            {
+                GameManager.Instance.GetGameData().totalMoney = moneyReduced;
+                GameManager.Instance.GetGameData().checkpointX = levelData[levelIndex].checkpointX[checkpointIndex];
+                GameManager.Instance.GetGameData().checkpointY = levelData[levelIndex].checkpointY[checkpointIndex];
+                GameManager.Instance.GetGameData().checkpointZ = levelData[levelIndex].checkpointZ[checkpointIndex];
+                GameManager.Instance.GetGameData().checkpointEnable = true;
+
+                Debug.Log("Level Index: " + levelIndex + " Checkpoint Index: " + checkpointIndex);
+                Debug.Log("New Pos: " + levelData[levelIndex].checkpointX[checkpointIndex]
+                 + " " + levelData[levelIndex].checkpointY[checkpointIndex]
+                 + " " + levelData[levelIndex].checkpointZ[checkpointIndex]);
+                GameManager.Instance.NextLevel(levelData[levelIndex].levelIndex);
+                //GameManager.Instance.NextLevel(SceneUtility.GetBuildIndexByScenePath(levelPaths[levelIndex]));
+            }
+
+        }
+
+
+
+    }
+
+}
+
+/*            //Debug.Log("Selected Scene Index: " + SceneUtility.GetBuildIndexByScenePath(levelNames[levelIndex]));
+            //Assets/Scenes/PlatformScenes/PlatformScene.unity
+            //Assets/Scenes/PlatformScenes\PlatformScene.unity
+            //Debug.Log("Selected Scene: " + levelNames[levelIndex]);
+
+            //Debug.Log("Selected Scene: " + levelNames[levelIndex] + " Index: " + levelIndex);
+
+            //GameManager.Instance.NextLevel(selectedScene.buildIndex);
+ * 
+ *             double moneyReduced = GameManager.Instance.GetGameData().totalMoney - baseTravelCostCheckpoint * (checkpointIndex + 1);
+            if (moneyReduced < 0)
+            {
+                Debug.Log("Not enought money");
+            }
+            else
+            {
+                GameManager.Instance.GetGameData().totalMoney = moneyReduced;
+                //onPlayerTravel?.Invoke(checpointPositions[checkpointIndex], 0);
+                CloseTaxi();
+            }
+ * 
+ * 
+ * 
+    private void UpdateLevels(LevelSaveData[] levelData)
+    {
+
+        for (int i = 0; i < levelData.Length; i++)
+        {
+            if (levelData[i].unlock)
+            {
+                levelButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                levelButtons[i].GetComponent<Button>().enabled = true;
+
+            }
+            else
+            {
+                levelButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                levelButtons[i].GetComponent<Button>().enabled = false;
+
+            }
+        }
+
+    }
+
+ * 
+ *     private void GetSceneInArray()
     {
         int lenght = SceneManager.sceneCountInBuildSettings;
         //Debug.Log("Total Scene Count " + lenght);
@@ -126,82 +333,14 @@ public class TaxiUI : MonoBehaviour
         for (int i = 0; i < levelName.Length; i++)
         {
             levelName[i] = levelPaths[i].Replace("Assets/Scenes/PlatformScenes/", "");
-            levelName[i] = levelName[i].Replace(".unity","");
+            levelName[i] = levelName[i].Replace(".unity", "");
         }
     }
-    private void SetupLevels()
-    {
-
-        levelButtons = new Button[levelPaths.Count];
-
-        for (int i = 0; i < levelPaths.Count; i++)
-        {
-            levelButtons[i] = Instantiate(levelButtonPrefab.gameObject.GetComponent<Button>());
-            levelButtons[i].transform.SetParent(levelButtonParent);
-            levelButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = levelName[i];
-            levelButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().gameObject.name = "" + i;
-            levelButtons[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "" + (i + 1);
-            levelButtons[i].onClick.AddListener(() =>
-            {
-                UpdateTexts(baseTravelCostLevel * (levelIndex + 1));
-            });
-
-        }
-    }
-    #endregion
-
-    private void UpdateTexts(float money)
-    {
-        moneyRequired.text = "$" + money;
-        levelTitle.text = "Level " + SceneManager.GetActiveScene().name;
-    }
-
-    public void Travel()
-    {
-        if (checkpointsPanel.activeSelf)
-        {
-            double moneyReduced = GameManager.Instance.GetGameData().totalMoney - baseTravelCostCheckpoint * (checkpointIndex + 1);
-            if (moneyReduced < 0)
-            {
-                Debug.Log("Not enought money");
-            }
-            else
-            {
-                GameManager.Instance.GetGameData().totalMoney = moneyReduced;
-                onPlayerTravel?.Invoke(checpointPositions[checkpointIndex], 0);
-                platformerUI.CloseTaxi();
-            }
-        }
-        else
-        {
-            double moneyReduced = GameManager.Instance.GetGameData().totalMoney - baseTravelCostLevel * (levelIndex + 1);
-            if (moneyReduced < 0)
-            {
-                Debug.Log("Not enought money");
-            }
-            else
-            {
-                GameManager.Instance.GetGameData().totalMoney = moneyReduced;
-                GameManager.Instance.NextLevel(SceneUtility.GetBuildIndexByScenePath(levelPaths[levelIndex]));
-            }
-
-
-            //Debug.Log("Selected Scene Index: " + SceneUtility.GetBuildIndexByScenePath(levelNames[levelIndex]));
-            //Assets/Scenes/PlatformScenes/PlatformScene.unity
-            //Assets/Scenes/PlatformScenes\PlatformScene.unity
-            //Debug.Log("Selected Scene: " + levelNames[levelIndex]);
-
-            //Debug.Log("Selected Scene: " + levelNames[levelIndex] + " Index: " + levelIndex);
-
-            //GameManager.Instance.NextLevel(selectedScene.buildIndex);
-        }
-
-
-    }
-
-}
-
-/*
+   
+ * 
+ * 
+ * 
+ * 
              checkpointButtons.Add(index, Instantiate(checkpointButtonPrefab).GetComponent<Button>());
 
 

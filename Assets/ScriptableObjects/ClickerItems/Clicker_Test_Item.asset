@@ -9,27 +9,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a6b54f993d8d8b418758e10269c62fe, type: 3}
-  m_Name: TestItem_2
+  m_Script: {fileID: 11500000, guid: 4b6d8e2e997ef46428455826c9f2195e, type: 3}
+  m_Name: Clicker_Test_Item
   m_EditorClassIdentifier: 
-  itemName: ' test item 2'
-  itemDescription: ads
+  itemName: test item
+  itemDescription: gfdshgd
   itemUnlocked: 1
   maxTier: 5
-  itemIcon: {fileID: -3950103776136749925, guid: e686ecee89cc2a14087b2c69ee21d41a, type: 3}
+  itemIcon: {fileID: 5600935968268953345, guid: a9c7f2b57fec6de47a7b7fef69678fab, type: 3}
   itemEffector: 2
-  itemOperationOnItemEffector: 2
-  baseItemEffect: 1
+  itemOperationOnItemEffector: 0
+  baseItemEffect: 12
   tierMultiplier:
-  - 100
-  - 1000
-  - 10000
-  - 100000
-  - 1000000
+  - 56
+  - 45
+  - 45
+  - 76
+  - 456
   baseItemCost: 1
   costMultiplier:
-  - 10
-  - 2
-  - 1.4
-  - 1.2
-  - 1.1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
