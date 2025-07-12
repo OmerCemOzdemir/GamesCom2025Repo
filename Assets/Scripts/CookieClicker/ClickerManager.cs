@@ -139,7 +139,7 @@ public class ClickerManager : MonoBehaviour
 
     private void IncreaseActiveMoney()
     {
-        float max = GameManager.Instance.GetGameData().maxTotalMoney;
+        double max = GameManager.Instance.GetGameData().maxTotalMoney;
         double money = GameManager.Instance.GetGameData().totalMoney;
 
         money += (activeMoneyIncrement * activeMoneyMultiplier);
@@ -161,7 +161,7 @@ public class ClickerManager : MonoBehaviour
 
     private void IncreaseIdleMoney()
     {
-        float max = GameManager.Instance.GetGameData().maxTotalMoney;
+        double max = GameManager.Instance.GetGameData().maxTotalMoney;
         double money = GameManager.Instance.GetGameData().totalMoney;
 
         money += (idleMoneyIncrement * idleMoneyMultiplier);
@@ -241,6 +241,7 @@ public class ClickerManager : MonoBehaviour
 
     public void NextScene(int index)
     {
+        GameManager.Instance.GetGameData().checkpointEnable = false;
         GameManager.Instance.SaveGame();
         GameManager.Instance.NextLevel(index);
     }

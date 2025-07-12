@@ -24,12 +24,14 @@ MonoBehaviour:
     operations: 0
     moneySpent: 0
   itemEffectOnMovement:
-    value: 0.5
+    value: 0
     operations: 2
     playerMovement: 0
   itemEffectSpecial: 0
   hasTier: 1
-  effectTiersPercentage: []
+  effectTiersPercentage:
+  - 10
+  - 12.5
   costTiers:
   - 100
   - 200

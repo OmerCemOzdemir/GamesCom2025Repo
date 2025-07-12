@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class PlatformUpgradeShop : MonoBehaviour
 {
     public static event Action<bool[]> onItemExchange;
+    public static event Action onNewGame;
 
     [SerializeField] private GameObject upgradeShopUI;
     [SerializeField] private GameObject buyButton;
@@ -43,9 +44,14 @@ public class PlatformUpgradeShop : MonoBehaviour
     {
         mainHubUI = GetComponent<MainHubUI>();
         InitilizeScriptableObjects();
+
+    }
+
+
+    private void Start()
+    {
         SetUpData();
         CreateUpgradeButtons();
-
     }
 
     private void InitilizeScriptableObjects()
@@ -77,7 +83,7 @@ public class PlatformUpgradeShop : MonoBehaviour
         if (GameManager.Instance.GetGameData().platformNewGame)
         {
             upgradeItemsData = new PlatformItemSaveData[upgradeItems.Count];
-
+            onNewGame?.Invoke();
             for (int i = 0; i < upgradeItemsData.Length; i++)
             {
                 upgradeItemsData[i] = new PlatformItemSaveData();
@@ -182,11 +188,8 @@ public class PlatformUpgradeShop : MonoBehaviour
             {
                 upgradeItemInstances[platformItemIndex].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(1, 1, 1, 1f);
                 upgradeItemInstances[platformItemIndex].GetComponent<Button>().enabled = true;
-
             }
         }
-
-
     }
 
     public void Buy()
@@ -225,9 +228,6 @@ public class PlatformUpgradeShop : MonoBehaviour
                     tier = upgradeItemsData[platformItemIndex].tier;
                     upgradeItemsData[platformItemIndex].cost = upgradeItems[platformItemIndex].costTiers[(int)tier];
                 }
-
-
-
             }
             else
             {

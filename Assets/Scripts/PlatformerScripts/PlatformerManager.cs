@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlatformerManager : MonoBehaviour
 {
@@ -43,7 +44,6 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpStart += DisableInteractText;
 
         //------------------------------------------------------------------
-        PlatformUpgradeShop.onItemExchange += SaveGameData;
         TestScript.onDataChange += LoadGameData;
     }
 
@@ -54,7 +54,6 @@ public class PlatformerManager : MonoBehaviour
         LerpObject.onlerpOpStart -= DisableInteractText;
 
         //------------------------------------------------------------------
-        PlatformUpgradeShop.onItemExchange -= SaveGameData;
         TestScript.onDataChange -= LoadGameData;
 
     }
@@ -85,15 +84,6 @@ public class PlatformerManager : MonoBehaviour
         onMoneyChange?.Invoke(0);
 
     }
-
-
-    private void SaveGameData(bool[] items)
-    {
-        //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
-        GameManager.Instance.GetGameData()._platformItems = items;
-        GameManager.Instance.SaveGame();
-    }
-
 
     //These Functions calculate the money spent and reduce the money.
     private void SpentMoney(MoneySpent moneySpent)
@@ -136,14 +126,21 @@ public class PlatformerManager : MonoBehaviour
         double calcMoney = money - moneyReq;
         if (calcMoney <= 0)
         {
-            GameManager.Instance.GetGameData().totalMoney = 0;
-            onMoneyChange?.Invoke(moneyReq);
-            onMoneyZero?.Invoke();
+            if (SceneManager.GetActiveScene().name != "MainHub")
+            {
+                GameManager.Instance.GetGameData().totalMoney = 0;
+                onMoneyChange?.Invoke(moneyReq);
+                onMoneyZero?.Invoke();
+            }
         }
         else
         {
-            GameManager.Instance.GetGameData().totalMoney = calcMoney;
-            onMoneyChange?.Invoke(moneyReq);
+            if (SceneManager.GetActiveScene().name != "MainHub")
+            {
+                GameManager.Instance.GetGameData().totalMoney = calcMoney;
+                onMoneyChange?.Invoke(moneyReq);
+            }
+
         }
 
     }
@@ -156,7 +153,7 @@ public class PlatformerManager : MonoBehaviour
         switch (moneySpent)
         {
             case MoneySpent.moneySpentMove:
-                moneyRequiredMove = playerControler.ImplementOperations(value,op);
+                moneyRequiredMove = playerControler.ImplementOperations(value, op);
                 break;
             case MoneySpent.moneySpentJump:
                 moneyRequiredJump = playerControler.ImplementOperations(value, op);
@@ -401,6 +398,16 @@ public enum MoneySpent
 
 
 /*
+ * 
+    private void SaveGameData(bool[] items)
+    {
+        //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
+        GameManager.Instance.GetGameData()._platformItems = items;
+        GameManager.Instance.SaveGame();
+    }
+
+ * 
+ * 
  * 
  *     [SerializeField] private float moneyRequiredMove = 10;
     [SerializeField] private float moneyRequiredJump = 100;

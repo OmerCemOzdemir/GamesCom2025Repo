@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEditor.PlayerSettings;
 
 public class PlayerControler : MonoBehaviour
 {
@@ -155,11 +156,11 @@ public class PlayerControler : MonoBehaviour
     private void Start()
     {
         playerAnimator.SetTrigger("Idle");
+        SetupPlayerPosition();
         //currentLocalScale = transform.localScale;
     }
     private void Update()
     {
-
         Move();
         DebugFunc();
     }
@@ -181,6 +182,20 @@ public class PlayerControler : MonoBehaviour
         transform.position = pos;
         EnableInput();
     }
+
+    private void SetupPlayerPosition()
+    {
+        if (GameManager.Instance.GetGameData().checkpointEnable)
+        {
+            float posX = GameManager.Instance.GetGameData().checkpointX;
+            float posY = GameManager.Instance.GetGameData().checkpointY;
+            float posZ = GameManager.Instance.GetGameData().checkpointZ;
+            Vector3 pos = new Vector3(posX, posY, posZ);
+            Debug.Log("Player Pos: " + pos);
+            TeleportPlayer(pos, 0);
+        }
+    }
+
 
     //These Functions handle basic movement and sprint
     #region HorizontalMovement
@@ -336,6 +351,7 @@ public class PlayerControler : MonoBehaviour
                 Debug.Log("Travel");
                 if (currentInteractedGameObject.GetComponent<Sign>().nextLevel)
                 {
+                    GameManager.Instance.GetGameData().checkpointEnable = false;
                     NextLevel(SceneManager.GetActiveScene().buildIndex + 1);
                 }
                 else
@@ -347,7 +363,7 @@ public class PlayerControler : MonoBehaviour
                 //Interaction Toggle Not needed
                 Debug.Log("Get Wallet");
                 GameManager.Instance.GetGameData().walletLevel++;
-                Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
+                Debug.Log("Wallet LevelButton: " + GameManager.Instance.GetGameData().walletLevel);
                 currentInteractedGameObject.GetComponent<Wallet>().PickUpWallet();
                 break;
             case Interaction.Item:
@@ -562,7 +578,7 @@ public class PlayerControler : MonoBehaviour
 
         foreach (var item in upgradeItems)
         {
-           // Debug.Log("Test: " + item.name);
+            // Debug.Log("Test: " + item.name);
         }
 
     }

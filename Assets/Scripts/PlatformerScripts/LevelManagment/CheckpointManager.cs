@@ -18,6 +18,7 @@ public class CheckpointManager : MonoBehaviour
     {
         InitializeCheckpoints();
         InitilizeSaveData();
+
     }
 
     private void InitializeCheckpoints()
@@ -33,11 +34,16 @@ public class CheckpointManager : MonoBehaviour
 
     private void InitilizeSaveData()
     {
-        Debug.Log("Current Level: " + SceneManager.GetActiveScene().name);
+        Debug.Log("Current LevelButton: " + SceneManager.GetActiveScene().name);
         if (SceneManager.GetActiveScene().name == "MainHub")
         {
-            InitilizeLevelData();
-            PrintArr();
+            if (GameManager.Instance.GetGameData().levelNewGame)
+            {
+                Debug.Log(" InitilizeLevelData ");
+                InitilizeLevelData();
+                GameManager.Instance.GetGameData().levelNewGame = false;
+            }
+            //PrintArr();
         }
         else
         {
@@ -46,29 +52,40 @@ public class CheckpointManager : MonoBehaviour
             {
                 if (levelSaveData[i].levelName == SceneManager.GetActiveScene().name)
                 {
-                    levelSaveData[i].checkpointX = new float[checkpointPositions.Length];
-                    for (int j = 0; j < levelSaveData[i].checkpointX.Length; j++)
+                    if (!levelSaveData[i].unlock)
                     {
-                        levelSaveData[i].checkpointX[j] = checkpointPositions[j].x;
-                    }
+                        levelSaveData[i].unlock = true;
+                        levelSaveData[i].checkpointX = new float[checkpointPositions.Length];
+                        for (int j = 0; j < levelSaveData[i].checkpointX.Length; j++)
+                        {
+                            levelSaveData[i].checkpointX[j] = checkpointPositions[j].x;
+                        }
 
-                    levelSaveData[i].checkpointY = new float[checkpointPositions.Length];
-                    for (int j = 0; j < levelSaveData[i].checkpointY.Length; j++)
-                    {
-                        levelSaveData[i].checkpointY[j] = checkpointPositions[j].y;
+                        levelSaveData[i].checkpointY = new float[checkpointPositions.Length];
+                        for (int j = 0; j < levelSaveData[i].checkpointY.Length; j++)
+                        {
+                            levelSaveData[i].checkpointY[j] = checkpointPositions[j].y;
 
-                    }
+                        }
 
-                    levelSaveData[i].checkpointZ = new float[checkpointPositions.Length];
-                    for (int j = 0; j < levelSaveData[i].checkpointZ.Length; j++)
-                    {
-                        levelSaveData[i].checkpointZ[j] = checkpointPositions[j].z;
+                        levelSaveData[i].checkpointZ = new float[checkpointPositions.Length];
+                        for (int j = 0; j < levelSaveData[i].checkpointZ.Length; j++)
+                        {
+                            levelSaveData[i].checkpointZ[j] = checkpointPositions[j].z;
+
+                        }
+                        levelSaveData[i].unlockCheckpoint = new bool[checkpointPositions.Length];
+                        for (int j = 0; j < levelSaveData[i].checkpointZ.Length; j++)
+                        {
+                            levelSaveData[i].unlockCheckpoint[j] = false;
+
+                        }
 
                     }
 
                 }
             }
-
+            PrintArr();
             GameManager.Instance.GetGameData().levelData = levelSaveData;
         }
     }
@@ -102,12 +119,15 @@ public class CheckpointManager : MonoBehaviour
 
         for (int i = 0; i < levelSaveData.Length; i++)
         {
+            Debug.Log("Save Level Data" + i);
             levelSaveData[i] = new LevelSaveData();
             levelSaveData[i].levelName = levelName[i];
+            levelSaveData[i].unlock = false;
             levelSaveData[i].levelIndex = SceneUtility.GetBuildIndexByScenePath(levelPaths[i]);
         }
 
         GameManager.Instance.GetGameData().levelData = levelSaveData;
+        GameManager.Instance.SaveGame();
     }
 
 
@@ -116,7 +136,7 @@ public class CheckpointManager : MonoBehaviour
         LevelSaveData[] levelSaveData = GameManager.Instance.GetGameData().levelData;
         foreach (var item in levelSaveData)
         {
-            Debug.Log("Level Data: " + item.levelName + " " + item.levelIndex);
+            Debug.Log("LevelButton Data: " + item.levelName + " " + item.levelIndex);
         }
 
     }
@@ -143,8 +163,8 @@ public class CustomCheckpointManagerInspector : Editor
         base.OnInspectorGUI();
 
         CheckpointManager checkpointManager = (CheckpointManager)target;
-        EditorGUILayout.LabelField("Create Checkpoint Field: ");
-        if (GUILayout.Button("Add Checkpoint", GUILayout.Width(360f)))
+        EditorGUILayout.LabelField("Create CheckpointButton Field: ");
+        if (GUILayout.Button("Add CheckpointButton", GUILayout.Width(360f)))
         {
             checkpointManager.CreateCheckpoint();
             Debug.Log("Taxi Inspector Button Works");
