@@ -1,32 +1,44 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEditor.PlayerSettings;
 
 public class PlayerControler : MonoBehaviour
 {
     public static event Action onPlayerJump;
     public static event Action onPlayerMove;
     public static event Action onPlayerClimb;
+    public static event Action<MoneySpent> onMoneySpent;
+    public static event Action onPlayerPickUpItem;
 
-    public static event Action onPlayerPickUpKey;
-    public static event Action onPlayerPickUpWallet;
-
-    public static event Action onPlayerOpenDoor;
-    public static event Action onPlayerUseElevator;
-    public static event Action onPlayerPassBridge;
     public static event Action onPlayerOpenShop;
     public static event Action onPlayerGetInTaxi;
 
+    public static event Action<string> onPlayerDebug;
 
-    [SerializeField] private float playerSpeed = 5; // default value is 5
-    [SerializeField] private float playerSprintMultiplier = 1.5f; // default value is 1.5f
-    [SerializeField] private float playerJumpPower = 13; // default value is 13
-    [SerializeField] private float playerJumpPowerMultiplier = 1.5f; // default value is 1.5f
-    [SerializeField] private float playerGravityActivationTime = 0.6f; // default value is 0.6
-    [SerializeField] private float playerDefaultGravityScale = 5; // default value is 5
-    [SerializeField] private float playerMaxGravityMultiplier = 7; // default value is 7
+
+    [SerializeField] private float basePlayerSpeed = 5; // default value is 5
+    [SerializeField] private float basePlayerSprintMultiplier = 1.5f; // default value is 1.5f
+    [SerializeField] private float basePlayerJumpPower = 13; // default value is 13
+    [SerializeField] private float basePlayerJumpPowerMultiplier = 1.5f; // default value is 1.5f
+    [SerializeField] private float basePlayerGravityActivationTime = 0.6f; // default value is 0.6
+    [SerializeField] private float basePlayerDefaultGravityScale = 5; // default value is 5
+    [SerializeField] private float basePlayerMaxGravityMultiplier = 7; // default value is 7
+
+    private float playerSpeed;
+    private float playerSprintMultiplier;
+    private float playerJumpPower;
+    private float playerJumpPowerMultiplier;
+    private float playerGravityActivationTime;
+    private float playerDefaultGravityScale;
+    private float playerMaxGravityMultiplier;
+
+
     private float playerGravityActivationTimeTemp;
     //private float groundCheckRadius = 0.2f;
 
@@ -38,7 +50,7 @@ public class PlayerControler : MonoBehaviour
     private Animator playerAnimator;
     private Interaction interaction = Interaction.Empty; //Default is Ladder
     private PlatformerManager platformerManager;
-
+    private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
 
     private Vector2 flipSpriteVector;
     //private Vector3 currentLocalScale;
@@ -46,28 +58,25 @@ public class PlayerControler : MonoBehaviour
     private GameObject currentInteractedGameObject;
 
     //This Array holds the items of game temp: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
-    private bool[] localItems;
     private bool enableMove = true;
     private bool isJumping = false;
     private bool climb = false;
     private bool toggleClimb = true;
     private bool interactionToggle = true;
+    private bool enableSprint = false;
     public InputSystem PlayerInputAction { get => playerInputAction; set => playerInputAction = value; }
-    public bool[] LocalItems { get => localItems; set => localItems = value; }
+    public List<PlatformUpgradeItem> UpgradeItems { get => upgradeItems; set => upgradeItems = value; }
 
     private void Awake()
     {
         playerAnimator = transform.GetChild(0).GetComponent<Animator>();
         playerRigid2D = GetComponent<Rigidbody2D>();
         platformerManager = GetComponent<PlatformerManager>();
-        playerGravityActivationTimeTemp = playerGravityActivationTime;
-        playerRigid2D.gravityScale = playerDefaultGravityScale;
         playerInputAction = new InputSystem();
-        localItems = new bool[4];
-        for (int i = 0; i < localItems.Length; i++)
-        {
-            localItems[i] = false;
-        }
+
+        SetUpData();
+        InitilizeScriptableObjects();
+        SetUpUpgrades();
     }
 
     private void OnEnable()
@@ -75,6 +84,7 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Move.Enable();
         playerInputAction.PlayerPlatform.Jump.Enable();
         playerInputAction.PlayerPlatform.Interact.Enable();
+        playerInputAction.PlayerPlatform.Sprint.Enable();
 
         playerInputAction.PlayerPlatform.Interact.performed += Interact;
 
@@ -96,7 +106,6 @@ public class PlayerControler : MonoBehaviour
 
         PlatformerManager.onLadderExit += DismountLadder;
         PlatformerManager.onInteract += SetUpInteraction;
-        UpgradeShop.onItemExchange += UpdateLocalItems;
         //-----------------------------------------------------
         //Elevator Operation is Done
         Elevator.onElevatorDone += ToggleInteraction;
@@ -133,7 +142,6 @@ public class PlayerControler : MonoBehaviour
 
         PlatformerManager.onLadderExit -= DismountLadder;
         PlatformerManager.onInteract -= SetUpInteraction;
-        UpgradeShop.onItemExchange -= UpdateLocalItems;
         //-----------------------------------------------------
         //Elevator Operation is Done
         Elevator.onElevatorDone -= ToggleInteraction;
@@ -148,41 +156,46 @@ public class PlayerControler : MonoBehaviour
     private void Start()
     {
         playerAnimator.SetTrigger("Idle");
+        SetupPlayerPosition();
         //currentLocalScale = transform.localScale;
     }
     private void Update()
     {
-
         Move();
         DebugFunc();
     }
 
-    //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
-    //This Functions also enables sprinting when localItem[1] = true
-    private void UpdateLocalItems(bool[] items)
-    {
-        localItems = items;
-        //SprintBoots: 1 = Enables sprinting
-        if (localItems[1])
-        {
-            playerInputAction.PlayerPlatform.Sprint.Enable();
-        }
-    }
 
     private void TeleportPlayer(Vector3 pos, float sec)
     {
         //Debug.Log("Teleport to ")
         DisableInput();
         //playerRigid2D.MovePosition(pos);
-        //StartCoroutine(DelayOnTeleport(sec));
+        StartCoroutine(DelayOnTeleport(sec, pos));
+
+    }
+
+    IEnumerator DelayOnTeleport(float sec, Vector3 pos)
+    {
+
+        yield return new WaitForSeconds(sec / 2);
         transform.position = pos;
         EnableInput();
     }
 
-    IEnumerator DelayOnTeleport(float sec)
+    private void SetupPlayerPosition()
     {
-        yield return new WaitForSeconds(sec);
+        if (GameManager.Instance.GetGameData().checkpointEnable)
+        {
+            float posX = GameManager.Instance.GetGameData().checkpointX;
+            float posY = GameManager.Instance.GetGameData().checkpointY;
+            float posZ = GameManager.Instance.GetGameData().checkpointZ;
+            Vector3 pos = new Vector3(posX, posY, posZ);
+            Debug.Log("Player Pos: " + pos);
+            TeleportPlayer(pos, 0);
+        }
     }
+
 
     //These Functions handle basic movement and sprint
     #region HorizontalMovement
@@ -209,16 +222,30 @@ public class PlayerControler : MonoBehaviour
     private void PlayerMoved(InputAction.CallbackContext context)
     {
         onPlayerMove?.Invoke();
+        onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
     }
 
     private void SprintStart(InputAction.CallbackContext context)
     {
-        playerSpeed = playerSpeed * playerSprintMultiplier;
+        //Debug.Log("Sprint Started");
+        if (enableSprint)
+        {
+            //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
+            Debug.Log("Sprint Started");
+            playerSpeed *= playerSprintMultiplier;
+        }
+
     }
 
     private void SprintEnd(InputAction.CallbackContext context)
     {
-        playerSpeed = playerSpeed / playerSprintMultiplier;
+        //basePlayerSpeed = basePlayerSpeed / basePlayerSprintMultiplier;
+        if (enableSprint)
+        {
+            Debug.Log("Sprint Stopped");
+            //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
+            playerSpeed /= playerSprintMultiplier;
+        }
     }
     #endregion
 
@@ -264,28 +291,48 @@ public class PlayerControler : MonoBehaviour
             case Interaction.Door:
                 //Interaction Toggle Not needed
                 Debug.Log("Open Door");
-                onPlayerOpenDoor?.Invoke();
+                onMoneySpent?.Invoke(MoneySpent.moneySpentOpenDoor);
+                if (currentInteractedGameObject.GetComponent<Door>() == null)
+                {
+                    currentInteractedGameObject.transform.root.GetComponent<Door>().CheckDoor();
+                    currentInteractedGameObject.transform.root.GetComponent<Door>().CheckKey(platformerManager.KeyNumber);
+
+                }
+                else
+                {
+                    currentInteractedGameObject.GetComponent<Door>().CheckDoor();
+                    currentInteractedGameObject.GetComponent<Door>().CheckKey(platformerManager.KeyNumber);
+                }
                 break;
             case Interaction.Key:
                 Debug.Log("PickUp Key");
                 //Interaction Toggle Not needed
-                onPlayerPickUpKey?.Invoke();
+                currentInteractedGameObject.GetComponent<Key>().PickUpKey();
+                onMoneySpent?.Invoke(MoneySpent.moneySpentPickUp);
+
                 platformerManager.KeyNumber++;
                 interaction = Interaction.Empty;
                 break;
             case Interaction.Elevator:
+                Debug.Log("interactionToggle: " + interactionToggle);
                 if (interactionToggle)
                 {
                     Debug.Log("Use Elevator");
-                    onPlayerUseElevator?.Invoke();
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
+                    currentInteractedGameObject.GetComponent<Elevator>().ToggleElevator();
                     interactionToggle = false;
                 }
                 break;
             case Interaction.Bridge:
                 if (interactionToggle)
                 {
+                    if (!currentInteractedGameObject.GetComponent<Bridge>().BridgePaid)
+                    {
+                        onMoneySpent?.Invoke(MoneySpent.moneySpentPassBridge);
+                        currentInteractedGameObject.GetComponent<Bridge>().unBlockBridge();
+                    }
                     Debug.Log("PassBridge");
-                    onPlayerPassBridge?.Invoke();
+
                     interactionToggle = false;
                 }
                 break;
@@ -304,6 +351,7 @@ public class PlayerControler : MonoBehaviour
                 Debug.Log("Travel");
                 if (currentInteractedGameObject.GetComponent<Sign>().nextLevel)
                 {
+                    GameManager.Instance.GetGameData().checkpointEnable = false;
                     NextLevel(SceneManager.GetActiveScene().buildIndex + 1);
                 }
                 else
@@ -315,13 +363,35 @@ public class PlayerControler : MonoBehaviour
                 //Interaction Toggle Not needed
                 Debug.Log("Get Wallet");
                 GameManager.Instance.GetGameData().walletLevel++;
-                Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
-                onPlayerPickUpWallet?.Invoke();
+                Debug.Log("Wallet LevelButton: " + GameManager.Instance.GetGameData().walletLevel);
+                currentInteractedGameObject.GetComponent<Wallet>().PickUpWallet();
+                break;
+            case Interaction.Item:
+                //Interaction Toggle Not needed
+                Debug.Log("Get Item");
+                ItemPickUp();
+                currentInteractedGameObject.GetComponent<TempPlaformItem>().OnPickUpItem();
                 break;
             default:
                 break;
         }
 
+    }
+
+
+    private void ItemPickUp()
+    {
+        ClickerItemSaveData[] currentItemData = GameManager.Instance.GetGameData().clickerItems;
+
+        for (int i = 0; i < currentItemData.Length; i++)
+        {
+            if (currentInteractedGameObject.GetComponent<TempPlaformItem>().Item.name == currentItemData[i].ID)
+            {
+                GameManager.Instance.GetGameData().clickerItems[i].unlock = true;
+                Debug.Log("Get Item " + GameManager.Instance.GetGameData().clickerItems[i].unlock);
+
+            }
+        }
     }
 
     private void NextLevel(int index)
@@ -335,7 +405,7 @@ public class PlayerControler : MonoBehaviour
     {
         toggleClimb = true;
         climb = false;
-        playerRigid2D.gravityScale = playerDefaultGravityScale;
+        playerRigid2D.gravityScale = basePlayerDefaultGravityScale;
 
     }
 
@@ -349,16 +419,9 @@ public class PlayerControler : MonoBehaviour
             transform.position = new Vector2(currentInteractedGameObject.transform.position.x, transform.position.y);
         }
         EnableMovement();
-        if (localItems != null)
-        {
-            // ClimbGloves: 3 = Climbing ladders becomes free
-            if (!localItems[3])
-            {
-                //Reduce Money
-                onPlayerClimb?.Invoke();
-                Debug.Log("Reduce Monay For Climbing");
-            }
-        }
+        onPlayerClimb?.Invoke();
+        onMoneySpent?.Invoke(MoneySpent.moneySpentClimb);
+        Debug.Log("Reduce Monay For Climbing");
         climb = true;
         AnimSetClimbing();
     }
@@ -442,16 +505,9 @@ public class PlayerControler : MonoBehaviour
         {
             isJumping = true;
             Jumping();
-            if (localItems != null)
-            {
-                // JumpBoots: 0 = Jumping becomes free
-                if (!localItems[0])
-                {
-                    //Reduce Money
-                    onPlayerJump?.Invoke();
-                    Debug.Log("Reduce Monay For Climbing");
-                }
-            }
+            onPlayerJump?.Invoke();
+            onMoneySpent?.Invoke(MoneySpent.moneySpentJump);
+            Debug.Log("Reduce Monay For Jumping");
             //Debug.Log("Jump Pressed");
         }
     }
@@ -463,8 +519,8 @@ public class PlayerControler : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(GravityMultiplier());
             //SpringSoles: 2 = Double the Jump Power // If localItems[2] = true: double the jump power
-            float trueJumpPower = localItems[2] ? playerJumpPower * playerJumpPowerMultiplier : playerJumpPower;
-            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, trueJumpPower);
+            //float trueJumpPower = localItems[2] ? playerJumpPower * playerJumpPowerMultiplier : playerJumpPower;
+            playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower);
         }
         AnimSetJumping();
     }
@@ -502,6 +558,214 @@ public class PlayerControler : MonoBehaviour
 
     #endregion
 
+
+    #region Upgrade
+
+    private void InitilizeScriptableObjects()
+    {
+        //Assets/ScriptableObjects/PlatformItems
+        string[] files;
+        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
+
+        foreach (var item in upgradeItems)
+        {
+            // Debug.Log("Test: " + item.name);
+        }
+
+    }
+
+
+    private void SetUpUpgrades()
+    {
+        PlatformItemSaveData[] itemData = GameManager.Instance.GetGameData().platformItems;
+
+        for (int i = 0; i < itemData.Length; i++)
+        {
+            if (itemData[i].unlock)
+            {
+                ImplementItemUpgrade(i, itemData);
+            }
+        }
+    }
+
+    private void ImplementItemUpgrade(int index, PlatformItemSaveData[] itemData)
+    {
+        if (upgradeItems[index].hasItemEffectOnMoney)
+        {
+            ImplementMoney(index, upgradeItems[index].itemEffectOnMoney.moneySpent);
+        }
+
+        if (upgradeItems[index].hasItemEffectOnMovement)
+        {
+            ImplementPlayerMovement(itemData, index, upgradeItems[index].itemEffectOnMovement.value, upgradeItems[index].itemEffectOnMovement.operations
+                , upgradeItems[index].itemEffectOnMovement.playerMovement);
+        }
+
+        if (!upgradeItems[index].hasItemEffectOnMoney && !upgradeItems[index].hasItemEffectOnMovement)
+        {
+            //Will be Implemented
+        }
+
+    }
+
+    private void ImplementMoney(int index, MoneySpent ms)
+    {
+        platformerManager.UpdateItemMoneyEffects(index, ms);
+    }
+
+    private void ImplementPlayerMovement(PlatformItemSaveData[] itemData, int index, float value, Operations op, PlayerMovement pm)
+    {
+        float tierEffect = 1;
+
+        switch (pm)
+        {
+            case PlayerMovement.MoveSpeed:
+
+                if (upgradeItems[index].hasTier)
+                {
+                    tierEffect = (playerSpeed * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
+                    playerSpeed = ImplementOperations(tierEffect + value, op);
+                }
+                else
+                {
+                    playerSpeed = ImplementOperations(value, op);
+                }
+                break;
+            case PlayerMovement.SprintMultiplier:
+                enableSprint = true;
+
+                if (upgradeItems[index].hasTier)
+                {
+                    tierEffect = (playerSprintMultiplier * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
+                    playerSprintMultiplier = ImplementOperations(tierEffect + value, op);
+                }
+                else
+                {
+                    playerSprintMultiplier = ImplementOperations(value, op);
+                }
+                break;
+            case PlayerMovement.JumpPower:
+
+                if (upgradeItems[index].hasTier)
+                {
+                    tierEffect = (playerJumpPower * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
+                    playerJumpPower = ImplementOperations(tierEffect + value, op);
+                }
+                else
+                {
+                    playerJumpPower = ImplementOperations(value, op);
+                }
+                break;
+            case PlayerMovement.JumpPowerMultiplier:
+
+                if (upgradeItems[index].hasTier)
+                {
+                    tierEffect = (playerJumpPowerMultiplier * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
+                    playerJumpPowerMultiplier = ImplementOperations(tierEffect + value, op);
+                }
+                else
+                {
+                    playerJumpPowerMultiplier = ImplementOperations(value, op);
+                }
+                break;
+            case PlayerMovement.GravityActivationTime:
+                if (upgradeItems[index].hasTier)
+                {
+                    tierEffect = (playerGravityActivationTime * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
+                    playerGravityActivationTime = ImplementOperations(tierEffect + value, op);
+                }
+                else
+                {
+                    playerGravityActivationTime = ImplementOperations(value, op);
+                }
+                break;
+            case PlayerMovement.DefaultGravityScale:
+                if (upgradeItems[index].hasTier)
+                {
+                    tierEffect = (playerDefaultGravityScale * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
+                    playerDefaultGravityScale = ImplementOperations(tierEffect + value, op);
+                }
+                else
+                {
+
+                    playerDefaultGravityScale = ImplementOperations(value, op);
+                }
+                break;
+
+            case PlayerMovement.MaxGravityMultiplier:
+                if (upgradeItems[index].hasTier)
+                {
+                    tierEffect = (playerMaxGravityMultiplier * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
+                    playerMaxGravityMultiplier = ImplementOperations(tierEffect + value, op);
+                }
+                else
+                {
+
+                    playerMaxGravityMultiplier = ImplementOperations(value, op);
+                }
+                break;
+        }
+    }
+
+    public float ImplementOperations(float value, Operations op)
+    {
+        float result = 0;
+        switch (op)
+        {
+            case Operations.Add:
+                result += value;
+                break;
+            case Operations.Subtract:
+                result -= value;
+
+                break;
+            case Operations.Multiply:
+                result *= value;
+
+                break;
+            case Operations.Divide:
+                result /= value;
+
+                break;
+            case Operations.Null:
+                result = 0;
+
+                break;
+        }
+
+        return result;
+    }
+
+
+    #endregion
+
+
+    private void SetUpData()
+    {
+        playerSpeed = basePlayerSpeed;
+        playerSprintMultiplier = basePlayerSprintMultiplier;
+        playerJumpPower = basePlayerJumpPower;
+        playerJumpPowerMultiplier = basePlayerJumpPowerMultiplier;
+        playerGravityActivationTime = basePlayerGravityActivationTime;
+        playerDefaultGravityScale = basePlayerDefaultGravityScale;
+        playerMaxGravityMultiplier = basePlayerMaxGravityMultiplier;
+
+        playerGravityActivationTimeTemp = playerGravityActivationTime;
+        playerRigid2D.gravityScale = playerDefaultGravityScale;
+
+    }
+
+
+
     //This function disables the movement of the player when called. It is triggered by platform manager when money is below or equal to 0.
     private void DisableMovement()
     {
@@ -535,20 +799,25 @@ public class PlayerControler : MonoBehaviour
     //Function used for debbuging
     #region DebugFunc
 
-    private void PrintArray()
+    public string PrintFields()
     {
-        int i = 0;
-        foreach (var item in localItems)
-        {
-            Debug.Log("Item_" + i++ + ": " + item);
-        }
+        string txt = "playerSpeed: " + playerSpeed + "\n"
+            + "playerSprintMultiplier: " + playerSprintMultiplier + "\n"
+            + "playerJumpPower: " + playerJumpPower + "\n"
+            + "playerJumpPowerMultiplier: " + playerJumpPowerMultiplier + "\n"
+            + "playerGravityActivationTime: " + playerGravityActivationTime + "\n"
+            + "playerMaxGravityMultiplier: " + playerMaxGravityMultiplier + "\n"
+            + "playerDefaultGravityScale: " + playerDefaultGravityScale + "\n";
+
+        return txt;
     }
 
     private void DebugFunc()
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            PrintArray();
+            // PrintArray();
+            onPlayerDebug?.Invoke(PrintFields());
         }
     }
 
@@ -569,12 +838,104 @@ public enum Interaction
     Shop,
     Taxi,
     Sign,
-    Wallet
+    Wallet,
+    Item
 
 }
 
+public enum PlayerMovement
+{
+    MoveSpeed,
+    SprintMultiplier,
+    JumpPower,
+    JumpPowerMultiplier,
+    GravityActivationTime,
+    DefaultGravityScale,
+    MaxGravityMultiplier
+}
+
+
 
 /*
+ *     [SerializeField] private float playerSpeed = 5; // default value is 5
+    [SerializeField] private float playerSprintMultiplier = 1.5f; // default value is 1.5f
+    [SerializeField] private float playerJumpPower = 13; // default value is 13
+    [SerializeField] private float playerJumpPowerMultiplier = 1.5f; // default value is 1.5f
+    [SerializeField] private float playerGravityActivationTime = 0.6f; // default value is 0.6
+    [SerializeField] private float playerDefaultGravityScale = 5; // default value is 5
+    [SerializeField] private float playerMaxGravityMultiplier = 7; // default value is 7
+ * 
+ * 
+ * 
+            if (localItems != null)
+            {
+                // JumpBoots: 0 = Jumping becomes free
+                if (!localItems[0])
+                {
+                    //Reduce Money
+
+                }
+            }
+ 
+ 
+ *        if (localItems != null)
+        {
+            // ClimbGloves: 3 = Climbing ladders becomes free
+            if (!localItems[3])
+            {
+                //Reduce Money
+
+            }
+        }
+ * 
+ * 
+ * 
+ * 
+ *     //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
+    //This Functions also enables sprinting when localItem[1] = true
+    private void UpdateLocalItems(bool[] items)
+    {
+        localItems = items;
+        //SprintBoots: 1 = Enables sprinting
+        if (localItems[1])
+        {
+            playerInputAction.PlayerPlatform.Sprint.Enable();
+        }
+    }
+ * 
+ * 
+ * 
+ *     private void PrintArray()
+    {
+        int i = 0;
+        foreach (var item in localItems)
+        {
+            Debug.Log("Item_" + i++ + ": " + item);
+        }
+    }
+ * 
+ *     private bool[] localItems;
+
+    public bool[] LocalItems { get => localItems; set => localItems = value; }
+
+
+    private void SetUpData()
+    {
+        localItems = new bool[4];
+        for (int i = 0; i < localItems.Length; i++)
+        {
+            localItems[i] = false;
+        }
+    }
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  
     if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -730,5 +1091,14 @@ Old Interaction Logic:
 
             Vector2 verticalVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower);
             Vector2 verticalDoubleVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower * 2);
+
+
+    public static event Action onPlayerPickUpKey;
+    public static event Action onPlayerPickUpWallet;
+
+    public static event Action onPlayerOpenDoor;
+    public static event Action onPlayerUseElevator;
+    public static event Action onPlayerPassBridge;
+
 
  */

@@ -63,8 +63,8 @@ public class TaxiInspector : Editor
         base.OnInspectorGUI();
 
         Taxi taxi = (Taxi)target;
-        EditorGUILayout.LabelField("Create Checkpoint Field: ");
-        if (GUILayout.Button("Add Checkpoint", GUILayout.Width(360f)))
+        EditorGUILayout.LabelField("Create CheckpointButton Field: ");
+        if (GUILayout.Button("Add CheckpointButton", GUILayout.Width(360f)))
         {
             taxi.CreateCheckpoint();
             Debug.Log("Taxi Inspector Button Works");

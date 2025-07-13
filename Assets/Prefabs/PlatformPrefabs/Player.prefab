@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 4142514542979625592}
   - component: {fileID: 3693980602066519743}
   - component: {fileID: 8713866994314607462}
-  - component: {fileID: 7466260515452624915}
   - component: {fileID: -727133942443865416}
+  - component: {fileID: 7466260515452624915}
   - component: {fileID: 6118663209651679425}
   m_Layer: 0
   m_Name: Player
@@ -159,6 +159,27 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.7868743, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-727133942443865416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2199448821371055467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89d0098724c1c1e48ba3be572d78beef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basePlayerSpeed: 5
+  basePlayerSprintMultiplier: 1
+  basePlayerJumpPower: 13
+  basePlayerJumpPowerMultiplier: 1.5
+  basePlayerGravityActivationTime: 0.6
+  basePlayerDefaultGravityScale: 5
+  basePlayerMaxGravityMultiplier: 7
+  playerModel: {fileID: 7773842568779554165}
+  groundCheck: {fileID: 6332439135971059515}
 --- !u!114 &7466260515452624915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,27 +202,6 @@ MonoBehaviour:
   moneyRequiredOpenDoor: 3000
   moneyRequiredUseElevator: 5000
   moneyRequiredPassBridge: 6000
---- !u!114 &-727133942443865416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2199448821371055467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89d0098724c1c1e48ba3be572d78beef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSpeed: 5
-  playerSprintMultiplier: 1.5
-  playerJumpPower: 13
-  playerJumpPowerMultiplier: 1.5
-  playerGravityActivationTime: 0.6
-  playerDefaultGravityScale: 5
-  playerMaxGravityMultiplier: 7
-  playerModel: {fileID: 7773842568779554165}
-  groundCheck: {fileID: 6332439135971059515}
 --- !u!60 &6118663209651679425
 PolygonCollider2D:
   m_ObjectHideFlags: 0

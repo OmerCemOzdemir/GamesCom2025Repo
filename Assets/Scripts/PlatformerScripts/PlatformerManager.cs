@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlatformerManager : MonoBehaviour
 {
@@ -16,7 +17,6 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onBridgeExit;
 
     private int keyNumber;
-    private bool elevatorActive = false;
     private PlayerControler playerControler;
 
     public int KeyNumber { get => keyNumber; set => keyNumber = value; }
@@ -39,36 +39,21 @@ public class PlatformerManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerControler.onPlayerJump += ReduceMoneyJump;
-        PlayerControler.onPlayerMove += ReduceMoneyMove;
-        PlayerControler.onPlayerClimb += ReduceMoneyClimb;
-        PlayerControler.onPlayerPickUpKey += ReduceMoneyPickUp;
-        PlayerControler.onPlayerOpenDoor += ReduceMoneyDoorOpen;
-        PlayerControler.onPlayerUseElevator += ReduceMoneyUseElevator;
-        PlayerControler.onPlayerPassBridge += ReduceMoneyPassBridge;
+        PlayerControler.onMoneySpent += SpentMoney;
         //------------------------------------------------------------------
         LerpObject.onlerpOpStart += DisableInteractText;
-        LerpObject.onlerpOpDone += ToggleElevatorActive;
-        LerpObject.onlerpOpStart += ToggleElevatorActive;
+
         //------------------------------------------------------------------
-        UpgradeShop.onItemExchange += SaveGameData;
         TestScript.onDataChange += LoadGameData;
     }
 
     private void OnDisable()
     {
-        PlayerControler.onPlayerJump -= ReduceMoneyJump;
-        PlayerControler.onPlayerMove -= ReduceMoneyMove;
-        PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
-        PlayerControler.onPlayerPickUpKey -= ReduceMoneyPickUp;
-        PlayerControler.onPlayerOpenDoor -= ReduceMoneyDoorOpen;
-        PlayerControler.onPlayerPassBridge -= ReduceMoneyPassBridge;
+        PlayerControler.onMoneySpent -= SpentMoney;
         //------------------------------------------------------------------
         LerpObject.onlerpOpStart -= DisableInteractText;
-        LerpObject.onlerpOpDone -= ToggleElevatorActive;
-        LerpObject.onlerpOpStart -= ToggleElevatorActive;
+
         //------------------------------------------------------------------
-        UpgradeShop.onItemExchange -= SaveGameData;
         TestScript.onDataChange -= LoadGameData;
 
     }
@@ -100,15 +85,345 @@ public class PlatformerManager : MonoBehaviour
 
     }
 
+    //These Functions calculate the money spent and reduce the money.
+    private void SpentMoney(MoneySpent moneySpent)
+    {
+        switch (moneySpent)
+        {
+            case MoneySpent.moneySpentMove:
+                RecudeMoney(moneyRequiredMove);
+                break;
+            case MoneySpent.moneySpentJump:
+                RecudeMoney(moneyRequiredJump);
 
+                break;
+            case MoneySpent.moneySpentClimb:
+                RecudeMoney(moneyRequiredClimb);
+
+                break;
+            case MoneySpent.moneySpentPickUp:
+                RecudeMoney(moneyRequiredPickUp);
+
+                break;
+            case MoneySpent.moneySpentOpenDoor:
+                RecudeMoney(moneyRequiredOpenDoor);
+
+                break;
+            case MoneySpent.moneySpentPassBridge:
+                RecudeMoney(moneyRequiredPassBridge);
+
+                break;
+            case MoneySpent.moneySpentUseElevator:
+                RecudeMoney(moneyRequiredUseElevator);
+
+                break;
+        }
+    }
+
+    private void RecudeMoney(float moneyReq)
+    {
+        double money = GameManager.Instance.GetGameData().totalMoney;
+        double calcMoney = money - moneyReq;
+        if (calcMoney <= 0)
+        {
+            if (SceneManager.GetActiveScene().name != "MainHub")
+            {
+                GameManager.Instance.GetGameData().totalMoney = 0;
+                onMoneyChange?.Invoke(moneyReq);
+                onMoneyZero?.Invoke();
+            }
+        }
+        else
+        {
+            if (SceneManager.GetActiveScene().name != "MainHub")
+            {
+                GameManager.Instance.GetGameData().totalMoney = calcMoney;
+                onMoneyChange?.Invoke(moneyReq);
+            }
+
+        }
+
+    }
+
+    public void UpdateItemMoneyEffects(int index, MoneySpent moneySpent)
+    {
+        float value = playerControler.UpgradeItems[index].itemEffectOnMoney.value;
+        Operations op = playerControler.UpgradeItems[index].itemEffectOnMoney.operations;
+
+        switch (moneySpent)
+        {
+            case MoneySpent.moneySpentMove:
+                moneyRequiredMove = playerControler.ImplementOperations(value, op);
+                break;
+            case MoneySpent.moneySpentJump:
+                moneyRequiredJump = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentClimb:
+                moneyRequiredClimb = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentPickUp:
+                moneyRequiredPickUp = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentOpenDoor:
+                moneyRequiredOpenDoor = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentPassBridge:
+                moneyRequiredPassBridge = playerControler.ImplementOperations(value, op);
+
+                break;
+            case MoneySpent.moneySpentUseElevator:
+                moneyRequiredUseElevator = playerControler.ImplementOperations(value, op);
+
+                break;
+        }
+    }
+
+
+
+    private void EnableInteractText(string txt)
+    {
+        interactText.SetActive(true);
+        requiredMoneyText.SetActive(true);
+        requiredMoneyText.GetComponent<TextMeshProUGUI>().text = txt;
+    }
+
+    private void DisableInteractText()
+    {
+        interactText.SetActive(false);
+        requiredMoneyText.SetActive(false);
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Debug.Log("This object : " + collision.gameObject);
+        if (collision.CompareTag("Ladder"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Ladder);
+            EnableInteractText("$" + moneyRequiredClimb);
+        }
+
+        if (collision.CompareTag("Door"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Door);
+            onDoorEnter?.Invoke();
+            onDoorCheck?.Invoke(keyNumber);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("$" + moneyRequiredOpenDoor);
+
+        }
+
+        if (collision.CompareTag("Key"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Key);
+            onKeyEnter?.Invoke();
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("$" + moneyRequiredPickUp);
+
+        }
+
+        if (collision.CompareTag("Elevator"))
+        {
+
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Elevator);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("$" + moneyRequiredUseElevator);
+
+        }
+
+        if (collision.CompareTag("Bridge"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Bridge);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("$" + moneyRequiredPassBridge);
+
+        }
+
+        if (collision.CompareTag("Shop"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Shop);
+            EnableInteractText("Upgrade Shop");
+
+        }
+
+        if (collision.CompareTag("Taxi"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Taxi);
+            EnableInteractText("Taxi");
+
+        }
+
+        if (collision.CompareTag("Sign"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Sign);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("");
+        }
+
+        if (collision.CompareTag("Wallet"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Wallet);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("");
+        }
+
+        if (collision.CompareTag("Item"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Item);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("");
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        // Debug.Log("This object : " + collision.gameObject);
+        if (collision.CompareTag("Ladder"))
+        {
+            //Debug.Log("Ladder can be used");
+            onInteract?.Invoke(Interaction.Ladder);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        // Debug.Log("This object : " + collision.gameObject);
+        if (collision.CompareTag("Ladder"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onLadderExit?.Invoke();
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+        }
+
+        if (collision.CompareTag("Door"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            onDoorExit?.Invoke();
+            DisableInteractText();
+        }
+
+        if (collision.CompareTag("Key"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+        }
+
+
+        if (collision.CompareTag("Elevator"))
+        {
+
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
+        }
+
+        if (collision.CompareTag("Bridge"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            onBridgeExit?.Invoke();
+            DisableInteractText();
+
+        }
+
+        if (collision.CompareTag("Shop"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
+        }
+
+        if (collision.CompareTag("Taxi"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
+        }
+
+        if (collision.CompareTag("Sign"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+        }
+
+        if (collision.CompareTag("Wallet"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+        }
+
+        if (collision.CompareTag("Item"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+        }
+    }
+
+}
+
+public enum MoneySpent
+{
+    moneySpentMove,
+    moneySpentJump,
+    moneySpentClimb,
+    moneySpentPickUp,
+    moneySpentOpenDoor,
+    moneySpentUseElevator,
+    moneySpentPassBridge
+}
+
+
+/*
+ * 
     private void SaveGameData(bool[] items)
     {
         //This Array holds the items of game: JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3"
-        GameManager.Instance.GetGameData().platformItems = items;
+        GameManager.Instance.GetGameData()._platformItems = items;
         GameManager.Instance.SaveGame();
     }
 
-    //This function is tied to player movement. When player presses a single movement key this function deducts a certain amount of money.
+ * 
+ * 
+ * 
+ *     [SerializeField] private float moneyRequiredMove = 10;
+    [SerializeField] private float moneyRequiredJump = 100;
+    [SerializeField] private float moneyRequiredClimb = 1000;
+    [SerializeField] private float moneyRequiredPickUp = 2000;
+    [SerializeField] private float moneyRequiredOpenDoor = 3000;
+    [SerializeField] private float moneyRequiredUseElevator = 5000;
+    [SerializeField] private float moneyRequiredPassBridge = 6000;
+
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ *     //This function is tied to player movement. When player presses a single movement key this function deducts a certain amount of money.
     //After it reduces the money if the current money is below 0 a game will trigger the onMoneyZero event which disables the player controls
     private void ReduceMoneyMove()
     {
@@ -186,32 +501,10 @@ public class PlatformerManager : MonoBehaviour
     }
 
 
-    private void EnableInteractText(string txt)
-    {
-        interactText.SetActive(true);
-        requiredMoneyText.SetActive(true);
-        requiredMoneyText.GetComponent<TextMeshProUGUI>().text = txt;
-    }
-
-    private void DisableInteractText()
-    {
-        interactText.SetActive(false);
-        requiredMoneyText.SetActive(false);
-    }
-
-    private void ToggleElevatorActive()
-    {
-        elevatorActive = !elevatorActive;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        // Debug.Log("This object : " + collision.gameObject);
-        if (collision.CompareTag("Ladder"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Ladder);
-            if (playerControler.LocalItems != null)
+ * 
+ * 
+ * 
+ *             if (playerControler.LocalItems != null)
             {
                 // Climb Gloves: 3 = Climbing free
                 if (playerControler.LocalItems[3])
@@ -223,171 +516,8 @@ public class PlatformerManager : MonoBehaviour
                     EnableInteractText("$" + moneyRequiredClimb);
                 }
             }
-
-        }
-
-        if (collision.CompareTag("Door"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Door);
-            onDoorEnter?.Invoke();
-            onDoorCheck?.Invoke(keyNumber);
-            EnableInteractText("$" + moneyRequiredOpenDoor);
-
-        }
-
-        if (collision.CompareTag("Key"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Key);
-            onKeyEnter?.Invoke();
-            EnableInteractText("$" + moneyRequiredPickUp);
-
-        }
-
-        if (collision.CompareTag("Elevator"))
-        {
-            if (!elevatorActive)
-            {
-                //Debug.Log("Ladder can NOT be used");
-                onInteract?.Invoke(Interaction.Elevator);
-                EnableInteractText("$" + moneyRequiredUseElevator);
-            }
-        }
-
-        if (collision.CompareTag("Bridge"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Bridge);
-            EnableInteractText("$" + moneyRequiredPassBridge);
-
-        }
-
-        if (collision.CompareTag("Shop"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Shop);
-            EnableInteractText("Upgrade Shop");
-
-        }
-
-        if (collision.CompareTag("Taxi"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Taxi);
-            EnableInteractText("Taxi");
-
-        }
-
-        if (collision.CompareTag("Sign"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Sign);
-            onGameObjectInteract?.Invoke(collision.gameObject);
-            EnableInteractText("");
-        }
-
-        if (collision.CompareTag("Wallet"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Wallet);
-            EnableInteractText("");
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        // Debug.Log("This object : " + collision.gameObject);
-        if (collision.CompareTag("Ladder"))
-        {
-            //Debug.Log("Ladder can be used");
-            onInteract?.Invoke(Interaction.Ladder);
-            onGameObjectInteract?.Invoke(collision.gameObject);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        // Debug.Log("This object : " + collision.gameObject);
-        if (collision.CompareTag("Ladder"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onLadderExit?.Invoke();
-            onInteract?.Invoke(Interaction.Empty);
-            DisableInteractText();
-        }
-
-        if (collision.CompareTag("Door"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Empty);
-            onDoorExit?.Invoke();
-            DisableInteractText();
-        }
-
-        if (collision.CompareTag("Key"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Empty);
-            DisableInteractText();
-        }
-
-
-        if (collision.CompareTag("Elevator"))
-        {
-            if (!elevatorActive)
-            {
-                //Debug.Log("Ladder can NOT be used");
-                onInteract?.Invoke(Interaction.Empty);
-                DisableInteractText();
-            }
-        }
-
-        if (collision.CompareTag("Bridge"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Empty);
-            onBridgeExit?.Invoke();
-            DisableInteractText();
-
-        }
-
-        if (collision.CompareTag("Shop"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Empty);
-            DisableInteractText();
-
-        }
-
-        if (collision.CompareTag("Taxi"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Empty);
-            DisableInteractText();
-
-        }
-
-        if (collision.CompareTag("Sign"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Empty);
-            DisableInteractText();
-
-        }
-
-        if (collision.CompareTag("Wallet"))
-        {
-            //Debug.Log("Ladder can NOT be used");
-            onInteract?.Invoke(Interaction.Empty);
-            DisableInteractText();
-
-        }
-    }
-
-}
-
-/*
+ * 
+ * 
    if (Input.GetKey(KeyCode.RightArrow))
         {
             onMoneyChange?.Invoke();
@@ -433,4 +563,19 @@ public class PlatformerManager : MonoBehaviour
     {
         Debug.Log("Disable Input : " + playerInputAction.PlayerPlatform.Move.enabled);
     }
+
+        PlayerControler.onPlayerJump += ReduceMoneyJump;
+        PlayerControler.onPlayerMove += ReduceMoneyMove;
+        PlayerControler.onPlayerClimb += ReduceMoneyClimb;
+        PlayerControler.onPlayerPickUpKey += ReduceMoneyPickUp;
+        PlayerControler.onPlayerOpenDoor += ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerUseElevator += ReduceMoneyUseElevator;
+        PlayerControler.onPlayerPassBridge += ReduceMoneyPassBridge;
+
+        PlayerControler.onPlayerJump -= ReduceMoneyJump;
+        PlayerControler.onPlayerMove -= ReduceMoneyMove;
+        PlayerControler.onPlayerClimb -= ReduceMoneyClimb;
+        PlayerControler.onPlayerPickUpKey -= ReduceMoneyPickUp;
+        PlayerControler.onPlayerOpenDoor -= ReduceMoneyDoorOpen;
+        PlayerControler.onPlayerPassBridge -= ReduceMoneyPassBridge;
  */
