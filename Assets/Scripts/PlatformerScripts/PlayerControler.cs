@@ -590,6 +590,7 @@ public class PlayerControler : MonoBehaviour
 
         for (int i = 0; i < itemData.Length; i++)
         {
+            Debug.Log(upgradeItems[i].itemName + " " + itemData[i].unlock);
             if (itemData[i].unlock)
             {
                 ImplementItemUpgrade(i, itemData);
@@ -602,12 +603,15 @@ public class PlayerControler : MonoBehaviour
         if (upgradeItems[index].hasItemEffectOnMoney)
         {
             ImplementMoney(index, upgradeItems[index].itemEffectOnMoney.moneySpent);
+            Debug.Log(upgradeItems[index].itemName + " Implement Money : " + upgradeItems[index].itemEffectOnMoney.moneySpent);
         }
 
         if (upgradeItems[index].hasItemEffectOnMovement)
         {
             ImplementPlayerMovement(itemData, index, upgradeItems[index].itemEffectOnMovement.value, upgradeItems[index].itemEffectOnMovement.operations
                 , upgradeItems[index].itemEffectOnMovement.playerMovement);
+            Debug.Log(upgradeItems[index].itemName + " Implement PlayerMovement : " + upgradeItems[index].itemEffectOnMovement.playerMovement
+                + " The value:  " + upgradeItems[index].itemEffectOnMovement.value);
         }
 
         if (!upgradeItems[index].hasItemEffectOnMoney && !upgradeItems[index].hasItemEffectOnMovement)
@@ -633,11 +637,11 @@ public class PlayerControler : MonoBehaviour
                 if (upgradeItems[index].hasTier)
                 {
                     tierEffect = (playerSpeed * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
-                    playerSpeed = ImplementOperations(tierEffect + value, op);
+                    playerSpeed = ImplementOperations(playerSpeed, tierEffect + value, op);
                 }
                 else
                 {
-                    playerSpeed = ImplementOperations(value, op);
+                    playerSpeed = ImplementOperations(playerSpeed, value, op);
                 }
                 break;
             case PlayerMovement.SprintMultiplier:
@@ -646,11 +650,11 @@ public class PlayerControler : MonoBehaviour
                 if (upgradeItems[index].hasTier)
                 {
                     tierEffect = (playerSprintMultiplier * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
-                    playerSprintMultiplier = ImplementOperations(tierEffect + value, op);
+                    playerSprintMultiplier = ImplementOperations(playerSprintMultiplier, tierEffect + value, op);
                 }
                 else
                 {
-                    playerSprintMultiplier = ImplementOperations(value, op);
+                    playerSprintMultiplier = ImplementOperations(playerSprintMultiplier, value, op);
                 }
                 break;
             case PlayerMovement.JumpPower:
@@ -658,11 +662,11 @@ public class PlayerControler : MonoBehaviour
                 if (upgradeItems[index].hasTier)
                 {
                     tierEffect = (playerJumpPower * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
-                    playerJumpPower = ImplementOperations(tierEffect + value, op);
+                    playerJumpPower = ImplementOperations(playerJumpPower, tierEffect + value, op);
                 }
                 else
                 {
-                    playerJumpPower = ImplementOperations(value, op);
+                    playerJumpPower = ImplementOperations(playerJumpPower, value, op);
                 }
                 break;
             case PlayerMovement.JumpPowerMultiplier:
@@ -670,34 +674,34 @@ public class PlayerControler : MonoBehaviour
                 if (upgradeItems[index].hasTier)
                 {
                     tierEffect = (playerJumpPowerMultiplier * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
-                    playerJumpPowerMultiplier = ImplementOperations(tierEffect + value, op);
+                    playerJumpPowerMultiplier = ImplementOperations(playerJumpPowerMultiplier, tierEffect + value, op);
                 }
                 else
                 {
-                    playerJumpPowerMultiplier = ImplementOperations(value, op);
+                    playerJumpPowerMultiplier = ImplementOperations(playerJumpPowerMultiplier, value, op);
                 }
                 break;
             case PlayerMovement.GravityActivationTime:
                 if (upgradeItems[index].hasTier)
                 {
                     tierEffect = (playerGravityActivationTime * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
-                    playerGravityActivationTime = ImplementOperations(tierEffect + value, op);
+                    playerGravityActivationTime = ImplementOperations(playerGravityActivationTime, tierEffect + value, op);
                 }
                 else
                 {
-                    playerGravityActivationTime = ImplementOperations(value, op);
+                    playerGravityActivationTime = ImplementOperations(playerGravityActivationTime, value, op);
                 }
                 break;
             case PlayerMovement.DefaultGravityScale:
                 if (upgradeItems[index].hasTier)
                 {
                     tierEffect = (playerDefaultGravityScale * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
-                    playerDefaultGravityScale = ImplementOperations(tierEffect + value, op);
+                    playerDefaultGravityScale = ImplementOperations(playerDefaultGravityScale, tierEffect + value, op);
                 }
                 else
                 {
 
-                    playerDefaultGravityScale = ImplementOperations(value, op);
+                    playerDefaultGravityScale = ImplementOperations(playerDefaultGravityScale, value, op);
                 }
                 break;
 
@@ -705,23 +709,24 @@ public class PlayerControler : MonoBehaviour
                 if (upgradeItems[index].hasTier)
                 {
                     tierEffect = (playerMaxGravityMultiplier * upgradeItems[index].effectTiersPercentage[itemData[index].tier]) / 100;
-                    playerMaxGravityMultiplier = ImplementOperations(tierEffect + value, op);
+                    playerMaxGravityMultiplier = ImplementOperations(playerMaxGravityMultiplier, tierEffect + value, op);
                 }
                 else
                 {
 
-                    playerMaxGravityMultiplier = ImplementOperations(value, op);
+                    playerMaxGravityMultiplier = ImplementOperations(playerMaxGravityMultiplier, value, op);
                 }
                 break;
         }
     }
 
-    public float ImplementOperations(float value, Operations op)
+    public float ImplementOperations(float origin, float value, Operations op)
     {
-        float result = 0;
+        float result = origin;
         switch (op)
         {
             case Operations.Add:
+                Debug.Log("Add: " + value + " ");
                 result += value;
                 break;
             case Operations.Subtract:

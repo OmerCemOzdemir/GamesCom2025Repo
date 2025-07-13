@@ -39,6 +39,7 @@ public class Checkpoint : MonoBehaviour
                 }
 
                 levelSaveData[i].unlockCheckpoint[index] = true;
+
                 Debug.Log("Checkpoint pos: "
                     + " " + levelSaveData[i].checkpointX[index] + " "
                     + " " + levelSaveData[i].checkpointY[index] + " "
@@ -66,7 +67,7 @@ public class Checkpoint : MonoBehaviour
                     if (levelSaveData[i].checkpointX[j] == transform.position.x)
                     {
                         index = j;
-                        Debug.Log("index: " + index);
+                        //Debug.Log("index: " + index);
                     }
                 }
 
@@ -75,7 +76,7 @@ public class Checkpoint : MonoBehaviour
                     if (levelSaveData[i].checkpointY[j] == transform.position.y)
                     {
                         index = j;
-                        Debug.Log("index: " + index);
+                        //Debug.Log("index: " + index);
                     }
                 }
 
