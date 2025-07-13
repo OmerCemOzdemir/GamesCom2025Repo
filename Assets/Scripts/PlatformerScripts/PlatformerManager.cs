@@ -149,34 +149,34 @@ public class PlatformerManager : MonoBehaviour
     {
         float value = playerControler.UpgradeItems[index].itemEffectOnMoney.value;
         Operations op = playerControler.UpgradeItems[index].itemEffectOnMoney.operations;
-
+        Debug.Log("the Item: " + playerControler.UpgradeItems[index].itemName + " : " + value + " , " + op);
         switch (moneySpent)
         {
             case MoneySpent.moneySpentMove:
-                moneyRequiredMove = playerControler.ImplementOperations(value, op);
+                moneyRequiredMove = playerControler.ImplementOperations(moneyRequiredMove, value, op);
                 break;
             case MoneySpent.moneySpentJump:
-                moneyRequiredJump = playerControler.ImplementOperations(value, op);
+                moneyRequiredJump = playerControler.ImplementOperations(moneyRequiredJump, value, op);
 
                 break;
             case MoneySpent.moneySpentClimb:
-                moneyRequiredClimb = playerControler.ImplementOperations(value, op);
+                moneyRequiredClimb = playerControler.ImplementOperations(moneyRequiredClimb, value, op);
 
                 break;
             case MoneySpent.moneySpentPickUp:
-                moneyRequiredPickUp = playerControler.ImplementOperations(value, op);
+                moneyRequiredPickUp = playerControler.ImplementOperations(moneyRequiredPickUp, value, op);
 
                 break;
             case MoneySpent.moneySpentOpenDoor:
-                moneyRequiredOpenDoor = playerControler.ImplementOperations(value, op);
+                moneyRequiredOpenDoor = playerControler.ImplementOperations(moneyRequiredOpenDoor, value, op);
 
                 break;
             case MoneySpent.moneySpentPassBridge:
-                moneyRequiredPassBridge = playerControler.ImplementOperations(value, op);
+                moneyRequiredPassBridge = playerControler.ImplementOperations(moneyRequiredPassBridge, value, op);
 
                 break;
             case MoneySpent.moneySpentUseElevator:
-                moneyRequiredUseElevator = playerControler.ImplementOperations(value, op);
+                moneyRequiredUseElevator = playerControler.ImplementOperations(moneyRequiredUseElevator, value, op);
 
                 break;
         }

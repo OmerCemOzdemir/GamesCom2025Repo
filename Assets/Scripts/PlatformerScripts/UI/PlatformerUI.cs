@@ -1,5 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,38 +11,31 @@ public class PlatformerUI : MonoBehaviour
     [Header("General GUI Elements")]
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI lostMoneyText;
-    [SerializeField] private GameObject keyImage;
-    [SerializeField] private GameObject upgradeShopPanel;
     [SerializeField] private GameObject outOfMoneyPanel;
+    [SerializeField] private Transform itemsPanel;
+    [SerializeField] private GameObject itemIconPrefab;
+    private GameObject[] itemIconArr;
     [Space(10)]
 
-    [Header("Item Images")]
-    [Tooltip("This Array holds the IMAGES of game upgradeItemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
-    [SerializeField] private GameObject[] itemSlotImages;
-    [Space(10)]
+    private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
 
-    [Header("Item Buttons")]
-    [Tooltip("This Array holds the BUTTONS of game upgradeItemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
-    [SerializeField] private GameObject[] itemSlotButtons;
 
     private void Awake()
     {
+        InitilizeScriptableObjects();
         UpdateMoneyText(0);
+        UpdateItemIcons();
     }
 
     private void OnEnable()
     {
         PlatformerManager.onMoneyChange += UpdateLostMoney;
-        PlayerControler.onPlayerOpenShop += OpenShop;
-        PlatformUpgradeShop.onItemExchange += UpdateItemSlotImages;
         PlatformerManager.onMoneyZero += OpenOutOfMoneyPanel;
     }
 
     private void OnDisable()
     {
         PlatformerManager.onMoneyChange -= UpdateLostMoney;
-        PlayerControler.onPlayerOpenShop -= OpenShop;
-        PlatformUpgradeShop.onItemExchange -= UpdateItemSlotImages;
         PlatformerManager.onMoneyZero -= OpenOutOfMoneyPanel;
 
     }
@@ -49,19 +45,51 @@ public class PlatformerUI : MonoBehaviour
         moneyText.text = "$" + GameManager.Instance.GetGameData().totalMoney;
     }
 
-    private void DisableKeyImage()
+
+    private void InitilizeScriptableObjects()
     {
-        keyImage.SetActive(true);
+        //Assets/ScriptableObjects/PlatformItems
+        string[] files;
+        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
+
+        foreach (var item in upgradeItems)
+        {
+            //Debug.Log("Test: " + item.name);
+        }
+
     }
 
-    public void CloseShop()
+    private void UpdateItemIcons()
     {
-        upgradeShopPanel.SetActive(false);
-    }
+        PlatformItemSaveData[] itemSaveData = GameManager.Instance.GetGameData().platformItems;
+        itemIconArr = new GameObject[itemSaveData.Length];
+        for (int i = 0; i < itemSaveData.Length; i++)
+        {
+            itemIconArr[i] = Instantiate(itemIconPrefab);
+            itemIconArr[i].transform.SetParent(itemsPanel);
 
-    private void OpenShop()
-    {
-        upgradeShopPanel.SetActive(true);
+            if (itemSaveData[i].unlock)
+            {
+                itemIconArr[i].GetComponent<Image>().sprite = upgradeItems[i].itemIcon;
+
+            }
+            else
+            {
+                itemIconArr[i].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+            }
+
+            //itemIcon.GetComponent<Image>().sprite = 
+        }
+
     }
 
 
@@ -103,6 +131,28 @@ public class PlatformerUI : MonoBehaviour
         GameManager.Instance.NextLevel(1);
     }
 
+
+}
+
+/*
+ 
+
+    public void CloseShop()
+    {
+        upgradeShopPanel.SetActive(false);
+    }
+
+    private void OpenShop()
+    {
+        upgradeShopPanel.SetActive(true);
+    }
+
+
+     private void DisableKeyImage()
+    {
+        keyImage.SetActive(true);
+    }
+
     private void UpdateItemSlotImages(bool[] itemSlots)
     {
         for (int i = 0; itemSlots.Length > i; i++)
@@ -121,11 +171,20 @@ public class PlatformerUI : MonoBehaviour
         keyImage.SetActive(true);
     }
 
-}
 
-/*
- 
- 
+
+
+    [Header("Item Images")]
+    [Tooltip("This Array holds the IMAGES of game upgradeItemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [SerializeField] private GameObject[] itemSlotImages;
+    [Space(10)]
+
+    [Header("Item Buttons")]
+    [Tooltip("This Array holds the BUTTONS of game upgradeItemsData:\n JumpBoots: 0/ SprintBoots: 1/ SpringSoles: 2/ ClimbGloves: 3")]
+    [SerializeField] private GameObject[] itemSlotButtons;
+
+
+
         int i = 0;
         while (i < totalSec)
         {

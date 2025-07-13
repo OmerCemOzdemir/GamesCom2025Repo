@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,7 @@ public class PlatformUpgradeShop : MonoBehaviour
     private int platformItemIndex = 0;
 
     public int PlatformItemIndex { get => platformItemIndex; set => platformItemIndex = value; }
+    public List<PlatformUpgradeItem> UpgradeItems { get => upgradeItems; set => upgradeItems = value; }
 
     private MainHubUI mainHubUI;
 
@@ -124,8 +126,17 @@ public class PlatformUpgradeShop : MonoBehaviour
             upgradeItemInstances[i].transform.SetParent(parentContext.transform);
             upgradeItemInstances[i].gameObject.name = "" + i;
             upgradeItemInstances[i].transform.GetChild(0).gameObject.GetComponent<Image>().sprite = upgradeItems[i].itemIcon;
+            if (upgradeItems[i].hasTier)
+            {
+                upgradeItemInstances[i].transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = "";
+            }
+            else
+            {
+                upgradeItemInstances[i].transform.GetChild(1).gameObject.SetActive(false);
+            }
             //Debug.Log("upgradeItemsData: " + i + ": " + upgradeItemsData[i].cost);
 
+            UpdateItemButtons(i);
         }
 
     }
@@ -152,7 +163,6 @@ public class PlatformUpgradeShop : MonoBehaviour
         {
             buyButton.GetComponent<Button>().enabled = false;
             buyButton.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
-
         }
         else
         {
@@ -160,28 +170,33 @@ public class PlatformUpgradeShop : MonoBehaviour
             buyButton.GetComponent<Image>().color = new Color(1, 1, 1, 1f);
         }
 
+    }
+
+
+
+    private void UpdateItemButtons()
+    {
+
         if (upgradeItems[platformItemIndex].hasTier)
         {
             int maxTier = upgradeItems[platformItemIndex].effectTiersPercentage.Length;
-            float tier = upgradeItemsData[platformItemIndex].tier;
+            int tier = upgradeItemsData[platformItemIndex].tier;
             tier++;
-            if (maxTier < tier)
+            upgradeItemInstances[platformItemIndex].transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = "" + tier;
+            if (maxTier == tier)
             {
                 Debug.Log("Max Tier Reached");
-                upgradeItemInstances[platformItemIndex].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                upgradeItemInstances[platformItemIndex].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(0, 1, 0, 1f);
                 upgradeItemInstances[platformItemIndex].GetComponent<Button>().enabled = false;
+                platformItemIndex = -1;
             }
-            else
-            {
-                upgradeItemInstances[platformItemIndex].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(1, 1, 1, 1f);
-                upgradeItemInstances[platformItemIndex].GetComponent<Button>().enabled = true;
-            }
+
         }
         else
         {
             if (upgradeItemsData[platformItemIndex].unlock)
             {
-                upgradeItemInstances[platformItemIndex].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                upgradeItemInstances[platformItemIndex].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(0, 1, 0, 1f);
                 upgradeItemInstances[platformItemIndex].GetComponent<Button>().enabled = false;
             }
             else
@@ -192,53 +207,104 @@ public class PlatformUpgradeShop : MonoBehaviour
         }
     }
 
-    public void Buy()
+
+
+    private void UpdateItemButtons(int index)
     {
-        double money = GameManager.Instance.GetGameData().totalMoney;
-        double cost = (double)upgradeItemsData[platformItemIndex].cost;
-        double calc = money - cost;
-        if (calc < 0)
+
+        if (upgradeItems[index].hasTier)
         {
-            Debug.Log("Can not Purchase");
+            int maxTier = upgradeItems[index].effectTiersPercentage.Length;
+            int tier = upgradeItemsData[index].tier;
+            tier++;
+            upgradeItemInstances[index].transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = "" + tier;
+            if (maxTier == tier)
+            {
+                Debug.Log("Max Tier Reached");
+                upgradeItemInstances[index].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(0, 1, 0, 1f);
+                upgradeItemInstances[index].GetComponent<Button>().enabled = false;
+                index = -1;
+            }
         }
         else
         {
-            if (upgradeItems[platformItemIndex].hasTier)
+            if (upgradeItemsData[index].unlock)
             {
-                int maxTier = upgradeItems[platformItemIndex].effectTiersPercentage.Length;
-                float tier = upgradeItemsData[platformItemIndex].tier;
-                tier++;
+                upgradeItemInstances[index].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(0, 1, 0, 1f);
+                upgradeItemInstances[index].GetComponent<Button>().enabled = false;
+            }
+            else
+            {
+                upgradeItemInstances[index].transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color(1, 1, 1, 1f);
+                upgradeItemInstances[index].GetComponent<Button>().enabled = true;
+            }
+        }
+    }
 
-                if (upgradeItemsData[platformItemIndex].unlock)
+
+
+    public void Buy()
+    {
+        if (platformItemIndex == -1)
+        {
+
+        }
+        else
+        {
+            double money = GameManager.Instance.GetGameData().totalMoney;
+            double cost = (double)upgradeItemsData[platformItemIndex].cost;
+            double calc = money - cost;
+            if (calc < 0)
+            {
+                Debug.Log("Can not Purchase");
+            }
+            else
+            {
+                if (upgradeItems[platformItemIndex].hasTier)
                 {
-                    if (maxTier < tier)
+                    int maxTier = upgradeItems[platformItemIndex].effectTiersPercentage.Length;
+                    int tier = upgradeItemsData[platformItemIndex].tier;
+                    tier++;
+                    Debug.Log("Max Tier: " + maxTier + " Tier: " + tier);
+                    if (upgradeItemsData[platformItemIndex].unlock)
                     {
-                        Debug.Log("Max Tier Reached");
+                        if (maxTier < tier)
+                        {
+                            Debug.Log("Max Tier Reached");
+                        }
+                        else
+                        {
+                            tier--;
+                            upgradeItemsData[platformItemIndex].tier++;
+                            upgradeItemsData[platformItemIndex].cost = upgradeItems[platformItemIndex].costTiers[tier];
+                            GameManager.Instance.GetGameData().totalMoney = calc;
+                        }
                     }
                     else
                     {
-                        tier--;
-                        upgradeItemsData[platformItemIndex].tier++;
-                        upgradeItemsData[platformItemIndex].cost = upgradeItems[platformItemIndex].costTiers[(int)tier];
+                        upgradeItemsData[platformItemIndex].tier = 0;
+                        tier = upgradeItemsData[platformItemIndex].tier;
+                        upgradeItemsData[platformItemIndex].cost = upgradeItems[platformItemIndex].costTiers[tier];
+                        upgradeItemsData[platformItemIndex].unlock = true;
+                        GameManager.Instance.GetGameData().totalMoney = calc;
                     }
                 }
                 else
                 {
-                    upgradeItemsData[platformItemIndex].tier = 0;
-                    tier = upgradeItemsData[platformItemIndex].tier;
-                    upgradeItemsData[platformItemIndex].cost = upgradeItems[platformItemIndex].costTiers[(int)tier];
+                    upgradeItemsData[platformItemIndex].tier = 1;
+                    upgradeItemsData[platformItemIndex].unlock = true;
+                    GameManager.Instance.GetGameData().totalMoney = calc;
+
                 }
+                mainHubUI.UpdateMoneyText(0);
+                UpdateShopTexts();
+                UpdateItemButtons();
+                mainHubUI.UpdateItemIcons();
+                //GameManager.Instance.SaveGame();
+                //PrintArr();
             }
-            else
-            {
-                upgradeItemsData[platformItemIndex].tier = 1;
-            }
-            upgradeItemsData[platformItemIndex].unlock = true;
-            GameManager.Instance.GetGameData().totalMoney = calc;
-            mainHubUI.UpdateMoneyText(0);
-            UpdateShopTexts();
-            //PrintArr();
         }
+
     }
 
 
