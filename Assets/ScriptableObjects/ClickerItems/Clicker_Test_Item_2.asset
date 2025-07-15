@@ -10,23 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b6d8e2e997ef46428455826c9f2195e, type: 3}
-  m_Name: Clicker_Test_Item
+  m_Name: Clicker_Test_Item_2
   m_EditorClassIdentifier: 
-  itemName: test item
-  itemDescription: Increase money per click
-  itemIcon: {fileID: 5600935968268953345, guid: a9c7f2b57fec6de47a7b7fef69678fab, type: 3}
+  itemName: test item 2
+  itemDescription: add idle money
   itemUnlocked: 1
-  maxTier: 5
-  itemEffector: 0
+  maxTier: 3
+  itemIcon: {fileID: -3950103776136749925, guid: e686ecee89cc2a14087b2c69ee21d41a, type: 3}
+  itemEffector: 2
   itemOperationOnItemEffector: 2
   itemTiers:
-  - tierEffect: 10
-    tierCost: 100
   - tierEffect: 20
+    tierCost: 100
+  - tierEffect: 40
     tierCost: 200
-  - tierEffect: 30
-    tierCost: 400
   - tierEffect: 40
-    tierCost: 500
-  - tierEffect: 40
-    tierCost: 500
+    tierCost: 200

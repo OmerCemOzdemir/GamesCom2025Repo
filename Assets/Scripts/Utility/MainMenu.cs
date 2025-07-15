@@ -1,15 +1,25 @@
+using System;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public static event Action<Music> onPlayMusic;
+    public static event Action<SFX> onPlaySFX;
+
     private void Awake()
     {
         GameManager.Instance.GetGameData();
     }
 
+    private void Start()
+    {
+        onPlayMusic?.Invoke(Music.MainMenu);
+    }
+
+
     public void StartGame()
     {
+        onPlaySFX?.Invoke(SFX.Generic);
         GameManager.Instance.NextLevel(1);
     }
 
