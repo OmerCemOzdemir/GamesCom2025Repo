@@ -37,8 +37,23 @@ public class MainHubUI : MonoBehaviour
     }
 
 
+    private void DestroyItemIcons()
+    {
+
+        if (itemsPanel.childCount != 0)
+        {
+            for (int i = 0; i < itemsPanel.childCount; i++)
+            {
+                Debug.Log("Help");
+                Destroy(itemsPanel.GetChild(i).gameObject);
+            }
+        }
+    }
+
+
     public void UpdateItemIcons()
     {
+        DestroyItemIcons();
         PlatformItemSaveData[] itemSaveData = GameManager.Instance.GetGameData().platformItems;
         itemIconArr = new GameObject[itemSaveData.Length];
         for (int i = 0; i < itemSaveData.Length; i++)
@@ -54,11 +69,9 @@ public class MainHubUI : MonoBehaviour
             {
                 itemIconArr[i].GetComponent<Image>().color = new Color(1, 1, 1, 0);
             }
-
             //itemIcon.GetComponent<Image>().sprite = 
         }
 
     }
-
 
 }

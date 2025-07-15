@@ -10,16 +10,18 @@ public class ClickerManager : MonoBehaviour
 {
     public static event Action onActiveClick;
     public static event Action onIdleClick;
+    public static event Action<SFX> onPlaySFX;
+    public static event Action<Music> onPlayMusic;
 
     private ClickerEffect effect;
     private List<ClickerUpgradeItem> upgradeClickerItems = new List<ClickerUpgradeItem>();
     private List<PlatformUpgradeItem> upgradePlatformItems = new List<PlatformUpgradeItem>();
 
 
-    [SerializeField] private float baseActiveMoneyIncrement = 1; //Defualt is 1
-    [SerializeField] private float baseActiveMoneyMultiplier = 1; //Defualt is 1
-    [SerializeField] private float baseIdleMoneyIncrement = 0; //Defualt is 0
-    [SerializeField] private float baseIdleMoneyMultiplier = 1; //Defualt is 1
+    [SerializeField] private float baseActiveMoneyIncrement = 1; //Default is 1
+    [SerializeField] private float baseActiveMoneyMultiplier = 1; //Default is 1
+    [SerializeField] private float baseIdleMoneyIncrement = 0; //Default is 0
+    [SerializeField] private float baseIdleMoneyMultiplier = 1; //Default is 1
 
 
     private float activeMoneyIncrement;
@@ -100,6 +102,7 @@ public class ClickerManager : MonoBehaviour
     {
         yield return new WaitForSeconds(idleTime);
         onIdleClick?.Invoke();
+        onPlaySFX?.Invoke(SFX.Idle);
         idleToggle = true;
     }
 
@@ -117,6 +120,7 @@ public class ClickerManager : MonoBehaviour
     {
         yield return new WaitForSeconds(baseActiveTime);
         onActiveClick?.Invoke();
+        onPlaySFX?.Invoke(SFX.Active);
         effect.IncreaseClickEffect(10);
         activeToggle = true;
     }
@@ -182,6 +186,7 @@ public class ClickerManager : MonoBehaviour
 
     private void ImplementUpgrades(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems)
     {
+        ResetFields(upgradeItems[index].itemEffector);
         switch (upgradeItems[index].itemEffector)
         {
             case ClickerItemEffetors.baseActiveMoneyIncrement:
@@ -212,16 +217,16 @@ public class ClickerManager : MonoBehaviour
             switch (upgradeItems[index].itemOperationOnItemEffector)
             {
                 case Operations.Add:
-                    fieldEffected = fieldEffected + (upgradeItems[index].baseItemEffect * upgradeItems[index].tierMultiplier[itemsData[index].tier]);
+                    fieldEffected += upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
                     break;
                 case Operations.Multiply:
-                    fieldEffected = fieldEffected * (upgradeItems[index].baseItemEffect * upgradeItems[index].tierMultiplier[itemsData[index].tier]);
+                    fieldEffected *= upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
                     break;
                 case Operations.Subtract:
-                    fieldEffected = fieldEffected - (upgradeItems[index].baseItemEffect * upgradeItems[index].tierMultiplier[itemsData[index].tier]);
+                    fieldEffected -= upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
                     break;
                 case Operations.Divide:
-                    fieldEffected = fieldEffected / (upgradeItems[index].baseItemEffect * upgradeItems[index].tierMultiplier[itemsData[index].tier]);
+                    fieldEffected /= upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
                     break;
                 default:
                     break;
@@ -280,6 +285,47 @@ public class ClickerManager : MonoBehaviour
 
     }
 
+
+    private void ResetFields()
+    {
+        activeMoneyIncrement = baseActiveMoneyIncrement;
+        activeMoneyMultiplier = baseActiveMoneyMultiplier;
+        idleMoneyIncrement = baseIdleMoneyIncrement;
+        idleMoneyMultiplier = baseIdleMoneyMultiplier;
+        idleTime = baseIdleTime;
+    }
+
+    private void ResetFields(ClickerItemEffetors field)
+    {
+        switch (field)
+        {
+            case ClickerItemEffetors.baseActiveMoneyIncrement:
+                activeMoneyIncrement = baseActiveMoneyIncrement;
+
+                break;
+            case ClickerItemEffetors.baseActiveMoneyMultiplier:
+                activeMoneyMultiplier = baseActiveMoneyMultiplier;
+
+                break;
+            case ClickerItemEffetors.baseIdleMoneyMultiplier:
+                idleMoneyIncrement = baseIdleMoneyIncrement;
+
+                break;
+            case ClickerItemEffetors.baseIdleMoneyIncrement:
+                idleMoneyMultiplier = baseIdleMoneyMultiplier;
+
+                break;
+            case ClickerItemEffetors.baseIdleTime:
+                idleTime = baseIdleTime;
+
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
     private void SetUpData()
     {
         GameManager.Instance.GetGameData();
@@ -288,12 +334,8 @@ public class ClickerManager : MonoBehaviour
         int walletLevel = GameManager.Instance.GetGameData().walletLevel;
         float maxTotalMoney = 0;
         //Debug.Log("max Money: " + walletLevel);
-        activeMoneyIncrement = baseActiveMoneyIncrement;
-        activeMoneyMultiplier = baseActiveMoneyMultiplier;
-        idleMoneyIncrement = baseIdleMoneyIncrement;
-        idleMoneyMultiplier = baseIdleMoneyMultiplier;
-        idleTime = baseIdleTime;
-
+        ResetFields();
+        onPlayMusic?.Invoke(Music.Clicker);
         UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems, upgradeClickerItems);
 
         maxTotalMoney = 10000;

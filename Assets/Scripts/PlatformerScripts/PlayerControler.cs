@@ -21,6 +21,8 @@ public class PlayerControler : MonoBehaviour
 
     public static event Action<string> onPlayerDebug;
 
+    public static event Action<SFX> onPlaySFX;
+    public static event Action<Music> onPlayMusic;
 
     [SerializeField] private float basePlayerSpeed = 5; // default value is 5
     [SerializeField] private float basePlayerSprintMultiplier = 1.5f; // default value is 1.5f
@@ -388,6 +390,7 @@ public class PlayerControler : MonoBehaviour
             if (currentInteractedGameObject.GetComponent<TempPlaformItem>().Item.name == currentItemData[i].ID)
             {
                 GameManager.Instance.GetGameData().clickerItems[i].unlock = true;
+                onPlaySFX?.Invoke(SFX.ItemPickUp);
                 Debug.Log("Get Item " + GameManager.Instance.GetGameData().clickerItems[i].unlock);
 
             }
@@ -754,8 +757,24 @@ public class PlayerControler : MonoBehaviour
     #endregion
 
 
+    private void SetUpAudio()
+    {
+        if (SceneManager.GetActiveScene().name == "MainHubScene")
+        {
+            onPlayMusic?.Invoke(Music.MainMenu);
+        }
+        else
+        {
+            onPlayMusic?.Invoke(Music.Platformer);
+        }
+
+
+    }
+
     private void SetUpData()
     {
+        SetUpAudio();
+
         playerSpeed = basePlayerSpeed;
         playerSprintMultiplier = basePlayerSprintMultiplier;
         playerJumpPower = basePlayerJumpPower;

@@ -61,7 +61,6 @@ public class ClickerUpgrade : MonoBehaviour
 
     }
 
-
     private void CreateUpgradeButtons()
     {
         upgradeItemInstances = new GameObject[upgradeItems.Count];
@@ -74,16 +73,7 @@ public class ClickerUpgrade : MonoBehaviour
             upgradeItemInstances[i].gameObject.name = "" + i;
             upgradeItemInstances[i].transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = upgradeItems[i].itemName;
             upgradeItemInstances[i].transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = upgradeItems[i].itemDescription;
-
-            if (itemsData[i].tier == 0)
-            {
-                upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + upgradeItems[i].baseItemCost;
-            }
-            else
-            {
-                upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
-            }
-
+            upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
             upgradeItemInstances[i].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "" + itemsData[i].tier;
             upgradeItemInstances[i].transform.GetChild(4).gameObject.GetComponent<Image>().sprite = upgradeItems[i].itemIcon;
 
@@ -141,7 +131,7 @@ public class ClickerUpgrade : MonoBehaviour
                     upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
                 }
             }
-          
+
         }
 
 
@@ -189,12 +179,11 @@ public class ClickerUpgrade : MonoBehaviour
         else
         {
             GameManager.Instance.GetGameData().totalMoney = calcMoney;
-            cost = itemsData[clickerIndex].cost * upgradeItems[clickerIndex].costMultiplier[itemsData[clickerIndex].tier];
+            itemsData[clickerIndex].tier++;
+            cost = upgradeItems[clickerIndex].itemTiers[itemsData[clickerIndex].tier].tierCost;
             cost = (float)Math.Round(cost);
             itemsData[clickerIndex].cost = cost;
-            Debug.Log("Cost: " + cost + "Exponent: " + upgradeItems[clickerIndex].costMultiplier);
-
-            itemsData[clickerIndex].tier++;
+            //Debug.Log("Cost: " + cost + "Exponent: " + upgradeItems[clickerIndex].itemTiers);
             Debug.Log("Bought Item: " + upgradeItems[clickerIndex].itemName + "The current tier: " + itemsData[clickerIndex].tier + "\n"
                 + "The new Item Cost");
         }
@@ -213,13 +202,12 @@ public class ClickerUpgrade : MonoBehaviour
             itemsData = new ClickerItemSaveData[upgradeItems.Count];
             Debug.Log("New Game: " + GameManager.Instance.GetGameData().clickerNewGame);
 
-
             for (int i = 0; i < itemsData.Length; i++)
             {
-                Debug.Log("upgradeItemsData: " + i + ": " + upgradeItems[i].baseItemCost);
+                //Debug.Log("upgradeItemsData: " + i + ": " + upgradeItems[i].itemTiers[0].tierCost);
                 itemsData[i] = new ClickerItemSaveData();
                 itemsData[i].ID = upgradeItems[i].name;
-                itemsData[i].cost = upgradeItems[i].baseItemCost;
+                itemsData[i].cost = upgradeItems[i].itemTiers[0].tierCost;
                 itemsData[i].tier = 0;
                 itemsData[i].unlock = upgradeItems[i].itemUnlocked;
             }
