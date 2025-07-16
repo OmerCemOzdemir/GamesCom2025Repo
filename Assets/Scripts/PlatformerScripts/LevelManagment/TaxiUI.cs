@@ -27,8 +27,6 @@ public class TaxiUI : MonoBehaviour
     [SerializeField] private float baseTravelCostLevel = 100;
     [SerializeField] private float baseTravelCostCheckpoint = 10;
 
-    private PlatformerUI platformerUI;
-
     //Checkpoint Var:
     private Button[] checkpointButtons;
     private Vector3[][] checpointPositions;
@@ -37,9 +35,7 @@ public class TaxiUI : MonoBehaviour
 
     //Level Var:
     private Button[] levelButtons;
-    private List<string> levelPaths = new List<string>();
     private int levelIndex = 0;
-    private string[] levelName;
     public int LevelIndex { get => levelIndex; set => levelIndex = value; }
 
     //Dictionary<int, Button> checkpointButtons = new Dictionary<int, Button> { };
@@ -57,7 +53,6 @@ public class TaxiUI : MonoBehaviour
 
     private void Awake()
     {
-        platformerUI = GetComponent<PlatformerUI>();
         //GetSceneInArray();
         //printLevelData();
     }
@@ -72,7 +67,7 @@ public class TaxiUI : MonoBehaviour
     {
         Debug.Log("Run SetUpData");
         LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
-        printLevelData(levelData);
+        //printLevelData(levelData);
         Vector3[][] checkpointsPos = new Vector3[levelData.Length][];
         for (int i = 0; i < levelData.Length; i++)
         {
@@ -161,7 +156,7 @@ public class TaxiUI : MonoBehaviour
 
     private void SetupLevels(LevelSaveData[] levelData)
     {
-        //printLevelData(levelData);
+        printLevelData(levelData);
         levelButtons = new Button[levelData.Length];
 
         for (int i = 0; i < levelData.Length; i++)

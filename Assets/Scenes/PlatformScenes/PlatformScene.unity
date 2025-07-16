@@ -2442,7 +2442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1240981160032159175, guid: 07f3d7c11ff75dd4d8ee7bff29d5fc6f, type: 3}
       propertyPath: infiMoney
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1265518996767317214, guid: 07f3d7c11ff75dd4d8ee7bff29d5fc6f, type: 3}
       propertyPath: m_AnchorMax.y

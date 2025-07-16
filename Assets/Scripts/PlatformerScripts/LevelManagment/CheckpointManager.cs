@@ -35,7 +35,7 @@ public class CheckpointManager : MonoBehaviour
     private void InitilizeSaveData()
     {
         Debug.Log("Current LevelButton: " + SceneManager.GetActiveScene().name);
-        if (SceneManager.GetActiveScene().name == "MainHub")
+        if (SceneManager.GetActiveScene().name == "MainHubScene")
         {
             if (GameManager.Instance.GetGameData().levelNewGame)
             {
