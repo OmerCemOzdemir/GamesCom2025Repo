@@ -126,7 +126,7 @@ public class PlatformerManager : MonoBehaviour
         double calcMoney = money - moneyReq;
         if (calcMoney <= 0)
         {
-            if (SceneManager.GetActiveScene().name != "MainHub")
+            if (SceneManager.GetActiveScene().name != "MainHubScene")
             {
                 GameManager.Instance.GetGameData().totalMoney = 0;
                 onMoneyChange?.Invoke(moneyReq);
@@ -135,7 +135,7 @@ public class PlatformerManager : MonoBehaviour
         }
         else
         {
-            if (SceneManager.GetActiveScene().name != "MainHub")
+            if (SceneManager.GetActiveScene().name != "MainHubScene")
             {
                 GameManager.Instance.GetGameData().totalMoney = calcMoney;
                 onMoneyChange?.Invoke(moneyReq);
