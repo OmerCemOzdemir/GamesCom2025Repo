@@ -292,18 +292,20 @@ public class PlayerControler : MonoBehaviour
                 break;
             case Interaction.Door:
                 //Interaction Toggle Not needed
-                Debug.Log("Open Door");
+                Debug.Log("Open Door " + currentInteractedGameObject.name);
                 onMoneySpent?.Invoke(MoneySpent.moneySpentOpenDoor);
+                
                 if (currentInteractedGameObject.GetComponent<Door>() == null)
                 {
-                    currentInteractedGameObject.transform.root.GetComponent<Door>().CheckDoor();
-                    currentInteractedGameObject.transform.root.GetComponent<Door>().CheckKey(platformerManager.KeyNumber);
+
+                    currentInteractedGameObject.GetComponentInParent<Door>().CheckKey(platformerManager.KeyNumber);
+                    currentInteractedGameObject.GetComponentInParent<Door>().CheckDoor();
 
                 }
                 else
                 {
-                    currentInteractedGameObject.GetComponent<Door>().CheckDoor();
                     currentInteractedGameObject.GetComponent<Door>().CheckKey(platformerManager.KeyNumber);
+                    currentInteractedGameObject.GetComponent<Door>().CheckDoor();
                 }
                 break;
             case Interaction.Key:
