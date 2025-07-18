@@ -28,8 +28,6 @@ public class Door : MonoBehaviour
             PlatformerManager.onDoorExit += DoorCloseAnimPlay;
         }
 
-        PlayerControler.onPlayerOpenDoor += CheckDoor;
-        PlatformerManager.onDoorCheck += CheckKey;
     }
 
     private void OnDisable()
