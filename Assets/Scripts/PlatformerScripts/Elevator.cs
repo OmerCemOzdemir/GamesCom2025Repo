@@ -19,20 +19,7 @@ public class Elevator : MonoBehaviour
         lerpObject = GetComponent<LerpObject>();
     }
 
-    private void OnEnable()
-    {
-        PlayerControler.onPlayerUseElevator += ToggleElevator;
-        LerpObject.onlerpOpDone += ElevatorStop;
-    }
-
-    private void OnDisable()
-    {
-        PlayerControler.onPlayerUseElevator -= ToggleElevator;
-        LerpObject.onlerpOpDone -= ElevatorStop;
-    }
-
-
-    private void ToggleElevator()
+    public void ToggleElevator()
     {
         if (allowElevatorOp)
         {
@@ -70,7 +57,7 @@ public class Elevator : MonoBehaviour
     }
 
 
-    private void ElevatorStop()
+    public void ElevatorStop()
     {
         elevatorAnimator.SetTrigger("ElevatorStop");
         player.transform.SetParent(null, true);
