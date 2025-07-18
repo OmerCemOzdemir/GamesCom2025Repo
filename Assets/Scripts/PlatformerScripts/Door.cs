@@ -32,6 +32,7 @@ public class Door : MonoBehaviour
             PlatformerManager.onDoorEnter += DoorOpenAnimPlay;
             PlatformerManager.onDoorExit += DoorCloseAnimPlay;
         }
+
     }
 
     private void OnDisable()
