@@ -2,7 +2,17 @@ using UnityEngine;
 
 public class Wallet : MonoBehaviour
 {
-    public void PickUpWallet()
+    private void OnEnable()
+    {
+        PlayerControler.onPlayerPickUpWallet += PickUpWallet;
+    }
+
+    private void OnDisable()
+    {
+        PlayerControler.onPlayerPickUpWallet -= PickUpWallet;
+    }
+
+    private void PickUpWallet()
     {
         Destroy(gameObject);
     }

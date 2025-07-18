@@ -9,9 +9,9 @@ public class Bridge : MonoBehaviour
     private BoxCollider2D bridgeBlock;
     private TextMeshProUGUI bridgeText_0;
     private TextMeshProUGUI bridgeText_1;
-    private bool bridgePaid = false;
-    
-    public bool BridgePaid { get => bridgePaid; set => bridgePaid = value; }
+    [SerializeField] private bool payOnce;
+    private bool passOnce = false;
+
 
     private void Awake()
     {
@@ -20,18 +20,31 @@ public class Bridge : MonoBehaviour
         bridgeText_1 = transform.GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
     }
 
+    private void OnEnable()
+    {
+        PlayerControler.onPlayerPassBridge += unBlockBridge;
+        if (!payOnce)
+        {
+            PlatformerManager.onBridgeExit += BlockBridge;
+        }
+    }
 
-    public void unBlockBridge()
+    private void OnDisable()
+    {
+        PlayerControler.onPlayerPassBridge -= unBlockBridge;
+        PlatformerManager.onBridgeExit -= BlockBridge;
+    }
+
+    void unBlockBridge()
     {
         bridgeBlock.enabled = false;
         BridgeOpenPaid();
-        bridgePaid = true;
     }
 
-    public void BlockBridge()
+    void BlockBridge()
     {
         bridgeBlock.enabled = true;
-        bridgePaid = false;
+
     }
 
     private void BridgeTextClose()
@@ -64,9 +77,13 @@ public class Bridge : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (bridgePaid)
+            if (payOnce)
             {
-                BridgeOpenPaid();
+                if (passOnce)
+                {
+                    BridgeTextOpenToll();
+                    passOnce = false;
+                }
             }
             else
             {
@@ -79,10 +96,12 @@ public class Bridge : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            BridgeTextClose();
-            //Player can use the interaction for Bridge again
-            Debug.Log("Out of Bridge");
-            onBridgeDone?.Invoke();
+            if (!payOnce)
+            {
+                BridgeTextClose();
+                //Player can use the interaction for Bridge again
+                onBridgeDone?.Invoke();
+            }
 
         }
     }

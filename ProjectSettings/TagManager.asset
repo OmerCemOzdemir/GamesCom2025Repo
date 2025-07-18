@@ -14,7 +14,6 @@ TagManager:
   - Sign
   - CheckpointCollector
   - Wallet
-  - Item
   layers:
   - Default
   - TransparentFX

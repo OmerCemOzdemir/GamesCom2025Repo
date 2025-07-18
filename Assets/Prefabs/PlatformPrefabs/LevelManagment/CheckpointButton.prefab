@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3908477679351510978}
   - component: {fileID: 6126240041788088048}
   - component: {fileID: 430950114757515729}
-  - component: {fileID: 7831931756534191338}
+  - component: {fileID: 1203711823832355180}
   m_Layer: 5
   m_Name: CheckpointButton
   m_TagString: Untagged
@@ -122,8 +122,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7831931756534191338}
-        m_TargetAssemblyTypeName: CheckpointButton, Assembly-CSharp
+      - m_Target: {fileID: 1203711823832355180}
+        m_TargetAssemblyTypeName: Checkpoint, Assembly-CSharp
         m_MethodName: GetCheckpointIndex
         m_Mode: 1
         m_Arguments:
@@ -134,7 +134,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7831931756534191338
+--- !u!114 &1203711823832355180
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3398107924501334203}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e46d74c08599069448d639a67b3c00a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 16514e2a2eae7804cbad7d14a5fb5cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5460721957921531057

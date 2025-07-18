@@ -13,23 +13,20 @@ MonoBehaviour:
   m_Name: Clicker_Test_Item
   m_EditorClassIdentifier: 
   itemName: test item
-  itemDescription: gfdshgd
+  itemDescription: Increase money per click
+  itemIcon: {fileID: 5600935968268953345, guid: a9c7f2b57fec6de47a7b7fef69678fab, type: 3}
   itemUnlocked: 1
   maxTier: 5
-  itemIcon: {fileID: 5600935968268953345, guid: a9c7f2b57fec6de47a7b7fef69678fab, type: 3}
-  itemEffector: 2
-  itemOperationOnItemEffector: 0
-  baseItemEffect: 12
-  tierMultiplier:
-  - 56
-  - 45
-  - 45
-  - 76
-  - 456
-  baseItemCost: 1
-  costMultiplier:
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
+  itemEffector: 0
+  itemOperationOnItemEffector: 2
+  itemTiers:
+  - tierEffect: 10
+    tierCost: 100
+  - tierEffect: 20
+    tierCost: 200
+  - tierEffect: 30
+    tierCost: 400
+  - tierEffect: 40
+    tierCost: 500
+  - tierEffect: 40
+    tierCost: 500

@@ -7,23 +7,9 @@ public class Sign : MonoBehaviour
     [SerializeField] public bool nextLevel = true;
     [SerializeField] private int nextLevelIndex;
 
-    private void Awake()
-    {
-        if (nextLevel)
-        {
-            GetComponentInChildren<TextMeshProUGUI>().text = "Next Level";
-
-        }
-        else
-        {
-            GetComponentInChildren<TextMeshProUGUI>().text = "Office";
-
-        }
-    }
-
     public void ChangeTextInInspector(string txt)
     {
-        GetComponentInChildren<TextMeshProUGUI>().text = txt;
+       GetComponentInChildren<TextMeshProUGUI>().text = txt;
     }
 
 

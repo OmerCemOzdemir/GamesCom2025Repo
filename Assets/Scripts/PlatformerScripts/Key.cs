@@ -2,8 +2,17 @@ using UnityEngine;
 
 public class Key : MonoBehaviour
 {
+    private void OnEnable()
+    {
+        PlayerControler.onPlayerPickUpKey += PickUpKey;
+    }
 
-    public void PickUpKey()
+    private void OnDisable()
+    {
+        PlayerControler.onPlayerPickUpKey -= PickUpKey;
+    }
+
+    private void PickUpKey()
     {
         Destroy(gameObject);
     }

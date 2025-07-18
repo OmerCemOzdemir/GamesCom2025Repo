@@ -2,23 +2,16 @@
 public class GameData
 {
     //Data For Multi-Scene;
-    public bool clickerNewGame = true;
-    public bool platformNewGame = true;
-    public bool levelNewGame = true;
-    public double totalMoney;
-    public double maxTotalMoney;
+    public bool newGame = true;
+    public float totalMoney;
+    public float maxTotalMoney;
     public int walletLevel = 0;
-    public LevelSaveData[] levelData;
 
     //Data For only Platforming Game:
-    public PlatformItemSaveData[] platformItems;
-    public float checkpointX;
-    public float checkpointY;
-    public float checkpointZ;
-    public bool checkpointEnable = false;
+    public bool[] platformItems = new bool[4];
 
     //Data For only Cookie Clicker Game:
-    public ClickerItemSaveData[] clickerItems;
+    public ClickerItem[] clickerItems = new ClickerItem[4];
 
 
 }

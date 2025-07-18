@@ -181,13 +181,6 @@ public class TestScript : MonoBehaviour
                     //bool newValue = int.Parse(inputFieldInstances[i].transform.GetChild(1).GetComponent<TMP_InputField>().text);
                     //Debug.Log("Current Value: " + fieldInfos[i].GetValue(gameData) + " New Value: " + newValue);
                 }
-                else if (fieldType == typeof(double))
-                {
-                    double newValue = float.Parse(inputValue);
-                    Debug.Log(i + " Current Value: " + fieldInfos[i].GetValue(gameData) + " New Value: " + newValue);
-                    fieldInfos[i].SetValue(gameData, newValue);
-                    Debug.Log(i + " Value: " + fieldInfos[i].GetValue(gameData));
-                }
 
             }
         }
@@ -269,7 +262,7 @@ public class TestScript : MonoBehaviour
     public void ResetGameData()
     {
         GameManager.Instance.ResetGameData();
-        GameManager.Instance.NextLevel(SceneManager.GetActiveScene().buildIndex);
+
     }
 
     public void ResetMoneyData()
