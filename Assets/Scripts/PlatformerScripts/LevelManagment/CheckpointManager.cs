@@ -136,7 +136,7 @@ public class CheckpointManager : MonoBehaviour
         LevelSaveData[] levelSaveData = GameManager.Instance.GetGameData().levelData;
         foreach (var item in levelSaveData)
         {
-            Debug.Log("LevelButton Data: " + item.levelName + " " + item.levelIndex);
+            //Debug.Log("LevelButton Data: " + item.levelName + " " + item.levelIndex);
         }
 
     }

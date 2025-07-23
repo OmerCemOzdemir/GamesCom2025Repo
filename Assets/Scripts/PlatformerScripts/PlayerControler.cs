@@ -512,7 +512,7 @@ public class PlayerControler : MonoBehaviour
             Jumping();
             onPlayerJump?.Invoke();
             onMoneySpent?.Invoke(MoneySpent.moneySpentJump);
-            Debug.Log("Reduce Monay For Jumping");
+            //Debug.Log("Reduce Monay For Jumping");
             //Debug.Log("Jump Pressed");
         }
     }
@@ -595,7 +595,7 @@ public class PlayerControler : MonoBehaviour
 
         for (int i = 0; i < itemData.Length; i++)
         {
-            Debug.Log(upgradeItems[i].itemName + " " + itemData[i].unlock);
+            //Debug.Log(upgradeItems[i].itemName + " " + itemData[i].unlock);
             if (itemData[i].unlock)
             {
                 ImplementItemUpgrade(i, itemData);
@@ -844,6 +844,12 @@ public class PlayerControler : MonoBehaviour
         {
             // PrintArray();
             onPlayerDebug?.Invoke(PrintFields());
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            // PrintArray();
+            GameManager.Instance.NextLevel(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
