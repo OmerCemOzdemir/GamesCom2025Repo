@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: -1713613219
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3334738622998220081, guid: ab1649ed8c214cb47a9c2b06b940dbcc, type: 3}
+  m_Sprite: {fileID: 3334738622998220081, guid: 6d898c37ef0e8af46a01b6f4ce858282, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -209,7 +209,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: -1713613219
+  m_SortingLayerID: 1040825749
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &5512284131393836672

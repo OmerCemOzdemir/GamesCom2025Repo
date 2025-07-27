@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 1160194315442267481}
   - component: {fileID: 5800486042320887773}
   m_Layer: 5
-  m_Name: ClickerUpgradeItemPrefab
+  m_Name: UpgradeItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -320,8 +320,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -240.10999, y: 43.72}
-  m_SizeDelta: {x: -480.21, y: -87.44}
+  m_AnchoredPosition: {x: -249.11, y: 43.72}
+  m_SizeDelta: {x: -498.21, y: -87.44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7680580980865676851
 CanvasRenderer:
