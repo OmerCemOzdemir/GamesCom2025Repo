@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Sprint Boots
   itemDescription: 'Enables sprint '
-  itemIcon: {fileID: -7458137046505257974, guid: e399fecb0a5642f45b1e129f265f8b13, type: 3}
+  itemIcon: {fileID: -7458137046505257974, guid: 02430c824d37d3e4bb9761aaf2a3e67a, type: 3}
   itemCost: 300
   itemType: 0
   hasItemEffectOnMoney: 0

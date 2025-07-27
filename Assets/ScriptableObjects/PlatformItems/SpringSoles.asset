@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Spring Soles
   itemDescription: Higher jump height
-  itemIcon: {fileID: -100712731447974267, guid: 9bdd0850e598864498aca409153135e4, type: 3}
+  itemIcon: {fileID: -100712731447974267, guid: a6263bd840ab1ff4884ca4445f4e80de, type: 3}
   itemCost: 500
   itemType: 0
   hasItemEffectOnMoney: 1
