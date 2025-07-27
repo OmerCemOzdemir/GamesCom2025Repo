@@ -296,7 +296,7 @@ public class PlatformUpgradeShop : MonoBehaviour
                     GameManager.Instance.GetGameData().totalMoney = calc;
 
                 }
-                mainHubUI.UpdateMoneyText(0);
+                mainHubUI.UpdateMoneyText(0, "");
                 UpdateShopTexts();
                 UpdateItemButtons();
                 mainHubUI.UpdateItemIcons();

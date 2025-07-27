@@ -10,7 +10,8 @@ public class PlatformerUI : MonoBehaviour
 {
     [Header("General GUI Elements")]
     [SerializeField] private TextMeshProUGUI moneyText;
-    [SerializeField] private TextMeshProUGUI lostMoneyText;
+    [SerializeField] private GameObject lostMoneyText;
+    [SerializeField] private Transform lostMoneyParent;
     [SerializeField] private GameObject outOfMoneyPanel;
     [SerializeField] private Transform itemsPanel;
     [SerializeField] private GameObject itemIconPrefab;
@@ -93,19 +94,25 @@ public class PlatformerUI : MonoBehaviour
     }
 
 
-    public void UpdateLostMoney(float money)
+    public void UpdateLostMoney(float money, string text)
     {
-        StopAllCoroutines();
-        lostMoneyText.color = new Color(1, 0, 0, 1f);
-        lostMoneyText.gameObject.SetActive(true);
-        lostMoneyText.text = "-$" + money;
-        StartCoroutine(DecreaseTransparency(2));
+        //Debug.Log("Reduced Money: " + text + " " + money);
+        //StopAllCoroutines();
+        GameObject newLostMoneyText = Instantiate(lostMoneyText, lostMoneyParent.position, Quaternion.identity);
+        newLostMoneyText.GetComponent<TextMeshProUGUI>().text = "" + text + " -$" + money;
+        //Debug.Log(lostMoneyText.GetComponent<TextMeshProUGUI>().text);
+        newLostMoneyText.transform.SetParent(lostMoneyParent, false);
+        newLostMoneyText.transform.SetAsFirstSibling();
+
+        //lostMoneyText.color = new Color(1, 0, 0, 1f);
+        //lostMoneyText.gameObject.SetActive(true);
+        StartCoroutine(DecreaseTransparency(2, newLostMoneyText));
         UpdateMoneyText(money);
     }
 
-    IEnumerator DecreaseTransparency(float sec)
+    IEnumerator DecreaseTransparency(float sec, GameObject ob)
     {
-        Color originalColor = lostMoneyText.color;
+        Color originalColor = ob.GetComponent<TextMeshProUGUI>().color;
         float startAlpha = originalColor.a;
         float elapsed = 0f;
 
@@ -113,12 +120,13 @@ public class PlatformerUI : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float newAlpha = Mathf.Lerp(startAlpha, 0f, elapsed / sec);
-            lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
+            ob.GetComponent<TextMeshProUGUI>().color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
             yield return null; // wait for next frame
         }
 
         // Ensure it's fully transparent at the end
-        lostMoneyText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+        ob.GetComponent<TextMeshProUGUI>().color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+        Destroy(ob);
     }
 
     private void OpenOutOfMoneyPanel()

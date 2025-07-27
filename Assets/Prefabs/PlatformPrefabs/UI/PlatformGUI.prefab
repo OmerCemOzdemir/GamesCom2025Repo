@@ -788,8 +788,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 479.99994, y: 382.08798}
-  m_SizeDelta: {x: 960, y: 156.0566}
+  m_AnchoredPosition: {x: 661.425, y: 382.08798}
+  m_SizeDelta: {x: 597.1499, y: 156.0566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5367048749694504650
 CanvasRenderer:
@@ -822,7 +822,7 @@ MonoBehaviour:
   m_text: $00000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
-  m_sharedMaterial: {fileID: -2281369136893940421, guid: 38130cd080c45bf4cb66e28fb9af3345, type: 2}
+  m_sharedMaterial: {fileID: 8676620777337174328, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -887,7 +887,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4552012241226172542
@@ -1321,6 +1321,68 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &5824702034566620192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4011417262517937819}
+  - component: {fileID: 5710052047532036504}
+  m_Layer: 5
+  m_Name: LostMoneyPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4011417262517937819
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5824702034566620192}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4515334845029751538}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 594.9554, y: -65.32034}
+  m_SizeDelta: {x: 730.09, y: 949.36}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5710052047532036504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5824702034566620192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 2
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &6179471420176040495
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,10 +1395,9 @@ GameObject:
   - component: {fileID: 2111681676827794992}
   - component: {fileID: 8203304725139836013}
   - component: {fileID: 5946665437836881099}
-  - component: {fileID: 3617661441708260582}
   - component: {fileID: 1883178520440813848}
   - component: {fileID: 1240981160032159175}
-  - component: {fileID: 5527040583220285528}
+  - component: {fileID: 4082780685025396925}
   m_Layer: 5
   m_Name: PlatformGUI
   m_TagString: Untagged
@@ -1358,9 +1419,12 @@ RectTransform:
   m_Children:
   - {fileID: 3523497314578207877}
   - {fileID: 5227225227294814658}
-  - {fileID: 1504838322615294715}
+  - {fileID: 4011417262517937819}
   - {fileID: 8316636614163323263}
   - {fileID: 3589550177375950582}
+  - {fileID: 7093545091045858808}
+  - {fileID: 5268167830218141391}
+  - {fileID: 1504838322615294715}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1431,34 +1495,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3617661441708260582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6179471420176040495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627fd54ae1c2f58459d76786edaff7f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleInfoText: {fileID: 6175045647205562822}
-  infoText: {fileID: 5123920531075977889}
-  costInfoText: {fileID: 8844523384310589170}
-  platformItems:
-  - name: Jump Boots
-    description: Jump Boots makes jumping free
-    cost: 60000
-  - name: Sprint Boots
-    description: Sprint Boots enables sprinting
-    cost: 10000
-  - name: Spring Soles
-    description: Permanently increases Jump Height
-    cost: 20000
-  - name: Climb Gloves
-    description: Makes Climbing ladders free
-    cost: 50000
 --- !u!114 &1883178520440813848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1472,7 +1508,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyText: {fileID: 534398887523975790}
-  lostMoneyText: {fileID: 8019143045537092044}
+  lostMoneyText: {fileID: 3530747921151907487, guid: 97704dc72d4d18a46b0ff6242d162651, type: 3}
+  lostMoneyParent: {fileID: 4011417262517937819}
   outOfMoneyPanel: {fileID: 537988969669980009}
   itemsPanel: {fileID: 3523497314578207877}
   itemIconPrefab: {fileID: 906393804552894392, guid: 374e5680a096d6d40a77177a62cfc30c, type: 3}
@@ -1488,9 +1525,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4b87d244d10564b97af7edde9a74b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugPanel: {fileID: 7357680573314039460}
   platformerUI: {fileID: 1883178520440813848}
   infiMoney: 0
---- !u!114 &5527040583220285528
+--- !u!114 &4082780685025396925
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1499,7 +1537,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6179471420176040495}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 960f0d53318cadd479b0854f3cb5cdbc, type: 3}
+  m_Script: {fileID: 11500000, guid: 39ce97f9ae828c145bcebe5607f2d8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   blackOutPanel: {fileID: 6369741789911091327}

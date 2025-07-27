@@ -22,7 +22,7 @@ public class MainHubUI : MonoBehaviour
 
     private void Awake()
     {
-        UpdateMoneyText(0);
+        UpdateMoneyText(0, "");
         platformUpgradeShop = GetComponent<PlatformUpgradeShop>();
     }
 
@@ -31,7 +31,7 @@ public class MainHubUI : MonoBehaviour
         UpdateItemIcons();
     }
 
-    public void UpdateMoneyText(float money)
+    public void UpdateMoneyText(float money, string txt)
     {
         moneyText.text = "$" + GameManager.Instance.GetGameData().totalMoney;
     }

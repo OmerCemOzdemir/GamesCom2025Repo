@@ -49,7 +49,7 @@ public class TestScript : MonoBehaviour
 
     private void CreateInputFields()
     {
-        Debug.Log("Create Input Fields");
+        //Debug.Log("Create Input Fields");
         int lenght = fieldInfos.Length;
         inputFieldInstances = new GameObject[lenght];
 

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlatformerManager : MonoBehaviour
 {
-    public static event Action<float> onMoneyChange;
+    public static event Action<float, string> onMoneyChange;
     //Used for sending the game object of the interacted game object. Used for sending the game object of ladder.
     public static event Action<GameObject> onGameObjectInteract;
     public static event Action onMoneyZero;
@@ -17,6 +17,7 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onBridgeExit;
 
     private int keyNumber;
+    private string moneyText = string.Empty;
     private PlayerControler playerControler;
 
     public int KeyNumber { get => keyNumber; set => keyNumber = value; }
@@ -81,7 +82,7 @@ public class PlatformerManager : MonoBehaviour
         //GameManager.Instance.GetGameData().platformItems;
         GameManager.Instance.SaveGame();
         GameManager.Instance.LoadGame();
-        onMoneyChange?.Invoke(0);
+        onMoneyChange?.Invoke(0, "");
 
     }
 
@@ -91,36 +92,36 @@ public class PlatformerManager : MonoBehaviour
         switch (moneySpent)
         {
             case MoneySpent.moneySpentMove:
-                RecudeMoney(moneyRequiredMove);
+                RecudeMoney(moneyRequiredMove, "Move");
                 break;
             case MoneySpent.moneySpentJump:
-                RecudeMoney(moneyRequiredJump);
+                RecudeMoney(moneyRequiredJump, "Jump");
 
                 break;
             case MoneySpent.moneySpentClimb:
-                RecudeMoney(moneyRequiredClimb);
+                RecudeMoney(moneyRequiredClimb, "Climb");
 
                 break;
             case MoneySpent.moneySpentPickUp:
-                RecudeMoney(moneyRequiredPickUp);
+                RecudeMoney(moneyRequiredPickUp, "Pick Up");
 
                 break;
             case MoneySpent.moneySpentOpenDoor:
-                RecudeMoney(moneyRequiredOpenDoor);
+                RecudeMoney(moneyRequiredOpenDoor, "Door");
 
                 break;
             case MoneySpent.moneySpentPassBridge:
-                RecudeMoney(moneyRequiredPassBridge);
+                RecudeMoney(moneyRequiredPassBridge, "Bridge");
 
                 break;
             case MoneySpent.moneySpentUseElevator:
-                RecudeMoney(moneyRequiredUseElevator);
+                RecudeMoney(moneyRequiredUseElevator, "Elevator");
 
                 break;
         }
     }
 
-    private void RecudeMoney(float moneyReq)
+    private void RecudeMoney(float moneyReq, string text)
     {
         double money = GameManager.Instance.GetGameData().totalMoney;
         double calcMoney = money - moneyReq;
@@ -129,7 +130,7 @@ public class PlatformerManager : MonoBehaviour
             if (SceneManager.GetActiveScene().name != "MainHubScene")
             {
                 GameManager.Instance.GetGameData().totalMoney = 0;
-                onMoneyChange?.Invoke(moneyReq);
+                onMoneyChange?.Invoke(moneyReq, text);
                 onMoneyZero?.Invoke();
             }
         }
@@ -137,8 +138,9 @@ public class PlatformerManager : MonoBehaviour
         {
             if (SceneManager.GetActiveScene().name != "MainHubScene")
             {
+                //Debug.Log("Reduced Money: " + text + " " + moneyReq);
                 GameManager.Instance.GetGameData().totalMoney = calcMoney;
-                onMoneyChange?.Invoke(moneyReq);
+                onMoneyChange?.Invoke(moneyReq, text);
             }
 
         }
