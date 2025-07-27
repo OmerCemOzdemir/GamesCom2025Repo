@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8384562599883058960
+--- !u!1 &769209112406103023
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,57 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6967702642870925420}
-  - component: {fileID: 843614410098464287}
-  - component: {fileID: 7751885518040822664}
-  - component: {fileID: 711097772157040139}
+  - component: {fileID: 3962464188955051951}
+  - component: {fileID: 9017299574432955535}
+  - component: {fileID: 3890377476323716764}
+  - component: {fileID: 4369650416568214008}
+  - component: {fileID: 6242426359220193717}
   m_Layer: 0
-  m_Name: WalletUpgrade
-  m_TagString: Wallet
-  m_Icon: {fileID: 0}
+  m_Name: Checkpoint(Clone)
+  m_TagString: Untagged
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6967702642870925420
+--- !u!4 &3962464188955051951
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8384562599883058960}
+  m_GameObject: {fileID: 769209112406103023}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45.05219, y: 9.746845, z: 0.016301317}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -8.63569, y: -0.81786376, z: -0.035358608}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &843614410098464287
+--- !u!114 &9017299574432955535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769209112406103023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45f74dc750f0dde418cee0675b9f2f12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 1
+  size: {x: 1, y: 1}
+  offset: {x: 0, y: 0, z: 0}
+  color: {r: 1, g: 0, b: 0.8224735, a: 1}
+  shape: 1
+--- !u!212 &3890377476323716764
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8384562599883058960}
+  m_GameObject: {fileID: 769209112406103023}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -78,24 +96,24 @@ SpriteRenderer:
   m_SortingLayerID: 1040825749
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: -266601586438069158, guid: 8047468dd27a27745a4c84e3c00231e8, type: 3}
+  m_Sprite: {fileID: 4045699755863792029, guid: 228e21b4a2c2e09499220ef34039c8ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.8, y: 0.76}
+  m_Size: {x: 0.15625, y: 0.15625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &7751885518040822664
+--- !u!61 &4369650416568214008
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8384562599883058960}
+  m_GameObject: {fileID: 769209112406103023}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -127,23 +145,24 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8, y: 0.76}
-    newSize: {x: 0.8, y: 0.76}
+    oldSize: {x: 0.8, y: 0.8}
+    newSize: {x: 0.15625, y: 0.15625}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.8, y: 0.76}
+  m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
---- !u!114 &711097772157040139
+--- !u!114 &6242426359220193717
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8384562599883058960}
+  m_GameObject: {fileID: 769209112406103023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2fa0c2dc4baf6f44a94416660fe63ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 16514e2a2eae7804cbad7d14a5fb5cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkpointOnSprite: {fileID: -6293470428667731920, guid: 228e21b4a2c2e09499220ef34039c8ae, type: 3}

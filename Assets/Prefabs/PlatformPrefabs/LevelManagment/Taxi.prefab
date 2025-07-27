@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -620194816691577197, guid: f1b51838576510e4fad81ab8cf44151e, type: 3}
+  m_Sprite: {fileID: -620194816691577197, guid: f8e5b801b6650b44abddec36cf8d897d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -147,7 +147,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe139fde4f760b145a135e4cb2c5d55f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levels:
-  - levelIndex: 0
-  - levelIndex: 0
   checkpointPrefab: {fileID: 1493023532741198575, guid: e5bdb62cbeb3eac4a9e64a49ce27d57a, type: 3}
