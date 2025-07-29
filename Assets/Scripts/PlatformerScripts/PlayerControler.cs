@@ -164,7 +164,9 @@ public class PlayerControler : MonoBehaviour
     private void Update()
     {
         Move();
+        HandleAnimationState();
         DebugFunc();
+
     }
 
 
@@ -227,6 +229,52 @@ public class PlayerControler : MonoBehaviour
         onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
     }
 
+    private void HandleAnimationState()
+    {
+        bool grounded = isGround();
+        Vector2 movementInput = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
+
+        // Check landed on ground state
+        if (isJumping && isGround())
+        {
+            isJumping = false;
+        }
+        // Highest priority: Climbing
+        if (climb)
+        {
+            playerAnimator.SetBool("Climb", true);
+            playerAnimator.SetBool("Jump", false);
+            playerAnimator.SetBool("Walk", false);
+            playerAnimator.SetBool("Idle", false);
+            return;
+        }
+
+        // Jumping overrides walk and idle
+        if (isJumping || !grounded)
+        {
+            playerAnimator.SetBool("Jump", true);
+            playerAnimator.SetBool("Climb", false);
+            playerAnimator.SetBool("Walk", false);
+            playerAnimator.SetBool("Idle", false);
+            return;
+        }
+
+        // Walking if moving horizontally and grounded
+        if (Mathf.Abs(movementInput.x) > 0.1f)
+        {
+            playerAnimator.SetBool("Walk", true);
+            playerAnimator.SetBool("Jump", false);
+            playerAnimator.SetBool("Climb", false);
+            playerAnimator.SetBool("Idle", false);
+            return;
+        }
+
+        // Otherwise, Idle
+        playerAnimator.SetBool("Idle", true);
+        playerAnimator.SetBool("Walk", false);
+        playerAnimator.SetBool("Jump", false);
+        playerAnimator.SetBool("Climb", false);
+        }
     private void SprintStart(InputAction.CallbackContext context)
     {
         //Debug.Log("Sprint Started");
@@ -474,7 +522,7 @@ public class PlayerControler : MonoBehaviour
     {
         if (!isJumping && !climb)
         {
-            playerAnimator.SetTrigger("Idle");
+            /* playerAnimator.SetTrigger("Idle"); */
         }
     }
 
@@ -482,18 +530,18 @@ public class PlayerControler : MonoBehaviour
     {
         if (!isJumping && !climb)
         {
-            playerAnimator.SetTrigger("Walk");
+            /* playerAnimator.SetTrigger("Walk"); */
         }
     }
 
     private void AnimSetJumping()
     {
-        playerAnimator.SetTrigger("Jump");
+        /* playerAnimator.SetTrigger("Jump"); */
     }
 
     private void AnimSetClimbing()
     {
-        playerAnimator.SetTrigger("Climb");
+        /* playerAnimator.SetTrigger("Climb"); */
     }
 
     #endregion
