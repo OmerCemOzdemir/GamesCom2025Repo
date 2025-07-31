@@ -13,18 +13,21 @@ EditorBuildSettings:
     guid: 69a33db2b19e4e2468a2400c10101388
   - enabled: 1
     path: Assets/Scenes/MainHubScene.unity
-    guid: ac5b12883909d6846891e2a78e07a531
+    guid: 8a563212cd4ff7348a303a9ebe03da84
   - enabled: 1
-    path: Assets/Scenes/PlatformScenes/Level1.unity
+    path: Assets/Scenes/PlatformScenes/Level1_Main.unity
+    guid: 371de0c2766ef5c409268bf5fd1edfbc
+  - enabled: 1
+    path: Assets/Scenes/PlatformScenes/Level1_Test.unity
     guid: a6b4584df2d5309409249f927b02a0b8
   - enabled: 1
-    path: Assets/Scenes/PlatformScenes/Level2.unity
+    path: Assets/Scenes/PlatformScenes/Level2_Test.unity
     guid: 20195d28011da4a44934d5e7437648ef
   - enabled: 1
-    path: Assets/Scenes/PlatformScenes/Level3.unity
+    path: Assets/Scenes/PlatformScenes/Level3_Test.unity
     guid: 678f10dcdfb01b54b9c007df044e64a6
   - enabled: 1
-    path: Assets/Scenes/PlatformScenes/Level4.unity
+    path: Assets/Scenes/PlatformScenes/Level4_Test.unity
     guid: fe0ce68fa3a997b4f947c7ab1b772b27
   - enabled: 1
     path: Assets/Scenes/PlatformScenes/PlatformScene.unity
