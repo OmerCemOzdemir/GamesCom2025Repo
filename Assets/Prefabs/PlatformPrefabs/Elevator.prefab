@@ -1,5 +1,74 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3289394091444868838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3268578014290169672}
+  - component: {fileID: 8378917506702987937}
+  m_Layer: 6
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3268578014290169672
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3289394091444868838}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4146072485681302474}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &8378917506702987937
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3289394091444868838}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.0021583375, y: -0.94593436}
+  m_Size: {x: 1.7636696, y: 0.13979353}
+  m_Direction: 1
 --- !u!1 &3375052797427472463
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 3375052797427472463}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000014901161, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: -0.000000014901161}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -64,10 +133,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2173377297043748769}
+  - {fileID: 3268578014290169672}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6892425193820327930
@@ -114,7 +184,7 @@ SpriteRenderer:
   m_SortingLayerID: -1713613219
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -8314410702468491439, guid: 39dc4e980c3c29d4f8e7c0c473ae4d3f, type: 3}
+  m_Sprite: {fileID: -6722264024765363516, guid: 8593550fd0b6dae42a3b3a984c76004e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -159,17 +229,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.012121379, y: -0.16666666}
+  m_Offset: {x: -0.0013352633, y: -0.35003132}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.9453125, y: 1}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 0.9453125, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.5210695, y: 0.66666645}
+  m_Size: {x: 1.2329559, y: 1.0333959}
   m_EdgeRadius: 0
 --- !u!95 &3852416257376101744
 Animator:
@@ -179,7 +249,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3981843840564156090}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 496b3a4356e292740849e5812f89a8f7, type: 2}
   m_CullingMode: 0
@@ -232,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc456c266fcf9b24fa044cffa7895c34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elevatorCoolDown: 10
+  elevatorCoolDown: 2
 --- !u!114 &765938955289492085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,6 +350,6 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.000000008344662, y: -0.59666675}
-  m_Size: {x: 1.0000005, y: 0.23333314}
+  m_Offset: {x: -0.0021583296, y: -0.87954295}
+  m_Size: {x: 1.7636691, y: 0.2869313}
   m_Direction: 1
