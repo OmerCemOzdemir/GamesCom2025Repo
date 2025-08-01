@@ -259,8 +259,8 @@ public class PlayerControler : MonoBehaviour
             return;
         }
 
-        // Walking if moving horizontally and grounded
-        if (Mathf.Abs(movementInput.x) > 0.1f)
+        // Walking only if grounded and not jumping
+        if (Mathf.Abs(movementInput.x) > 0.1f && grounded && !isJumping)
         {
             playerAnimator.SetBool("Walk", true);
             playerAnimator.SetBool("Jump", false);

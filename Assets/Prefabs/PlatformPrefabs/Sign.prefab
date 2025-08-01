@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5047656204136341939}
   - component: {fileID: 622357778061328758}
-  - component: {fileID: 3289167067364974203}
+  - component: {fileID: 516691901064903471}
   - component: {fileID: 1537313800347680782}
   m_Layer: 13
   m_Name: Sign
@@ -79,18 +79,18 @@ SpriteRenderer:
   m_SortingLayerID: -1713613219
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3334738622998220081, guid: 6d898c37ef0e8af46a01b6f4ce858282, type: 3}
+  m_Sprite: {fileID: -69355226, guid: 712558a3e544b6945b2c65bee165b9e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.56, y: 1.27}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &3289167067364974203
+--- !u!61 &516691901064903471
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,13 +128,13 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.56, y: 1.27}
-    newSize: {x: 1.56, y: 1.27}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.56, y: 1.27}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &1537313800347680782
 MonoBehaviour:
@@ -286,7 +286,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00000044703484, y: 0.17857142}
+  m_AnchoredPosition: {x: -0.00000044703484, y: 0.224}
   m_SizeDelta: {x: 0.8571, y: 0.6429}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7522399036141136005
