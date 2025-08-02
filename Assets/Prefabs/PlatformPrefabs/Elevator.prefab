@@ -94,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 3375052797427472463}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000014901161, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: -0.000000014901161}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -114,7 +114,6 @@ GameObject:
   - component: {fileID: 3852416257376101744}
   - component: {fileID: 2621677304863903171}
   - component: {fileID: 34780136612958161}
-  - component: {fileID: 765938955289492085}
   - component: {fileID: 995599023962861076}
   m_Layer: 10
   m_Name: Elevator
@@ -303,19 +302,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   elevatorCoolDown: 2
---- !u!114 &765938955289492085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3981843840564156090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8b97cfd979ce8041a81fe0db85034d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lerpSpeed: 1
+  target: {fileID: 2173377297043748769}
+  time: 1
 --- !u!70 &995599023962861076
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

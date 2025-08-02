@@ -226,7 +226,7 @@ public class PlayerControler : MonoBehaviour
     private void PlayerMoved(InputAction.CallbackContext context)
     {
         onPlayerMove?.Invoke();
-        onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
+        //onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
     }
 
     private void HandleAnimationState()
@@ -274,7 +274,8 @@ public class PlayerControler : MonoBehaviour
         playerAnimator.SetBool("Walk", false);
         playerAnimator.SetBool("Jump", false);
         playerAnimator.SetBool("Climb", false);
-        }
+    }
+
     private void SprintStart(InputAction.CallbackContext context)
     {
         //Debug.Log("Sprint Started");
@@ -342,7 +343,7 @@ public class PlayerControler : MonoBehaviour
                 //Interaction Toggle Not needed
                 Debug.Log("Open Door " + currentInteractedGameObject.name);
                 onMoneySpent?.Invoke(MoneySpent.moneySpentOpenDoor);
-                
+
                 if (currentInteractedGameObject.GetComponent<Door>() == null)
                 {
 
@@ -424,13 +425,19 @@ public class PlayerControler : MonoBehaviour
                 ItemPickUp();
                 currentInteractedGameObject.GetComponent<TempPlaformItem>().OnPickUpItem();
                 break;
+            case Interaction.ElevatorControl:
+                //Interaction Toggle Not needed
+                Debug.Log("Get Item");
+                onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
+                currentInteractedGameObject.GetComponent<ElevatorControl>().ToggleElevator();
+                break;
             default:
                 break;
         }
 
     }
 
-
+    //ElevatorControl
     private void ItemPickUp()
     {
         ClickerItemSaveData[] currentItemData = GameManager.Instance.GetGameData().clickerItems;
@@ -854,7 +861,7 @@ public class PlayerControler : MonoBehaviour
 
 
     //This function disables the player inputs. It is triggered by platform manager when money is below or equal to 0.
-    protected void DisableInput()
+    public void DisableInput()
     {
         playerInputAction.PlayerPlatform.Move.Disable();
         playerInputAction.PlayerPlatform.Jump.Disable();
@@ -862,7 +869,7 @@ public class PlayerControler : MonoBehaviour
     }
 
     //This function is purely for debug purposes. Is not yet used.
-    protected void EnableInput()
+    public void EnableInput()
     {
         playerInputAction.PlayerPlatform.Move.Enable();
         playerInputAction.PlayerPlatform.Jump.Enable();
@@ -919,7 +926,8 @@ public enum Interaction
     Taxi,
     Sign,
     Wallet,
-    Item
+    Item,
+    ElevatorControl
 
 }
 

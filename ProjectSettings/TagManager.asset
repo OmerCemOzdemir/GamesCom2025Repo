@@ -15,6 +15,7 @@ TagManager:
   - CheckpointCollector
   - Wallet
   - Item
+  - ElevatorControl
   layers:
   - Default
   - TransparentFX
