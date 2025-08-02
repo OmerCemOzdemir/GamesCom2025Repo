@@ -42,18 +42,12 @@ public class PlatformerManager : MonoBehaviour
     {
         PlayerControler.onMoneySpent += SpentMoney;
         //------------------------------------------------------------------
-        LerpObject.onlerpOpStart += DisableInteractText;
-
-        //------------------------------------------------------------------
         TestScript.onDataChange += LoadGameData;
     }
 
     private void OnDisable()
     {
         PlayerControler.onMoneySpent -= SpentMoney;
-        //------------------------------------------------------------------
-        LerpObject.onlerpOpStart -= DisableInteractText;
-
         //------------------------------------------------------------------
         TestScript.onDataChange -= LoadGameData;
 
@@ -262,7 +256,7 @@ public class PlatformerManager : MonoBehaviour
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Taxi);
-            EnableInteractText("Taxi");
+            EnableInteractText("Bus");
 
         }
 
@@ -289,6 +283,15 @@ public class PlatformerManager : MonoBehaviour
             onGameObjectInteract?.Invoke(collision.gameObject);
             EnableInteractText("");
         }
+
+        if (collision.CompareTag("ElevatorControl"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.ElevatorControl);
+            onGameObjectInteract?.Invoke(collision.gameObject);
+            EnableInteractText("");
+        }
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -383,6 +386,14 @@ public class PlatformerManager : MonoBehaviour
             onInteract?.Invoke(Interaction.Empty);
             DisableInteractText();
         }
+
+        if (collision.CompareTag("ElevatorControl"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            EnableInteractText("");
+        }
+
     }
 
 }
