@@ -124,8 +124,10 @@ public class CheckpointManager : MonoBehaviour
             levelSaveData[i].levelName = levelName[i];
             levelSaveData[i].unlock = false;
             levelSaveData[i].levelIndex = SceneUtility.GetBuildIndexByScenePath(levelPaths[i]);
+
         }
 
+        //levelSaveData[0].unlock = true; 
         GameManager.Instance.GetGameData().levelData = levelSaveData;
         GameManager.Instance.SaveGame();
     }

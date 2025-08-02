@@ -85,7 +85,7 @@ public class FadeEffect : MonoBehaviour
 
             if (1f <= blackOutPanel.GetComponent<Image>().color.a)
             {
-                Debug.Log("toggle: " + toggle);
+                Debug.Log("toggleElevator: " + toggle);
 
                 toggle = true;
             }

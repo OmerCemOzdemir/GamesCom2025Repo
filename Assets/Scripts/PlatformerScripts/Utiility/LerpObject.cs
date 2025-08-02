@@ -6,6 +6,7 @@ public class LerpObject : MonoBehaviour
 {
     [SerializeField] public float lerpSpeed;
     private Rigidbody2D rb;
+    [SerializeField] private Transform target;
     private Vector3 endVector;
     private Vector3 startVector;
     private Vector3 newStartVector;
@@ -19,7 +20,7 @@ public class LerpObject : MonoBehaviour
     private void Start()
     {
         startVector = transform.position;
-        endVector = transform.GetChild(0).position;
+        endVector = target.position;
         rb = GetComponent<Rigidbody2D>();
         elevator = GetComponent<Elevator>();
     }
@@ -64,7 +65,7 @@ public class LerpObject : MonoBehaviour
             //StopAllCoroutines();
             onlerpOpStart?.Invoke();
             newStartVector = transform.position;
-            newEndVector = transform.GetChild(0).position;
+            newEndVector = target.position;
             toggleElevator = false;
             StartCoroutine(LerpObjectKinematicCoroutine(newStartVector, newEndVector, lerpSpeed));
             Debug.Log("LerpStarted");
@@ -90,13 +91,13 @@ public class LerpObject : MonoBehaviour
         float startTime = Time.time;
         while (Time.time < startTime + overTime)
         {
-            rb.MovePosition(Vector3.Lerp(source, target, (Time.time - startTime) / overTime));
+            rb.MovePosition(Vector3.MoveTowards(source, target, (Time.time - startTime) / overTime));
             //transform.position = Vector3.Lerp(source, target, (Time.time - startTime) / overTime);
             yield return null;
         }
         rb.MovePosition(target);
         elevator.ElevatorStop();
-        onlerpOpDone?.Invoke();
+        //onlerpOpDone?.Invoke();
         toggleElevator = true;
     }
 
