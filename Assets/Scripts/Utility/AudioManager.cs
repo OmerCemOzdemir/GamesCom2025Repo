@@ -1,127 +1,125 @@
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
-    private GameObject musicContainer;
-    private GameObject SFXContainer;
+    public static AudioManager Instance;
 
-    private AudioSource mainMenuMusicSource;
-    private AudioSource clickerMusicSource;
-    private AudioSource platformMusicSource;
+    [Header("Audio Sources")]
+    public AudioSource bgmSource;
+    public AudioSource sfxSource;
 
-    private AudioSource activeSFXSource;
-    private AudioSource idleSFXSource;
-    private AudioSource genericSFXSource;
-    private AudioSource outOfMoneySFXSource;
-    private AudioSource itemPickUpSFXSource;
-    private AudioSource itemPurchaseSFXSource;
+    [Header("Background Music")] // Change at every scene
+    public AudioClip backgroundMusic;
 
+    [Header("Sound Effects - General")]
+    public AudioClip menuButtonClick;
+    public AudioClip gameOver;
 
-    private void Awake()
+    [Header("Sound Effects - Platformer")]
+    public AudioClip buttonMoneyClick;
+    public AudioClip passiveSale;
+    public AudioClip criticalSale;
+    public AudioClip upgradeButtonClick;
+    public AudioClip upgradeButtonSuccess;
+    public AudioClip upgradeButtonFail;
+
+    [Header("Sound Effects - Platformer")]
+    public AudioClip playerWalk;
+    public AudioClip playerJump;
+    public AudioClip playerSprint;
+    public AudioClip interactWithObject;
+    public AudioClip npcInteract;
+
+    private Dictionary<string, AudioClip> sfxClips;
+
+    void Awake()
     {
-        musicContainer = transform.GetChild(0).GetChild(0).gameObject;
-        SFXContainer = transform.GetChild(0).GetChild(1).gameObject;
+        /* // Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+        }
 
-        //Music Audio Source
-        mainMenuMusicSource = musicContainer.transform.GetChild(0).GetComponent<AudioSource>();
-        clickerMusicSource = musicContainer.transform.GetChild(1).GetComponent<AudioSource>();
-        platformMusicSource = musicContainer.transform.GetChild(2).GetComponent<AudioSource>();
+        else
+        {
+            Destroy(gameObject);
+            return;
+        } */
 
-        //SFX Audio Source
-        activeSFXSource = SFXContainer.transform.GetChild(0).GetComponent<AudioSource>();
-        idleSFXSource = SFXContainer.transform.GetChild(1).GetComponent<AudioSource>();
-        genericSFXSource = SFXContainer.transform.GetChild(2).GetComponent<AudioSource>();
-        outOfMoneySFXSource = SFXContainer.transform.GetChild(3).GetComponent<AudioSource>();
-        itemPickUpSFXSource = SFXContainer.transform.GetChild(4).GetComponent<AudioSource>();
-        itemPurchaseSFXSource = SFXContainer.transform.GetChild(5).GetComponent<AudioSource>();
+        DontDestroyOnLoad(gameObject);
 
+        // Build SFX dictionary
+        sfxClips = new Dictionary<string, AudioClip>
+        {
+            // General
+            { "menuClick", menuButtonClick },
+            { "gameOver", gameOver },
+
+            // Clicker / Cookie Game
+            { "buttonMoney", buttonMoneyClick },
+            { "passiveSale", passiveSale },
+            { "criticalSale", criticalSale },
+            { "upgradeClick", upgradeButtonClick },
+            { "upgradeSuccess", upgradeButtonSuccess },
+            { "upgradeFail", upgradeButtonFail },
+
+            // Platformer
+            { "walk", playerWalk },
+            { "jump", playerJump },
+            { "sprint", playerSprint },
+            { "interact", interactWithObject },
+            { "npcInteract", npcInteract }
+        };
     }
 
     private void OnEnable()
     {
-        MainMenu.onPlayMusic += SetUpMusic;
-        MainMenu.onPlaySFX += SetUpSFX;
-
-        ClickerManager.onPlayMusic += SetUpMusic;
-        ClickerManager.onPlaySFX += SetUpSFX;
-
-        PlayerControler.onPlayMusic += SetUpMusic;
-        PlayerControler.onPlaySFX += SetUpSFX;
+        // Subscribe to player action events
+        PlayerControler.onPlayerJump += HandlePlayerJump;
+        PlayerControler.onPlayerMove += HandlePlayerMove;
+        PlayerControler.onPlayerClimb += HandlePlayerClimb;
     }
 
     private void OnDisable()
     {
-        MainMenu.onPlayMusic -= SetUpMusic;
-        MainMenu.onPlaySFX -= SetUpSFX;
-
-        ClickerManager.onPlayMusic -= SetUpMusic;
-        ClickerManager.onPlaySFX -= SetUpSFX;
-
-        PlayerControler.onPlayMusic -= SetUpMusic;
-        PlayerControler.onPlaySFX -= SetUpSFX;
+        // Unsubscribe from events
+        PlayerControler.onPlayerJump -= HandlePlayerJump;
+        PlayerControler.onPlayerMove -= HandlePlayerMove;
+        PlayerControler.onPlayerClimb -= HandlePlayerClimb;
     }
 
-    private void SetUpMusic(Music music)
+    void Start()
     {
-        switch (music) {
-            case Music.MainMenu:
-                PlayAudio(mainMenuMusicSource);
-                break;
-            case Music.Platformer:
-                PlayAudio(platformMusicSource);
-                break;
-            case Music.Clicker:
-                PlayAudio(clickerMusicSource);
-                break;
-        }
+        PlayBGM();
     }
 
-    private void SetUpSFX(SFX sfx)
+    public void PlayBGM()
     {
-        switch (sfx)
+        if (bgmSource && backgroundMusic)
         {
-            case SFX.Active:
-                PlayAudio(activeSFXSource);
-                break;
-            case SFX.Idle:
-                PlayAudio(idleSFXSource);
-                break;
-            case SFX.Generic:
-                PlayAudio(genericSFXSource);
-                break;
-            case SFX.OutOfMoney:
-                PlayAudio(outOfMoneySFXSource);
-                break;
-            case SFX.ItemPickUp:
-                PlayAudio(itemPickUpSFXSource);
-                break;
-            case SFX.ItemPurchase:
-                PlayAudio(itemPurchaseSFXSource);
-                break;
+            bgmSource.clip = backgroundMusic;
+            bgmSource.loop = true;
+            bgmSource.Play();
         }
     }
 
-    private void PlayAudio(AudioSource audio)
+    public void PlaySFX(string key)
     {
-        audio.Play();
+        if (sfxClips.ContainsKey(key) && sfxClips[key] != null)
+        {
+            sfxSource.PlayOneShot(sfxClips[key]);
+        }
     }
+    /* public void ReloadScene()
+    {
+        Destroy(AudioManager.Instance.gameObject); // Destroy before reload
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    } */
 
-
-}
-
-public enum Music
-{
-    MainMenu,
-    Clicker,
-    Platformer
-}
-
-public enum SFX
-{
-    Active,
-    Idle,
-    Generic,
-    OutOfMoney,
-    ItemPickUp,
-    ItemPurchase
+    // Event Handlers
+    private void HandlePlayerJump() => PlaySFX("jump");
+    private void HandlePlayerMove() => PlaySFX("walk");
+    private void HandlePlayerClimb() => PlaySFX("sprint");
 }
