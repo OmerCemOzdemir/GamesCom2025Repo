@@ -98,6 +98,9 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
+        bgmSource.volume = PlayerPrefs.GetFloat("bgmVolume", 0.5f);
+        sfxSource.volume = PlayerPrefs.GetFloat("sfxVolume", 0.5f);
+
         PlayBGM();
     }
 
@@ -105,7 +108,7 @@ public class AudioManager : MonoBehaviour
     {
         if (bgmSource == null) return;
 
-        AudioClip bgmPlaying;
+        AudioClip bgmPlaying = null;
         int sceneIndex = SceneManager.GetActiveScene().buildIndex;
 
         if (sceneIndex == 0)
@@ -132,6 +135,18 @@ public class AudioManager : MonoBehaviour
         {
             sfxSource.PlayOneShot(sfxClips[key]);
         }
+    }
+
+    public void SetBGMVolume(float volume)
+    {
+        if (bgmSource != null)
+            bgmSource.volume = volume;
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        if (sfxSource != null)
+            sfxSource.volume = volume;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

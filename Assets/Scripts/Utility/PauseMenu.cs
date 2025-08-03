@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
-
     [SerializeField] private GameObject settingPanel;
     [SerializeField] private GameObject debugPanel;
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private Slider sfxSlider;
 
     private InputSystem GUI_InputAction;
     private bool togglePauseGame = true;
@@ -16,6 +18,29 @@ public class PauseMenu : MonoBehaviour
         GUI_InputAction = new InputSystem();
     }
 
+    private void Start()
+    {
+        if (bgmSlider != null)
+        {
+            bgmSlider.value = PlayerPrefs.GetFloat("bgmVolume", 0.5f);
+            bgmSlider.onValueChanged.AddListener((v) =>
+            {
+                AudioManager.Instance.SetBGMVolume(v);
+                PlayerPrefs.SetFloat("bgmVolume", v);
+            });
+        }
+
+        if (sfxSlider != null)
+        {
+            sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume", 0.5f);
+            sfxSlider.onValueChanged.AddListener((v) =>
+            {
+                AudioManager.Instance.SetSFXVolume(v);
+                PlayerPrefs.SetFloat("sfxVolume", v);
+            });
+        }
+    }
+    
     private void OnEnable()
     {
 
