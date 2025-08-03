@@ -31,7 +31,7 @@ public class ClickerManager : MonoBehaviour
     private float idleTime;
 
 
-    [Tooltip("Increase this to longer the time of idle money")]
+    [Tooltip("Increase this to longer the elevatorSpeed of idle money")]
     [SerializeField] private float baseIdleTime = 1;
     [SerializeField] private float baseActiveTime = 1;
     private bool idleToggle = true;
