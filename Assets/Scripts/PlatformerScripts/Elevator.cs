@@ -1,27 +1,36 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem.XR.Haptics;
 
 public class Elevator : MonoBehaviour
 {
     public static event Action onElevatorDone;
 
+    [Header("Elevator Variables")]
     [SerializeField] private float elevatorCoolDown;
-    private Animator elevatorAnimator;
+    [SerializeField] private float elevatorSpeed;
+    [Space(10)]
     //private LerpObject lerpObject;
     private bool toggleElevator = true;
     private bool allowElevatorOp = true;
     private bool isPlayerOn = false;
     private GameObject player;
+    Rigidbody2D rb2D;
 
+
+    [Header("Do not touch")]
     [SerializeField] private Transform target;
-    [SerializeField] private float time;
+    [SerializeField] private ParticleSystem cooldownEffect;
+    [SerializeField] private ParticleSystem burstEffect;
+
+
     private Vector3 endVector;
     private Vector3 startVector;
 
     private void Awake()
     {
-        elevatorAnimator = GetComponent<Animator>();
+        rb2D = GetComponent<Rigidbody2D>();
         //lerpObject = GetComponent<LerpObject>();
         endVector = target.position;
         startVector = transform.position;
@@ -62,6 +71,10 @@ public class Elevator : MonoBehaviour
     {
         if (allowElevatorOp)
         {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlatformerManager>().DisableInteraction();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlatformerManager>().DisableInteractText();
+
+
             if (toggleElevator)
             {
                 ElevatorUp();
@@ -84,9 +97,8 @@ public class Elevator : MonoBehaviour
     {
 
         //Debug.Log("Elevator Up ");
-
         //Debug.Log("Star Vector: " + startVector + " End Vector: " + endVector);
-        StartCoroutine(LerpObjectKinematicCoroutine(startVector, endVector, time));
+        StartCoroutine(LerpObjectKinematicCoroutine(endVector, elevatorSpeed));
 
     }
 
@@ -95,19 +107,23 @@ public class Elevator : MonoBehaviour
 
         //Debug.Log("Elevator Down ");
         //Debug.Log("Star Vector: " + endVector + " End Vector: " + startVector);
-        StartCoroutine(LerpObjectKinematicCoroutine(endVector, startVector, time));
+        StartCoroutine(LerpObjectKinematicCoroutine(startVector, elevatorSpeed));
     }
 
 
     public void ElevatorStop()
     {
         //elevatorAnimator.SetTrigger("ElevatorStop");
+        cooldownEffect.Play();
+        burstEffect.Play();
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlatformerManager>().EnableInteraction();
         if (isPlayerOn)
         {
             player.transform.SetParent(null, true);
             isPlayerOn = false;
             player.GetComponent<PlayerControler>().EnableInput();
         }
+        Debug.Log("Elevator Stoped");
         StartCoroutine(ElevatorCoolDown(elevatorCoolDown));
     }
 
@@ -115,24 +131,26 @@ public class Elevator : MonoBehaviour
     IEnumerator ElevatorCoolDown(float sec)
     {
         yield return new WaitForSeconds(sec);
+        cooldownEffect.Stop();
+        burstEffect.Stop();
         allowElevatorOp = !allowElevatorOp;
         //Player can use the interaction for elevator again
         onElevatorDone?.Invoke();
     }
 
 
-    IEnumerator LerpObjectKinematicCoroutine(Vector3 start, Vector3 end, float overTime)
+    IEnumerator LerpObjectKinematicCoroutine(Vector3 target, float speed)
     {
-        float startTime = Time.time;
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        while (Time.time < startTime + overTime)
+        while (Vector3.Distance(transform.position, target) >= 0.01f)
         {
-            rb.MovePosition(Vector3.LerpUnclamped(start, end, (Time.time - startTime) / overTime));
-            //transform.position = Vector3.Lerp(source, target, (Time.time - startTime) / overTime);
-            yield return null;
+            // Move a constant amount per frame based on speed and time
+            rb2D.MovePosition(Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime));
+            yield return null; // Wait for the next frame
         }
-        rb.MovePosition(end);
+        Debug.Log("Elevator Corotine is done");
+        rb2D.MovePosition(target);
         ElevatorStop();
+
     }
 
 
@@ -164,6 +182,32 @@ public class Elevator : MonoBehaviour
 }
 
 /*
+ * 
+ *  float startTime = Time.time;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+        while (rb.position.y >= end.y)
+        {
+            rb.MovePosition(Vector3.MoveTowards(start, end, speed));
+            //transform.position = Vector3.Lerp(source, target, (Time.time - startTime) / overTime);
+            // (Time.time - startTime) / overTime)
+            //Time.time < startTime + overTime
+            yield return null;
+        }
+        rb.MovePosition(end);
+ * 
+ * 
+ *         while (Vector3.Distance(transform.position, destination) > 0.01f)
+        {
+            // Move a constant amount per frame based on speed and time
+            transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+            yield return null; // Wait for the next frame
+        }
+
+        // Optional: Snap to exact destination at the end
+        transform.position = destination;
+ * 
+ * 
      private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Z))

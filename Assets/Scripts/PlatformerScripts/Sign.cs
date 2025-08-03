@@ -53,7 +53,6 @@ public class SignCustomInspector : Editor
         Sign sign = (Sign)target;
         if (sign.nextLevel)
         {
-            EditorGUILayout.PropertyField(nextLevelIndex);
             sign.ChangeTextInInspector("Next Level");
         }
         else

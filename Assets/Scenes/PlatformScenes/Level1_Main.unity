@@ -15348,6 +15348,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 34780136612958161, guid: e6804ae703761ca439ac7e36845c6af3, type: 3}
+      propertyPath: time
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 765938955289492085, guid: e6804ae703761ca439ac7e36845c6af3, type: 3}
       propertyPath: lerpSpeed
       value: 10

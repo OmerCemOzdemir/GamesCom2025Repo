@@ -58,6 +58,7 @@ public class PlayerControler : MonoBehaviour
     private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
 
     private Vector2 flipSpriteVector;
+    private float flipTimer = 5;
     //private Vector3 currentLocalScale;
 
     private GameObject currentInteractedGameObject;
@@ -69,6 +70,7 @@ public class PlayerControler : MonoBehaviour
     private bool toggleClimb = true;
     private bool interactionToggle = true;
     private bool enableSprint = false;
+    private bool toggleAnim = true;
     public InputSystem PlayerInputAction { get => playerInputAction; set => playerInputAction = value; }
     public List<PlatformUpgradeItem> UpgradeItems { get => upgradeItems; set => upgradeItems = value; }
 
@@ -93,9 +95,6 @@ public class PlayerControler : MonoBehaviour
 
         playerInputAction.PlayerPlatform.Interact.performed += Interact;
 
-        playerInputAction.PlayerPlatform.Move.performed += FlipSprite;
-        playerInputAction.PlayerPlatform.Move.started += FlipDeterminator;
-        playerInputAction.PlayerPlatform.Move.canceled += AnimSetIdle;
         playerInputAction.PlayerPlatform.Move.performed += PlayerMoved;
 
 
@@ -131,9 +130,6 @@ public class PlayerControler : MonoBehaviour
 
         playerInputAction.PlayerPlatform.Interact.performed -= Interact;
 
-        playerInputAction.PlayerPlatform.Move.performed -= FlipSprite;
-        playerInputAction.PlayerPlatform.Move.started -= FlipDeterminator;
-        playerInputAction.PlayerPlatform.Move.canceled -= AnimSetIdle;
         playerInputAction.PlayerPlatform.Move.performed -= PlayerMoved;
 
         playerInputAction.PlayerPlatform.Jump.started -= JumpStart;
@@ -167,6 +163,7 @@ public class PlayerControler : MonoBehaviour
     private void Update()
     {
         Move();
+        HandleFlipSprite();
         HandleAnimationState();
         DebugFunc();
 
@@ -232,62 +229,16 @@ public class PlayerControler : MonoBehaviour
         //onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
     }
 
-    private void HandleAnimationState()
-    {
-        bool grounded = isGround();
-        Vector2 movementInput = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
-
-        // Check landed on ground state
-        if (isJumping && isGround())
-        {
-            isJumping = false;
-        }
-        // Highest priority: Climbing
-        if (climb)
-        {
-            playerAnimator.SetBool("Climb", true);
-            playerAnimator.SetBool("Jump", false);
-            playerAnimator.SetBool("Walk", false);
-            playerAnimator.SetBool("Idle", false);
-            return;
-        }
-
-        // Jumping overrides walk and idle
-        if (isJumping || !grounded)
-        {
-            playerAnimator.SetBool("Jump", true);
-            playerAnimator.SetBool("Climb", false);
-            playerAnimator.SetBool("Walk", false);
-            playerAnimator.SetBool("Idle", false);
-            return;
-        }
-
-        // Walking only if grounded and not jumping
-        if (Mathf.Abs(movementInput.x) > 0.1f && grounded && !isJumping)
-        {
-            playerAnimator.SetBool("Walk", true);
-            playerAnimator.SetBool("Jump", false);
-            playerAnimator.SetBool("Climb", false);
-            playerAnimator.SetBool("Idle", false);
-            return;
-        }
-
-        // Otherwise, Idle
-        playerAnimator.SetBool("Idle", true);
-        playerAnimator.SetBool("Walk", false);
-        playerAnimator.SetBool("Jump", false);
-        playerAnimator.SetBool("Climb", false);
-    }
-
     private void SprintStart(InputAction.CallbackContext context)
     {
         //Debug.Log("Sprint Started");
         if (enableSprint)
         {
             onPlayerSprintStart?.Invoke();
+            onMoneySpent?.Invoke(MoneySpent.moneySpentSprint);
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
             Debug.Log("Sprint Started");
-            playerSpeed *= playerSprintMultiplier;
+            playerSpeed += playerSprintMultiplier;
         }
 
     }
@@ -300,7 +251,7 @@ public class PlayerControler : MonoBehaviour
             onPlayerSprintEnd?.Invoke();
             Debug.Log("Sprint Stopped");
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
-            playerSpeed /= playerSprintMultiplier;
+            playerSpeed -= playerSprintMultiplier;
         }
     }
     #endregion
@@ -388,6 +339,7 @@ public class PlayerControler : MonoBehaviour
                         onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
                         currentInteractedGameObject.GetComponent<Elevator>().ToggleElevator();
                         interactionToggle = false;
+                        toggleAnim = false;
                     }
                 }
                 break;
@@ -444,11 +396,15 @@ public class PlayerControler : MonoBehaviour
                 break;
             case Interaction.ElevatorControl:
                 //Interaction Toggle Not needed
-                Debug.Log("Get Item");
+                Debug.Log("Elevator Control");
                 if (platformerManager.CheckMoney(MoneySpent.moneySpentUseElevator))
                 {
-                    onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
-                    currentInteractedGameObject.GetComponent<ElevatorControl>().ToggleElevator();
+                    if (interactionToggle)
+                    {
+                        onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
+                        currentInteractedGameObject.GetComponent<ElevatorControl>().ToggleElevator();
+                        interactionToggle = false;
+                    }
                 }
                 break;
             default:
@@ -504,28 +460,27 @@ public class PlayerControler : MonoBehaviour
         onMoneySpent?.Invoke(MoneySpent.moneySpentClimb);
         Debug.Log("Reduce Monay For Climbing");
         climb = true;
-        AnimSetClimbing();
+        //AnimSetClimbing();
     }
 
     private void ToggleInteraction()
     {
         interactionToggle = true;
+        toggleAnim = true;
     }
 
     #endregion
 
-    //the FlipDeterminatior and FlipSprite are used to determine which direction the player is going and then flip the sprite according to that direction.
-    #region FlipSprite
-    private void FlipDeterminator(InputAction.CallbackContext context)
-    {
-        flipSpriteVector = context.ReadValue<Vector2>();
-    }
+    //Animation Functions Triggers the animations based on player inputs
+    //Example: If player presses Jump(Space) then an AnimSetJumping() will initilize the jumping animation.
+    #region Animation
 
     //Right is positive; Left is negative
     //flipSpriteVector.x < 0 --> Negative
     //flipSpriteVector.x > 0 --> Positive
-    private void FlipSprite(InputAction.CallbackContext context)
+    private void HandleFlipSprite()
     {
+        flipSpriteVector = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
 
         if (flipSpriteVector.x < 0)
         {
@@ -537,20 +492,17 @@ public class PlayerControler : MonoBehaviour
             playerModel.localScale = new Vector3(1, 1, 1);
             //transform.localScale = new Vector3(currentLocalScale.x, currentLocalScale.y, currentLocalScale.z);
         }
-        AnimSetWalking();
+        //AnimSetWalking();
     }
 
-
-    #endregion
-
-    //Animation Functions Triggers the animations based on player inputs
-    //Example: If player presses Jump(Space) then an AnimSetJumping() will initilize the jumping animation.
-    #region Animation
     private void AnimSetIdle(InputAction.CallbackContext context)
     {
         if (!isJumping && !climb)
         {
-            /* playerAnimator.SetTrigger("Idle"); */
+            playerAnimator.SetBool("Idle", true);
+            playerAnimator.SetBool("Walk", false);
+            playerAnimator.SetBool("Jump", false);
+            playerAnimator.SetBool("Climb", false);
         }
     }
 
@@ -558,18 +510,87 @@ public class PlayerControler : MonoBehaviour
     {
         if (!isJumping && !climb)
         {
-            /* playerAnimator.SetTrigger("Walk"); */
+            playerAnimator.SetBool("Walk", true);
+            playerAnimator.SetBool("Jump", false);
+            playerAnimator.SetBool("Climb", false);
+            playerAnimator.SetBool("Idle", false);
         }
     }
 
     private void AnimSetJumping()
     {
-        /* playerAnimator.SetTrigger("Jump"); */
+        playerAnimator.SetBool("Jump", true);
+        playerAnimator.SetBool("Climb", false);
+        playerAnimator.SetBool("Walk", false);
+        playerAnimator.SetBool("Idle", false);
     }
 
     private void AnimSetClimbing()
     {
-        /* playerAnimator.SetTrigger("Climb"); */
+        playerAnimator.SetBool("Climb", true);
+        playerAnimator.SetBool("Jump", false);
+        playerAnimator.SetBool("Walk", false);
+        playerAnimator.SetBool("Idle", false);
+    }
+
+    private void HandleAnimationState()
+    {
+        bool grounded = isGround();
+        Vector2 movementInput = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
+
+        if (toggleAnim)
+        {
+            // Check landed on ground state
+            if (isJumping && isGround())
+            {
+                isJumping = false;
+            }
+            // Highest priority: Climbing
+            if (climb)
+            {
+                playerAnimator.SetBool("Climb", true);
+                playerAnimator.SetBool("Jump", false);
+                playerAnimator.SetBool("Walk", false);
+                playerAnimator.SetBool("Idle", false);
+                return;
+            }
+
+            // Jumping overrides walk and idle
+            if (isJumping || !grounded)
+            {
+                playerAnimator.SetBool("Jump", true);
+                playerAnimator.SetBool("Climb", false);
+                playerAnimator.SetBool("Walk", false);
+                playerAnimator.SetBool("Idle", false);
+                return;
+            }
+
+            // Walking only if grounded and not jumping
+            if (Mathf.Abs(movementInput.x) > 0.1f && grounded && !isJumping)
+            {
+                playerAnimator.SetBool("Walk", true);
+                playerAnimator.SetBool("Jump", false);
+                playerAnimator.SetBool("Climb", false);
+                playerAnimator.SetBool("Idle", false);
+                return;
+            }
+
+            // Otherwise, Idle
+            playerAnimator.SetBool("Idle", true);
+            playerAnimator.SetBool("Walk", false);
+            playerAnimator.SetBool("Jump", false);
+            playerAnimator.SetBool("Climb", false);
+        }
+        else
+        {
+            //Only Idle
+            playerAnimator.SetBool("Idle", true);
+            playerAnimator.SetBool("Walk", false);
+            playerAnimator.SetBool("Jump", false);
+            playerAnimator.SetBool("Climb", false);
+        }
+
+
     }
 
     #endregion
@@ -603,7 +624,7 @@ public class PlayerControler : MonoBehaviour
             //float trueJumpPower = localItems[2] ? playerJumpPower * playerJumpPowerMultiplier : playerJumpPower;
             playerRigid2D.linearVelocity = new Vector2(playerRigid2D.linearVelocity.x, playerJumpPower);
         }
-        AnimSetJumping();
+        //AnimSetJumping();
     }
 
     IEnumerator GravityMultiplier()
@@ -663,7 +684,6 @@ public class PlayerControler : MonoBehaviour
         }
 
     }
-
 
     private void SetUpUpgrades()
     {
@@ -837,14 +857,8 @@ public class PlayerControler : MonoBehaviour
     #endregion
 
 
-    private void SetUpAudio()
-    {
-
-    }
-
     private void SetUpData()
     {
-        SetUpAudio();
 
         playerSpeed = basePlayerSpeed;
         playerSprintMultiplier = basePlayerSprintMultiplier;
@@ -959,6 +973,8 @@ public enum PlayerMovement
 
 
 /*
+ * 
+ * 
  *         if (SceneManager.GetActiveScene().name == "MainHubScene")
         {
             onPlayMusic?.Invoke(Music.MainMenu);
@@ -1214,3 +1230,37 @@ Old Interaction Logic:
 
 
  */
+
+
+
+/*
+ 
+ 
+    private void AnimSetIdle(InputAction.CallbackContext context)
+    {
+        if (!isJumping && !climb)
+        {
+            /* playerAnimator.SetTrigger("Idle"); 
+        }
+    }
+
+    private void AnimSetWalking()
+{
+    if (!isJumping && !climb)
+    {
+        /* playerAnimator.SetTrigger("Walk"); 
+    }
+}
+
+private void AnimSetJumping()
+{
+    /* playerAnimator.SetTrigger("Jump"); 
+}
+
+private void AnimSetClimbing()
+{
+    /* playerAnimator.SetTrigger("Climb"); 
+}
+
+
+*/
