@@ -52,34 +52,30 @@ public class CheckpointManager : MonoBehaviour
             {
                 if (levelSaveData[i].levelName == SceneManager.GetActiveScene().name)
                 {
-                    if (!levelSaveData[i].unlock)
+                    levelSaveData[i].unlock = true;
+                    levelSaveData[i].checkpointX = new float[checkpointPositions.Length];
+                    for (int j = 0; j < levelSaveData[i].checkpointX.Length; j++)
                     {
-                        levelSaveData[i].unlock = true;
-                        levelSaveData[i].checkpointX = new float[checkpointPositions.Length];
-                        for (int j = 0; j < levelSaveData[i].checkpointX.Length; j++)
-                        {
-                            levelSaveData[i].checkpointX[j] = checkpointPositions[j].x;
-                        }
+                        levelSaveData[i].checkpointX[j] = checkpointPositions[j].x;
+                    }
 
-                        levelSaveData[i].checkpointY = new float[checkpointPositions.Length];
-                        for (int j = 0; j < levelSaveData[i].checkpointY.Length; j++)
-                        {
-                            levelSaveData[i].checkpointY[j] = checkpointPositions[j].y;
+                    levelSaveData[i].checkpointY = new float[checkpointPositions.Length];
+                    for (int j = 0; j < levelSaveData[i].checkpointY.Length; j++)
+                    {
+                        levelSaveData[i].checkpointY[j] = checkpointPositions[j].y;
 
-                        }
+                    }
 
-                        levelSaveData[i].checkpointZ = new float[checkpointPositions.Length];
-                        for (int j = 0; j < levelSaveData[i].checkpointZ.Length; j++)
-                        {
-                            levelSaveData[i].checkpointZ[j] = checkpointPositions[j].z;
+                    levelSaveData[i].checkpointZ = new float[checkpointPositions.Length];
+                    for (int j = 0; j < levelSaveData[i].checkpointZ.Length; j++)
+                    {
+                        levelSaveData[i].checkpointZ[j] = checkpointPositions[j].z;
 
-                        }
-                        levelSaveData[i].unlockCheckpoint = new bool[checkpointPositions.Length];
-                        for (int j = 0; j < levelSaveData[i].checkpointZ.Length; j++)
-                        {
-                            levelSaveData[i].unlockCheckpoint[j] = false;
-
-                        }
+                    }
+                    levelSaveData[i].unlockCheckpoint = new bool[checkpointPositions.Length];
+                    for (int j = 0; j < levelSaveData[i].checkpointZ.Length; j++)
+                    {
+                        levelSaveData[i].unlockCheckpoint[j] = false;
 
                     }
 

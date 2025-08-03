@@ -18,7 +18,7 @@ MonoBehaviour:
   itemCost: 300
   itemType: 0
   hasItemEffectOnMoney: 0
-  hasItemEffectOnMovement: 1
+  hasItemEffectOnMovement: 0
   itemEffectOnMoney:
     value: 0
     operations: 0
@@ -27,8 +27,8 @@ MonoBehaviour:
     value: 0
     operations: 2
     playerMovement: 1
-  itemEffectSpecial: 0
-  hasTier: 1
+  itemEffectSpecial: EnableSprint
+  hasTier: 0
   effectTiersPercentage:
   - 10
   - 12.5

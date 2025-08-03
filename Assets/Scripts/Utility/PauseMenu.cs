@@ -51,6 +51,11 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    public void BackToOffice()
+    {
+        GameManager.Instance.NextLevel(1);
+    }
+
     public void Resume()
     {
         if (togglePauseGame)
