@@ -16,6 +16,7 @@ TagManager:
   - Wallet
   - Item
   - ElevatorControl
+  - NPC
   layers:
   - Default
   - TransparentFX

@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 4437583935504650916}
   m_Layer: 0
   m_Name: NPC
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -498,9 +498,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameNPC: 
   dialogNPC: 
-  dialogBox: {fileID: 7418834023808039774}
-  nameText: {fileID: 2057808466244476075}
-  dialogText: {fileID: 8156811468331936604}
+  itemDrop: 0
+  item: {fileID: 0}
 --- !u!1 &4324943460688824941
 GameObject:
   m_ObjectHideFlags: 0

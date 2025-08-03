@@ -6,7 +6,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using static UnityEditor.PlayerSettings;
 
 public class PlayerControler : MonoBehaviour
 {
@@ -21,6 +20,8 @@ public class PlayerControler : MonoBehaviour
 
     public static event Action onPlayerOpenShop;
     public static event Action onPlayerGetInTaxi;
+    public static event Action<GameObject> onPlayerTalkNPC;
+
 
     public static event Action<string> onPlayerDebug;
 
@@ -115,7 +116,9 @@ public class PlayerControler : MonoBehaviour
         Elevator.onElevatorDone += ToggleInteraction;
         //Bridge is Passed 
         Bridge.onBridgeDone += ToggleInteraction;
-        //
+        //NPC Talked
+        PlatformerUI.onNPCdone += ToggleInteraction;
+
         PlatformerManager.onGameObjectInteract += SetUpGameObjectInteraction;
         Door.onDoorTravel += TeleportPlayer;
         TaxiUI.onPlayerTravel += TeleportPlayer;
@@ -148,6 +151,8 @@ public class PlayerControler : MonoBehaviour
         Elevator.onElevatorDone -= ToggleInteraction;
         //Bridge is Passed 
         Bridge.onBridgeDone -= ToggleInteraction;
+        //NPc Talked
+        PlatformerUI.onNPCdone -= ToggleInteraction;    
         PlatformerManager.onGameObjectInteract -= SetUpGameObjectInteraction;
         Door.onDoorTravel -= TeleportPlayer;
         TaxiUI.onPlayerTravel -= TeleportPlayer;
@@ -168,7 +173,6 @@ public class PlayerControler : MonoBehaviour
         DebugFunc();
 
     }
-
 
     private void TeleportPlayer(Vector3 pos, float sec)
     {
@@ -407,6 +411,19 @@ public class PlayerControler : MonoBehaviour
                     }
                 }
                 break;
+            case Interaction.NPC:
+                //Interaction Toggle Not needed
+                Debug.Log("Talk NPC");
+                if (interactionToggle)
+                {
+                    DisableInput();
+                    if (currentInteractedGameObject)
+                    {
+                        onPlayerTalkNPC?.Invoke(currentInteractedGameObject);
+                    }
+                    interactionToggle = false;
+                }
+                break;
             default:
                 break;
         }
@@ -467,6 +484,7 @@ public class PlayerControler : MonoBehaviour
     {
         interactionToggle = true;
         toggleAnim = true;
+        EnableInput();
     }
 
     #endregion
@@ -955,7 +973,8 @@ public enum Interaction
     Sign,
     Wallet,
     Item,
-    ElevatorControl
+    ElevatorControl,
+    NPC
 
 }
 

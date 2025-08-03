@@ -348,6 +348,14 @@ public class PlatformerManager : MonoBehaviour
                 onGameObjectInteract?.Invoke(collision.gameObject);
                 EnableInteractText("Activate Elevator");
             }
+
+            if (collision.CompareTag("NPC"))
+            {
+                //Debug.Log("Ladder can NOT be used");
+                onInteract?.Invoke(Interaction.NPC);
+                onGameObjectInteract?.Invoke(collision.gameObject);
+                EnableInteractText("Talk");
+            }
         }
 
     }
@@ -446,6 +454,13 @@ public class PlatformerManager : MonoBehaviour
         }
 
         if (collision.CompareTag("ElevatorControl"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+        }
+
+        if (collision.CompareTag("NPC"))
         {
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Empty);

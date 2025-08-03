@@ -144,11 +144,12 @@ public class Elevator : MonoBehaviour
         while (Vector3.Distance(transform.position, target) >= 0.01f)
         {
             // Move a constant amount per frame based on speed and time
-            rb2D.MovePosition(Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime));
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
             yield return null; // Wait for the next frame
         }
         Debug.Log("Elevator Corotine is done");
-        rb2D.MovePosition(target);
+        transform.position = target;
+        // rb2D.MovePosition(target);
         ElevatorStop();
 
     }
