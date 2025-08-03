@@ -185,7 +185,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 7171368904768696357}
   sfxSource: {fileID: 4768093528267779526}
-  backgroundMusic: {fileID: 8300000, guid: d9de055d532eab4479e82d9f87be761f, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: 2e579c362aa632e408176f74b737dd16, type: 3}
+  clickerMusic: {fileID: 8300000, guid: b118964ab6e8b2e46abb693aadf407e3, type: 3}
+  mainHubMusic: {fileID: 8300000, guid: 2e579c362aa632e408176f74b737dd16, type: 3}
+  platformerMusic: {fileID: 8300000, guid: eeb3c8de993d64e41accab913fee61e1, type: 3}
   menuButtonClick: {fileID: 0}
   gameOver: {fileID: 0}
   buttonMoneyClick: {fileID: 8300000, guid: 18d6bda9f4e079e47aba3719551f1baa, type: 3}
