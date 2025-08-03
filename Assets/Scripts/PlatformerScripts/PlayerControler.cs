@@ -13,6 +13,9 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerJump;
     public static event Action onPlayerMove;
     public static event Action onPlayerClimb;
+    public static event Action onPlayerSprintStart;
+    public static event Action onPlayerSprintEnd;
+
     public static event Action<MoneySpent> onMoneySpent;
     public static event Action onPlayerPickUpItem;
 
@@ -281,6 +284,7 @@ public class PlayerControler : MonoBehaviour
         //Debug.Log("Sprint Started");
         if (enableSprint)
         {
+            onPlayerSprintStart?.Invoke();
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
             Debug.Log("Sprint Started");
             playerSpeed *= playerSprintMultiplier;
@@ -293,6 +297,7 @@ public class PlayerControler : MonoBehaviour
         //basePlayerSpeed = basePlayerSpeed / basePlayerSprintMultiplier;
         if (enableSprint)
         {
+            onPlayerSprintEnd?.Invoke();
             Debug.Log("Sprint Stopped");
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
             playerSpeed /= playerSprintMultiplier;
@@ -326,35 +331,42 @@ public class PlayerControler : MonoBehaviour
                 //Debug.Log("No Interaction");
                 break;
             case Interaction.Ladder:
+
                 //Interaction Toggle Not needed
                 Debug.Log("Mount Ladder");
                 if (toggleClimb)
                 {
-                    //Debug.Log("Player ON Ladder");
-                    MountLadder();
+                    if (platformerManager.CheckMoney(MoneySpent.moneySpentClimb))
+                    {
+                        //Debug.Log("Player ON Ladder");
+                        MountLadder();
+                    }
                 }
                 else
                 {
                     //Debug.Log("Player OFF Ladder");
                     DismountLadder();
                 }
+
                 break;
             case Interaction.Door:
                 //Interaction Toggle Not needed
-                Debug.Log("Open Door " + currentInteractedGameObject.name);
-                onMoneySpent?.Invoke(MoneySpent.moneySpentOpenDoor);
-
-                if (currentInteractedGameObject.GetComponent<Door>() == null)
+                if (platformerManager.CheckMoney(MoneySpent.moneySpentOpenDoor))
                 {
+                    Debug.Log("Open Door " + currentInteractedGameObject.name);
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentOpenDoor);
+                    if (currentInteractedGameObject.GetComponent<Door>() == null)
+                    {
 
-                    currentInteractedGameObject.GetComponentInParent<Door>().CheckKey(platformerManager.KeyNumber);
-                    currentInteractedGameObject.GetComponentInParent<Door>().CheckDoor();
+                        currentInteractedGameObject.GetComponentInParent<Door>().CheckKey(platformerManager.KeyNumber);
+                        currentInteractedGameObject.GetComponentInParent<Door>().CheckDoor();
 
-                }
-                else
-                {
-                    currentInteractedGameObject.GetComponent<Door>().CheckKey(platformerManager.KeyNumber);
-                    currentInteractedGameObject.GetComponent<Door>().CheckDoor();
+                    }
+                    else
+                    {
+                        currentInteractedGameObject.GetComponent<Door>().CheckKey(platformerManager.KeyNumber);
+                        currentInteractedGameObject.GetComponent<Door>().CheckDoor();
+                    }
                 }
                 break;
             case Interaction.Key:
@@ -367,26 +379,31 @@ public class PlayerControler : MonoBehaviour
                 interaction = Interaction.Empty;
                 break;
             case Interaction.Elevator:
-                Debug.Log("interactionToggle: " + interactionToggle);
-                if (interactionToggle)
+                if (platformerManager.CheckMoney(MoneySpent.moneySpentUseElevator))
                 {
-                    Debug.Log("Use Elevator");
-                    onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
-                    currentInteractedGameObject.GetComponent<Elevator>().ToggleElevator();
-                    interactionToggle = false;
+                    Debug.Log("interactionToggle: " + interactionToggle);
+                    if (interactionToggle)
+                    {
+                        Debug.Log("Use Elevator");
+                        onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
+                        currentInteractedGameObject.GetComponent<Elevator>().ToggleElevator();
+                        interactionToggle = false;
+                    }
                 }
                 break;
             case Interaction.Bridge:
-                if (interactionToggle)
+                if (platformerManager.CheckMoney(MoneySpent.moneySpentPassBridge))
                 {
-                    if (!currentInteractedGameObject.GetComponent<Bridge>().BridgePaid)
+                    if (interactionToggle)
                     {
-                        onMoneySpent?.Invoke(MoneySpent.moneySpentPassBridge);
-                        currentInteractedGameObject.GetComponent<Bridge>().unBlockBridge();
+                        if (!currentInteractedGameObject.GetComponent<Bridge>().BridgePaid)
+                        {
+                            onMoneySpent?.Invoke(MoneySpent.moneySpentPassBridge);
+                            currentInteractedGameObject.GetComponent<Bridge>().unBlockBridge();
+                        }
+                        Debug.Log("PassBridge");
+                        interactionToggle = false;
                     }
-                    Debug.Log("PassBridge");
-
-                    interactionToggle = false;
                 }
                 break;
             case Interaction.Shop:
@@ -428,14 +445,18 @@ public class PlayerControler : MonoBehaviour
             case Interaction.ElevatorControl:
                 //Interaction Toggle Not needed
                 Debug.Log("Get Item");
-                onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
-                currentInteractedGameObject.GetComponent<ElevatorControl>().ToggleElevator();
+                if (platformerManager.CheckMoney(MoneySpent.moneySpentUseElevator))
+                {
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentUseElevator);
+                    currentInteractedGameObject.GetComponent<ElevatorControl>().ToggleElevator();
+                }
                 break;
             default:
                 break;
         }
 
     }
+
 
     //ElevatorControl
     private void ItemPickUp()
@@ -676,7 +697,10 @@ public class PlayerControler : MonoBehaviour
 
         if (!upgradeItems[index].hasItemEffectOnMoney && !upgradeItems[index].hasItemEffectOnMovement)
         {
-            //Will be Implemented
+            if (upgradeItems[index].itemEffectSpecial == "EnableSprint")
+            {
+                enableSprint = true;
+            }
         }
 
     }
@@ -705,7 +729,6 @@ public class PlayerControler : MonoBehaviour
                 }
                 break;
             case PlayerMovement.SprintMultiplier:
-                enableSprint = true;
 
                 if (upgradeItems[index].hasTier)
                 {
@@ -816,15 +839,6 @@ public class PlayerControler : MonoBehaviour
 
     private void SetUpAudio()
     {
-        if (SceneManager.GetActiveScene().name == "MainHubScene")
-        {
-            onPlayMusic?.Invoke(Music.MainMenu);
-        }
-        else
-        {
-            onPlayMusic?.Invoke(Music.Platformer);
-        }
-
 
     }
 
@@ -945,6 +959,16 @@ public enum PlayerMovement
 
 
 /*
+ *         if (SceneManager.GetActiveScene().name == "MainHubScene")
+        {
+            onPlayMusic?.Invoke(Music.MainMenu);
+        }
+        else
+        {
+            onPlayMusic?.Invoke(Music.Platformer);
+        }
+ * 
+ * 
  *     [SerializeField] private float playerSpeed = 5; // default value is 5
     [SerializeField] private float playerSprintMultiplier = 1.5f; // default value is 1.5f
     [SerializeField] private float playerJumpPower = 13; // default value is 13

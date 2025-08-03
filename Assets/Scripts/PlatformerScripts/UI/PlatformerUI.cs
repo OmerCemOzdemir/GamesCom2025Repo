@@ -30,12 +30,14 @@ public class PlatformerUI : MonoBehaviour
 
     private void OnEnable()
     {
+        PlatformerManager.onMoneyCheck += LogNotEnoughMoney;
         PlatformerManager.onMoneyChange += UpdateLostMoney;
         PlatformerManager.onMoneyZero += OpenOutOfMoneyPanel;
     }
 
     private void OnDisable()
     {
+        PlatformerManager.onMoneyCheck -= LogNotEnoughMoney;
         PlatformerManager.onMoneyChange -= UpdateLostMoney;
         PlatformerManager.onMoneyZero -= OpenOutOfMoneyPanel;
 
@@ -91,6 +93,22 @@ public class PlatformerUI : MonoBehaviour
             //itemIcon.GetComponent<Image>().sprite = 
         }
 
+    }
+
+
+    public void LogNotEnoughMoney()
+    {
+        //Debug.Log("Reduced Money: " + text + " " + money);
+        //StopAllCoroutines();
+        GameObject newLostMoneyText = Instantiate(lostMoneyText, lostMoneyParent.position, Quaternion.identity);
+        newLostMoneyText.GetComponent<TextMeshProUGUI>().text = "Not Enough Money";
+        //Debug.Log(lostMoneyText.GetComponent<TextMeshProUGUI>().text);
+        newLostMoneyText.transform.SetParent(lostMoneyParent, false);
+        newLostMoneyText.transform.SetAsFirstSibling();
+
+        //lostMoneyText.color = new Color(1, 0, 0, 1f);
+        //lostMoneyText.gameObject.SetActive(true);
+        StartCoroutine(DecreaseTransparency(2, newLostMoneyText));
     }
 
 

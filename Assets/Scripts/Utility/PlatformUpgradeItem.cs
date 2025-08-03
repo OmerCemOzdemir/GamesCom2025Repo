@@ -16,7 +16,7 @@ public class PlatformUpgradeItem : ScriptableObject
 
     [SerializeField] public CustomItemMoneyPair itemEffectOnMoney;
     [SerializeField] public CustomItemMovementPair itemEffectOnMovement;
-    [SerializeField] public float itemEffectSpecial;
+    [SerializeField] public string itemEffectSpecial;
 
 
     [SerializeField] public bool hasTier = false;
