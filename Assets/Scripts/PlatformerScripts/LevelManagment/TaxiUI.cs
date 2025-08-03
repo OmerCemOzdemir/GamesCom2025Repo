@@ -22,6 +22,9 @@ public class TaxiUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelTitle;
     [SerializeField] private GameObject levelsPanel;
     [SerializeField] private GameObject checkpointsPanel;
+    [SerializeField] private GameObject travelButton;
+    [SerializeField] private GameObject firstLevelButton;
+
     [Space(10)]
     [Header("Stats: ")]
     [SerializeField] private float baseTravelCostLevel = 100;
@@ -69,15 +72,26 @@ public class TaxiUI : MonoBehaviour
         LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
         //printLevelData(levelData);
         Vector3[][] checkpointsPos = new Vector3[levelData.Length][];
+        //Force unlock the first level
+        levelData[0].unlock = true;
+
         for (int i = 0; i < levelData.Length; i++)
         {
             if (levelData[i].unlock)
             {
-                checkpointsPos[i] = new Vector3[levelData[i].checkpointX.Length];
-                for (int j = 0; j < levelData[i].checkpointX.Length; j++)
+                if (checkpointsPos[i] != null)
                 {
-                    checkpointsPos[i][j] = new Vector3(levelData[i].checkpointX[j], levelData[i].checkpointY[j], levelData[i].checkpointZ[j]);
+                    checkpointsPos[i] = new Vector3[levelData[i].checkpointX.Length];
+                    for (int j = 0; j < levelData[i].checkpointX.Length; j++)
+                    {
+                        checkpointsPos[i][j] = new Vector3(levelData[i].checkpointX[j], levelData[i].checkpointY[j], levelData[i].checkpointZ[j]);
+                    }
                 }
+                else
+                {
+
+                }
+
             }
         }
         checpointPositions = checkpointsPos;
@@ -190,6 +204,20 @@ public class TaxiUI : MonoBehaviour
         }
     }
 
+    public void FirstLevel()
+    {
+        travelButton.SetActive(false);
+        firstLevelButton.SetActive(true);
+    }
+
+
+    public void TravelFirstLevel()
+    {
+        LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
+        GameManager.Instance.NextLevel(levelData[0].levelIndex);
+
+    }
+
     public void UpdateCheckpoints()
     {
         if (checkpointButtonParent.childCount == 0)
@@ -217,7 +245,7 @@ public class TaxiUI : MonoBehaviour
 
     private void printLevelData(LevelSaveData[] levelData)
     {
-      //  = GameManager.Instance.GetGameData().levelData;
+        //  = GameManager.Instance.GetGameData().levelData;
 
         for (int i = 0; i < levelData.Length; i++)
         {

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class PlatformerManager : MonoBehaviour
 {
     public static event Action<float, string> onMoneyChange;
+    public static event Action onMoneyCheck;
+
     //Used for sending the game object of the interacted game object. Used for sending the game object of ladder.
     public static event Action<GameObject> onGameObjectInteract;
     public static event Action onMoneyZero;
@@ -17,7 +19,6 @@ public class PlatformerManager : MonoBehaviour
     public static event Action onBridgeExit;
 
     private int keyNumber;
-    private string moneyText = string.Empty;
     private PlayerControler playerControler;
 
     public int KeyNumber { get => keyNumber; set => keyNumber = value; }
@@ -79,6 +80,41 @@ public class PlatformerManager : MonoBehaviour
         onMoneyChange?.Invoke(0, "");
 
     }
+
+    public bool CheckMoney(MoneySpent moneySpent)
+    {
+        switch (moneySpent)
+        {
+
+            case MoneySpent.moneySpentJump:
+                return CheckMoneyReduction(moneyRequiredJump);
+            case MoneySpent.moneySpentClimb:
+                return CheckMoneyReduction(moneyRequiredClimb);
+            case MoneySpent.moneySpentPickUp:
+                return CheckMoneyReduction(moneyRequiredPickUp);
+            case MoneySpent.moneySpentOpenDoor:
+                return CheckMoneyReduction(moneyRequiredOpenDoor);
+            case MoneySpent.moneySpentPassBridge:
+                return CheckMoneyReduction(moneyRequiredPassBridge);
+            case MoneySpent.moneySpentUseElevator:
+                return CheckMoneyReduction(moneyRequiredUseElevator);
+        }
+        return false;
+
+    }
+
+    private bool CheckMoneyReduction(float moneyReq)
+    {
+        double totalMoney = GameManager.Instance.GetGameData().totalMoney;
+        double calcMoney = totalMoney - moneyReq;
+        if (calcMoney <= 0)
+        {
+            onMoneyCheck?.Invoke();
+        }
+
+        return calcMoney > 0;
+    }
+
 
     //These Functions calculate the money spent and reduce the money.
     private void SpentMoney(MoneySpent moneySpent)
