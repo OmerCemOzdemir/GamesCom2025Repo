@@ -1,18 +1,72 @@
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
     [Header("NPC Information: ")]
-    [SerializeField] private string nameNPC;
+    [SerializeField] public string nameNPC;
     [TextArea]
-    [SerializeField] private string dialogNPC;
-    [Space(10)]
+    [SerializeField] public string dialogNPC;
+
+    [SerializeField] public bool itemDrop = false;
+    [SerializeField] public GameObject item;
+
+
+}
+
+
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(NPC))]
+public class NPCCustomInspector : Editor
+{
+    SerializedProperty nameNPC;
+    SerializedProperty dialogNPC;
+    SerializedProperty itemDrop;
+    SerializedProperty item;
+
+
+
+    private void OnEnable()
+    {
+        nameNPC = serializedObject.FindProperty("nameNPC");
+        dialogNPC = serializedObject.FindProperty("dialogNPC");
+        itemDrop = serializedObject.FindProperty("itemDrop");
+        item = serializedObject.FindProperty("item");
+
+    }
+
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+        EditorGUILayout.PropertyField(nameNPC);
+        EditorGUILayout.PropertyField(dialogNPC);
+        EditorGUILayout.PropertyField(itemDrop);
+
+        NPC npc = (NPC)target;
+        if (npc.itemDrop)
+        {
+            EditorGUILayout.PropertyField(item);
+        }
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+
+}
+
+
+#endif
+
+
+/*
+ 
 
     [SerializeField] private GameObject dialogBox;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI dialogText;
-
 
     private void Start()
     {
@@ -20,7 +74,8 @@ public class NPC : MonoBehaviour
         dialogText.text = dialogNPC;
     }
 
-    private void EnableText()
+
+     private void EnableText()
     {
         dialogBox.SetActive(true);
     }
@@ -41,6 +96,5 @@ public class NPC : MonoBehaviour
         if (collision.CompareTag("Player")) { DisableText(); }
 
     }
-
-
-}
+ 
+ */

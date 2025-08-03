@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,13 @@ public class PlatformerUI : MonoBehaviour
     [SerializeField] private GameObject outOfMoneyPanel;
     [SerializeField] private Transform itemsPanel;
     [SerializeField] private GameObject itemIconPrefab;
+    [SerializeField] private GameObject NPCPanel;
+    [SerializeField] private Image NPCImage;
+    [SerializeField] private TextMeshProUGUI NPCName;
+    [SerializeField] private TextMeshProUGUI NPCDialog;
+
+    public static event Action onNPCdone;
+
     private GameObject[] itemIconArr;
     [Space(10)]
 
@@ -33,6 +41,7 @@ public class PlatformerUI : MonoBehaviour
         PlatformerManager.onMoneyCheck += LogNotEnoughMoney;
         PlatformerManager.onMoneyChange += UpdateLostMoney;
         PlatformerManager.onMoneyZero += OpenOutOfMoneyPanel;
+        PlayerControler.onPlayerTalkNPC += OpenNPCPanel;
     }
 
     private void OnDisable()
@@ -40,6 +49,7 @@ public class PlatformerUI : MonoBehaviour
         PlatformerManager.onMoneyCheck -= LogNotEnoughMoney;
         PlatformerManager.onMoneyChange -= UpdateLostMoney;
         PlatformerManager.onMoneyZero -= OpenOutOfMoneyPanel;
+        PlayerControler.onPlayerTalkNPC -= OpenNPCPanel;
 
     }
 
@@ -150,6 +160,25 @@ public class PlatformerUI : MonoBehaviour
     private void OpenOutOfMoneyPanel()
     {
         outOfMoneyPanel.SetActive(true);
+    }
+
+    private void OpenNPCPanel(GameObject ob)
+    {
+        NPCPanel.SetActive(true);
+        NPCImage.sprite = ob.GetComponent<SpriteRenderer>().sprite;
+        NPCName.text = ob.GetComponent<NPC>().nameNPC;
+        NPCDialog.text = ob.GetComponent<NPC>().dialogNPC;
+        if (ob.GetComponent<NPC>().itemDrop)
+        {
+            ob.GetComponent<NPC>().item.SetActive(true);
+        }
+    }
+
+    public void CloseNPCPanel()
+    {
+        Debug.Log("Close NPC Panel");
+        NPCPanel.SetActive(false);
+        onNPCdone?.Invoke();
     }
 
     public void Grind()
