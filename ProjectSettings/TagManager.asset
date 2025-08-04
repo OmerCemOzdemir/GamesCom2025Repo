@@ -17,6 +17,7 @@ TagManager:
   - Item
   - ElevatorControl
   - NPC
+  - ClickerManager
   layers:
   - Default
   - TransparentFX

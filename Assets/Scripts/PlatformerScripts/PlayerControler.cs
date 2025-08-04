@@ -58,6 +58,7 @@ public class PlayerControler : MonoBehaviour
 
     [SerializeField] private Transform playerModel;
     [SerializeField] private Transform groundCheck; // assign groundcheck gameObject
+    [SerializeField] private ParticleSystem sprintEffect;
 
     private Rigidbody2D playerRigid2D;
     private InputSystem playerInputAction;
@@ -287,6 +288,7 @@ public class PlayerControler : MonoBehaviour
         if (enableSprint)
         {
             onPlayerSprintStart?.Invoke();
+            sprintEffect.Play();
             ///onMoneySpent?.Invoke(MoneySpent.moneySpentSprint);
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
             Debug.Log("Sprint Started");
@@ -302,6 +304,7 @@ public class PlayerControler : MonoBehaviour
         if (enableSprint)
         {
             onPlayerSprintEnd?.Invoke();
+            sprintEffect.Stop();
             Debug.Log("Sprint Stopped");
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
             isSprinting = false;
@@ -796,7 +799,47 @@ public class PlayerControler : MonoBehaviour
 
     private void ImplementMoney(int index, MoneySpent ms)
     {
-        platformerManager.UpdateItemMoneyEffects(index, ms);
+        UpdateItemMoneyEffects(index, ms);
+    }
+
+    public void UpdateItemMoneyEffects(int index, MoneySpent moneySpent)
+    {
+        float value = UpgradeItems[index].itemEffectOnMoney.value;
+        Operations op = UpgradeItems[index].itemEffectOnMoney.operations;
+        Debug.Log("the Item: " + UpgradeItems[index].itemName + " : " + value + " , " + op);
+        switch (moneySpent)
+        {
+            case MoneySpent.moneySpentMove:
+                platformerManager.moneyRequiredMove = ImplementOperations(platformerManager.moneyRequiredMove, value, op);
+                break;
+            case MoneySpent.moneySpentSprint:
+                platformerManager.moneyRequiredMove = ImplementOperations(platformerManager.moneyRequiredMove, value, op);
+                break;
+            case MoneySpent.moneySpentJump:
+                platformerManager.moneyRequiredJump = ImplementOperations(platformerManager.moneyRequiredJump, value, op);
+
+                break;
+            case MoneySpent.moneySpentClimb:
+                platformerManager.moneyRequiredClimb = ImplementOperations(platformerManager.moneyRequiredClimb, value, op);
+
+                break;
+            case MoneySpent.moneySpentPickUp:
+                platformerManager.moneyRequiredPickUp = ImplementOperations(platformerManager.moneyRequiredPickUp, value, op);
+
+                break;
+            case MoneySpent.moneySpentOpenDoor:
+                platformerManager.moneyRequiredOpenDoor = ImplementOperations(platformerManager.moneyRequiredOpenDoor, value, op);
+
+                break;
+            case MoneySpent.moneySpentPassBridge:
+                platformerManager.moneyRequiredPassBridge = ImplementOperations(platformerManager.moneyRequiredPassBridge, value, op);
+
+                break;
+            case MoneySpent.moneySpentUseElevator:
+                platformerManager.moneyRequiredUseElevator = ImplementOperations(platformerManager.moneyRequiredUseElevator, value, op);
+
+                break;
+        }
     }
 
     private void ImplementPlayerMovement(PlatformItemSaveData[] itemData, int index, float value, Operations op, PlayerMovement pm)

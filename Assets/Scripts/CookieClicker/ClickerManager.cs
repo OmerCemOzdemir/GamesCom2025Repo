@@ -36,6 +36,7 @@ public class ClickerManager : MonoBehaviour
     [SerializeField] private float baseActiveTime = 1;
     private bool idleToggle = true;
     private bool activeToggle = true;
+    private bool gameToggle = true;
     private bool mouseEnable = false;
     private float clickTimer = 0;
 
@@ -68,14 +69,17 @@ public class ClickerManager : MonoBehaviour
         SetUpData();
         effect = transform.GetChild(0).gameObject.GetComponent<ClickerEffect>();
         inputSystem = new InputSystem();
+        effect.StartEffect();
+        effect.IncreaseClickEffect(0);
     }
 
     private void FixedUpdate()
     {
-        IdleMoney();
+        if (gameToggle)
+        {
+            IdleMoney();
+        }
     }
-
-
 
     #endregion
 
@@ -87,6 +91,7 @@ public class ClickerManager : MonoBehaviour
         if (idleToggle)
         {
             StartCoroutine(IdleClicker());
+            effect.IncreaseClickEffect(2);
             idleToggle = false;
         }
 
@@ -285,6 +290,21 @@ public class ClickerManager : MonoBehaviour
 
     }
 
+    public void EnableInputs()
+    {
+        inputSystem.PlayerCookie.GetMoney.Enable();
+        gameToggle = true;
+        effect.StartEffect();
+
+    }
+
+    public void DisableInputs()
+    {
+        inputSystem.PlayerCookie.GetMoney.Disable();
+        gameToggle = false;
+        effect.StopEffect();
+
+    }
 
     private void ResetFields()
     {
@@ -355,6 +375,15 @@ public class ClickerManager : MonoBehaviour
                     break;
                 case PlatformItemType.Temporary:
                     GameManager.Instance.GetGameData().platformItems[i].unlock = false;
+                    if (upgradePlatformItems[i].hasTier)
+                    {
+                        GameManager.Instance.GetGameData().platformItems[i].cost = upgradePlatformItems[i].costTiers[0];
+                        GameManager.Instance.GetGameData().platformItems[i].tier = 0;
+                    }
+                    else
+                    {
+                        GameManager.Instance.GetGameData().platformItems[i].cost = upgradePlatformItems[i].itemCost;
+                    }
                     break;
                 case PlatformItemType.RepeatPurchase:
                     break;
