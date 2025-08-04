@@ -15,7 +15,7 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerSprintStart;
     public static event Action onPlayerSprintEnd;
     public static event Action onPlayerWalkDistance;
-
+    public static event Action onPlayerSprintDistance;
     public static event Action<MoneySpent> onMoneySpent;
     public static event Action onPlayerPickUpItem;
 
@@ -49,6 +49,9 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private float walkSFXDistanceThreshold = 2.5f; // How often walk SFX is played, based on money deduct threshold
     private float moveDistanceTravelled = 0f;
     private float walkSFXDistanceTravelled = 0f;
+    private float sprintDistanceTravelled = 0f;
+    [SerializeField] private float moneyDeductDistanceThresholdSprint = 5f;
+    [SerializeField] private bool isSprinting = false;
 
     private float playerGravityActivationTimeTemp;
     //private float groundCheckRadius = 0.2f;
@@ -238,14 +241,25 @@ public class PlayerControler : MonoBehaviour
         if (!climb && isGround() && Mathf.Abs(_horizontalMovement.x) > 0.01f)
         {
             float playerInputMovedWalking = Mathf.Abs(transform.position.x - previousPosition.x);
-            moveDistanceTravelled += playerInputMovedWalking;
 
             // Distance for money deduction
-            if (moveDistanceTravelled >= moneyDeductDistanceThreshold)
+            if (isSprinting)
             {
-                Debug.Log("Money deduct should be triggered");
-                onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
-                moveDistanceTravelled = 0f;
+                sprintDistanceTravelled += playerInputMovedWalking;
+                if (sprintDistanceTravelled >= moneyDeductDistanceThresholdSprint)
+                {
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentSprint);
+                    sprintDistanceTravelled = 0f;
+                }
+            }
+            else
+            {
+                moveDistanceTravelled += playerInputMovedWalking;
+                if (moveDistanceTravelled >= moneyDeductDistanceThreshold)
+                {
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
+                    moveDistanceTravelled = 0f;
+                }
             }
 
             // Distance for SFX played
@@ -274,9 +288,10 @@ public class PlayerControler : MonoBehaviour
         if (enableSprint)
         {
             onPlayerSprintStart?.Invoke();
-            onMoneySpent?.Invoke(MoneySpent.moneySpentSprint);
+            ///onMoneySpent?.Invoke(MoneySpent.moneySpentSprint);
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
             Debug.Log("Sprint Started");
+            isSprinting = true;
             playerSpeed += playerSprintMultiplier;
         }
 
@@ -290,7 +305,9 @@ public class PlayerControler : MonoBehaviour
             onPlayerSprintEnd?.Invoke();
             Debug.Log("Sprint Stopped");
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
+            isSprinting = false;
             playerSpeed -= playerSprintMultiplier;
+            onPlayerSprintEnd?.Invoke();
         }
     }
     #endregion
