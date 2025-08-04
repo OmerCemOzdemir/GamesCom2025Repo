@@ -190,18 +190,18 @@ MonoBehaviour:
   mainHubMusic: {fileID: 8300000, guid: 2e579c362aa632e408176f74b737dd16, type: 3}
   platformerMusic: {fileID: 8300000, guid: eeb3c8de993d64e41accab913fee61e1, type: 3}
   menuButtonClick: {fileID: 0}
-  gameOver: {fileID: 0}
+  gameOver: {fileID: 8300000, guid: 34254167c80c189439e5d3fd91494510, type: 3}
   buttonMoneyClick: {fileID: 8300000, guid: 18d6bda9f4e079e47aba3719551f1baa, type: 3}
   passiveSale: {fileID: 8300000, guid: 6d9e1c00899078944a87a28a056fa562, type: 3}
   criticalSale: {fileID: 8300000, guid: 8789e3a1e5b46204faad764ddfe9dfeb, type: 3}
   upgradeButtonClick: {fileID: 8300000, guid: 91cd301654f2a1e4d84d758a3972d024, type: 3}
   upgradeButtonSuccess: {fileID: 8300000, guid: 27fc07c5cfd474e4d990ce6ca5856fa8, type: 3}
-  upgradeButtonFail: {fileID: 0}
+  upgradeButtonFail: {fileID: 8300000, guid: 701381fec640fdb44b1d0baefde2bb1f, type: 3}
   playerWalk: {fileID: 8300000, guid: 2b2e1f8a98063574f86988a61ddfa9a8, type: 3}
   playerJump: {fileID: 8300000, guid: 60cffa7f45b9c9b47a2150cdd04cf679, type: 3}
-  playerSprint: {fileID: 0}
+  playerSprint: {fileID: 8300000, guid: 6d2e558e7c7a4f748bc38381a72c819a, type: 3}
   interactWithObject: {fileID: 8300000, guid: 4cc78d71b101d3f49815a3e5d636f31e, type: 3}
-  npcInteract: {fileID: 0}
+  npcInteract: {fileID: 8300000, guid: 1fa7f9d950a400346b8d287ba2c9f871, type: 3}
 --- !u!1 &4126819563897068148
 GameObject:
   m_ObjectHideFlags: 0
