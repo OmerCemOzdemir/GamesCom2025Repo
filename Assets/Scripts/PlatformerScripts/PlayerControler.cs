@@ -46,7 +46,9 @@ public class PlayerControler : MonoBehaviour
     private float playerMaxGravityMultiplier;
     private Vector2 previousPosition;
     [SerializeField] private float moneyDeductDistanceThreshold = 5f;
+    [SerializeField] private float walkSFXDistanceThreshold = 2.5f; // How often walk SFX is played, based on money deduct threshold
     private float moveDistanceTravelled = 0f;
+    private float walkSFXDistanceTravelled = 0f;
 
     private float playerGravityActivationTimeTemp;
     //private float groundCheckRadius = 0.2f;
@@ -245,6 +247,15 @@ public class PlayerControler : MonoBehaviour
                 onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
                 moveDistanceTravelled = 0f;
             }
+
+            // Distance for SFX played
+            walkSFXDistanceTravelled += playerInputMovedWalking;
+            if (walkSFXDistanceTravelled >= walkSFXDistanceThreshold)
+            {
+                onPlayerWalkDistance?.Invoke();
+                walkSFXDistanceTravelled = 0f;
+            }
+
         }
 
         previousPosition = transform.position;
@@ -979,6 +990,7 @@ public class PlayerControler : MonoBehaviour
     }
 
     #endregion
+
 }
 
 public enum Interaction

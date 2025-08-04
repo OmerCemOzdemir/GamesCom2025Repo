@@ -10,7 +10,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource bgmSource;
     public AudioSource sfxSource;
 
-    [Header("Background Music")] 
+    [Header("Background Music")]
     public AudioClip mainMenuMusic;
     public AudioClip clickerMusic;
     public AudioClip mainHubMusic;
@@ -83,6 +83,7 @@ public class AudioManager : MonoBehaviour
         PlayerControler.onPlayerJump += HandlePlayerJump;
         PlayerControler.onPlayerMove += HandlePlayerMove;
         PlayerControler.onPlayerClimb += HandlePlayerClimb;
+        PlayerControler.onPlayerWalkDistance += PlayStepSound;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -94,6 +95,7 @@ public class AudioManager : MonoBehaviour
         PlayerControler.onPlayerJump -= HandlePlayerJump;
         PlayerControler.onPlayerMove -= HandlePlayerMove;
         PlayerControler.onPlayerClimb -= HandlePlayerClimb;
+        PlayerControler.onPlayerWalkDistance -= PlayStepSound;
     }
 
     void Start()
@@ -133,8 +135,15 @@ public class AudioManager : MonoBehaviour
     {
         if (sfxClips.ContainsKey(key) && sfxClips[key] != null)
         {
+            //sfxSource.pitch = Random.Range(0.95f, 1.05f);
             sfxSource.PlayOneShot(sfxClips[key]);
         }
+    }
+
+    private void PlayStepSound()
+    {
+        if (playerWalk != null)
+            sfxSource.PlayOneShot(playerWalk);
     }
 
     public void SetBGMVolume(float volume)
@@ -158,7 +167,7 @@ public class AudioManager : MonoBehaviour
     {
         bgmSource.Stop();
     }
-    
+
     /* public void ReloadScene()
     {
         Destroy(AudioManager.Instance.gameObject); // Destroy before reload
@@ -169,4 +178,17 @@ public class AudioManager : MonoBehaviour
     private void HandlePlayerJump() => PlaySFX("jump");
     private void HandlePlayerMove() => PlaySFX("walk");
     private void HandlePlayerClimb() => PlaySFX("sprint");
+}
+
+public enum SFX
+{
+    Active,
+    Idle,
+    Walk,
+    Jump,
+    Sprint,
+    Interact,
+    NpcInteract,
+    ItemPickUp,
+    Generic
 }

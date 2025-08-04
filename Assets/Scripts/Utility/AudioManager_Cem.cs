@@ -43,7 +43,8 @@ public class AudioManager_Cem : MonoBehaviour
         PlayAudio(mainMenuMusicSource); // Force play
     }
 
-    private void OnEnable()
+    // Disabled to prevent namespace conflict with new AudioManager script
+    /* private void OnEnable()
     {
         MainMenu.onPlayMusic += SetUpMusic;
         MainMenu.onPlaySFX += SetUpSFX;
@@ -65,11 +66,12 @@ public class AudioManager_Cem : MonoBehaviour
 
         PlayerControler.onPlayMusic -= SetUpMusic;
         PlayerControler.onPlaySFX -= SetUpSFX;
-    }
+    } */
 
     private void SetUpMusic(Music music)
     {
-        switch (music) {
+        switch (music)
+        {
             case Music.MainMenu:
                 PlayAudio(mainMenuMusicSource);
                 break;
@@ -82,26 +84,26 @@ public class AudioManager_Cem : MonoBehaviour
         }
     }
 
-    private void SetUpSFX(SFX sfx)
+    private void SetUpSFX(SFX_Cem sfx)
     {
         switch (sfx)
         {
-            case SFX.Active:
+            case SFX_Cem.Active:
                 PlayAudio(activeSFXSource);
                 break;
-            case SFX.Idle:
+            case SFX_Cem.Idle:
                 PlayAudio(idleSFXSource);
                 break;
-            case SFX.Generic:
+            case SFX_Cem.Generic:
                 PlayAudio(genericSFXSource);
                 break;
-            case SFX.OutOfMoney:
+            case SFX_Cem.OutOfMoney:
                 PlayAudio(outOfMoneySFXSource);
                 break;
-            case SFX.ItemPickUp:
+            case SFX_Cem.ItemPickUp:
                 PlayAudio(itemPickUpSFXSource);
                 break;
-            case SFX.ItemPurchase:
+            case SFX_Cem.ItemPurchase:
                 PlayAudio(itemPurchaseSFXSource);
                 break;
         }
@@ -122,7 +124,7 @@ public enum Music
     Platformer
 }
 
-public enum SFX
+public enum SFX_Cem
 {
     Active,
     Idle,
