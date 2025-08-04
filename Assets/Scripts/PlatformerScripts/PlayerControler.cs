@@ -43,6 +43,9 @@ public class PlayerControler : MonoBehaviour
     private float playerGravityActivationTime;
     private float playerDefaultGravityScale;
     private float playerMaxGravityMultiplier;
+    private Vector2 previousPosition;
+    private float moveDistanceTravelled = 0f;
+    [SerializeField] private float moneyDeductDistanceThreshold = 5f;
 
 
     private float playerGravityActivationTimeTemp;
@@ -164,6 +167,8 @@ public class PlayerControler : MonoBehaviour
         playerAnimator.SetTrigger("Idle");
         SetupPlayerPosition();
         //currentLocalScale = transform.localScale;
+
+        previousPosition = transform.position;
     }
     private void Update()
     {
@@ -212,9 +217,10 @@ public class PlayerControler : MonoBehaviour
     //If the player climb ability is active then this functions moves player up and down.
     private void Move()
     {
+        Vector2 _horizontalMovement = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
+
         if (enableMove)
         {
-            Vector2 _horizontalMovement = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
             if (climb)
             {
                 playerRigid2D.gravityScale = 0;
@@ -225,7 +231,23 @@ public class PlayerControler : MonoBehaviour
                 playerRigid2D.linearVelocity = new Vector2(_horizontalMovement.x * playerSpeed, playerRigid2D.linearVelocity.y);
             }
         }
-    }
+
+        // Deduct wallet upon moving
+        if (!climb && isGround() && Mathf.Abs(_horizontalMovement.x) > 0.01f)
+        {
+            float playerInputMovedWalking = Mathf.Abs(transform.position.x - previousPosition.x);
+            moveDistanceTravelled += playerInputMovedWalking;
+
+            if (moveDistanceTravelled >= moneyDeductDistanceThreshold)
+            {
+                onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
+                moveDistanceTravelled = 0f;
+            }
+        }
+
+        previousPosition = transform.position;
+        }
+
     //This Functions just sends a event trigger to PlatformManager to deduct money.
     private void PlayerMoved(InputAction.CallbackContext context)
     {

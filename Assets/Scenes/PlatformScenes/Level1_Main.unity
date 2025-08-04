@@ -15352,6 +15352,10 @@ PrefabInstance:
       propertyPath: time
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 34780136612958161, guid: e6804ae703761ca439ac7e36845c6af3, type: 3}
+      propertyPath: elevatorSpeed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 765938955289492085, guid: e6804ae703761ca439ac7e36845c6af3, type: 3}
       propertyPath: lerpSpeed
       value: 10
@@ -20289,6 +20293,10 @@ PrefabInstance:
       propertyPath: basePlayerJumpPower
       value: 13
       objectReference: {fileID: 0}
+    - target: {fileID: -727133942443865416, guid: 385d4bbe5b03fe34686d05f1354f497f, type: 3}
+      propertyPath: moneyDeductDistanceThreshold
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 338784963053622654, guid: 385d4bbe5b03fe34686d05f1354f497f, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -20618,6 +20626,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1872654314759977677, guid: 48ffd0b4181849041b35a0942dca952f, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1872654314759977677, guid: 48ffd0b4181849041b35a0942dca952f, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2183740430022263108, guid: 48ffd0b4181849041b35a0942dca952f, type: 3}
       propertyPath: m_Name
       value: NPC
