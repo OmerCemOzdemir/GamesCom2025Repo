@@ -22,7 +22,7 @@ MonoBehaviour:
   itemEffectOnMoney:
     value: 100
     operations: 2
-    moneySpent: 1
+    moneySpent: 2
   itemEffectOnMovement:
     value: 2
     operations: 0

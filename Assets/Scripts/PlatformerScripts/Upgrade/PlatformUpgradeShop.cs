@@ -216,8 +216,8 @@ public class PlatformUpgradeShop : MonoBehaviour
         {
             int maxTier = upgradeItems[index].effectTiersPercentage.Length;
             int tier = upgradeItemsData[index].tier;
-            tier++;
             upgradeItemInstances[index].transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = "" + tier;
+            tier++;
             if (maxTier == tier)
             {
                 Debug.Log("Max Tier Reached");
@@ -247,6 +247,7 @@ public class PlatformUpgradeShop : MonoBehaviour
     {
         if (platformItemIndex == -1)
         {
+            Debug.Log("Choose Another Item");
 
         }
         else
@@ -300,10 +301,13 @@ public class PlatformUpgradeShop : MonoBehaviour
                 UpdateShopTexts();
                 UpdateItemButtons();
                 mainHubUI.UpdateItemIcons();
+                platformItemIndex = -1;
+
                 //GameManager.Instance.SaveGame();
                 //PrintArr();
             }
         }
+
 
     }
 

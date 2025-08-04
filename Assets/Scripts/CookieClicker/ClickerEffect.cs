@@ -25,4 +25,15 @@ public class ClickerEffect : MonoBehaviour
         emission.rateOverTime = new ParticleSystem.MinMaxCurve(rate);
     }
 
+    public void StartEffect()
+    {
+        clickerEffect.Play();
+    }
+
+    public void StopEffect()
+    {
+        clickerEffect.Stop();
+
+    }
+
 }

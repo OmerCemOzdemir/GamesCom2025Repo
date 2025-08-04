@@ -29,14 +29,14 @@ public class PlatformerManager : MonoBehaviour
     [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1.5f, -10f); // default for Z is -10 to prevent 2D clipping issues
     [SerializeField] private GameObject interactText;
     [SerializeField] private GameObject requiredMoneyText;
-    [SerializeField] private float moneyRequiredMove = 10;
-    [SerializeField] private float moneyRequiredSprint = 50;
-    [SerializeField] private float moneyRequiredJump = 100;
-    [SerializeField] private float moneyRequiredClimb = 1000;
-    [SerializeField] private float moneyRequiredPickUp = 2000;
-    [SerializeField] private float moneyRequiredOpenDoor = 3000;
-    [SerializeField] private float moneyRequiredUseElevator = 5000;
-    [SerializeField] private float moneyRequiredPassBridge = 6000;
+    [SerializeField] public float moneyRequiredMove = 10;
+    [SerializeField] public float moneyRequiredSprint = 50;
+    [SerializeField] public float moneyRequiredJump = 100;
+    [SerializeField] public float moneyRequiredClimb = 1000;
+    [SerializeField] public float moneyRequiredPickUp = 2000;
+    [SerializeField] public float moneyRequiredOpenDoor = 3000;
+    [SerializeField] public float moneyRequiredUseElevator = 5000;
+    [SerializeField] public float moneyRequiredPassBridge = 6000;
 
 
 
@@ -185,46 +185,7 @@ public class PlatformerManager : MonoBehaviour
 
     }
     //moneySpentSprint
-    public void UpdateItemMoneyEffects(int index, MoneySpent moneySpent)
-    {
-        float value = playerControler.UpgradeItems[index].itemEffectOnMoney.value;
-        Operations op = playerControler.UpgradeItems[index].itemEffectOnMoney.operations;
-        Debug.Log("the Item: " + playerControler.UpgradeItems[index].itemName + " : " + value + " , " + op);
-        switch (moneySpent)
-        {
-            case MoneySpent.moneySpentMove:
-                moneyRequiredMove = playerControler.ImplementOperations(moneyRequiredMove, value, op);
-                break;
-            case MoneySpent.moneySpentSprint:
-                moneyRequiredMove = playerControler.ImplementOperations(moneyRequiredMove, value, op);
-                break;
-            case MoneySpent.moneySpentJump:
-                moneyRequiredJump = playerControler.ImplementOperations(moneyRequiredJump, value, op);
-
-                break;
-            case MoneySpent.moneySpentClimb:
-                moneyRequiredClimb = playerControler.ImplementOperations(moneyRequiredClimb, value, op);
-
-                break;
-            case MoneySpent.moneySpentPickUp:
-                moneyRequiredPickUp = playerControler.ImplementOperations(moneyRequiredPickUp, value, op);
-
-                break;
-            case MoneySpent.moneySpentOpenDoor:
-                moneyRequiredOpenDoor = playerControler.ImplementOperations(moneyRequiredOpenDoor, value, op);
-
-                break;
-            case MoneySpent.moneySpentPassBridge:
-                moneyRequiredPassBridge = playerControler.ImplementOperations(moneyRequiredPassBridge, value, op);
-
-                break;
-            case MoneySpent.moneySpentUseElevator:
-                moneyRequiredUseElevator = playerControler.ImplementOperations(moneyRequiredUseElevator, value, op);
-
-                break;
-        }
-    }
-
+   
     private void EnableInteractText(string txt)
     {
         interactText.SetActive(true);

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
@@ -40,7 +41,7 @@ public class PauseMenu : MonoBehaviour
             });
         }
     }
-    
+
     private void OnEnable()
     {
 
@@ -67,14 +68,44 @@ public class PauseMenu : MonoBehaviour
         if (togglePauseGame)
         {
             pauseMenu.SetActive(true);
+            DisableGame();
             togglePauseGame = false;
+
         }
         else
         {
             pauseMenu.SetActive(false);
+            EnableGame();
             togglePauseGame = true;
         }
     }
+
+
+    private void DisableGame()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            GameObject.FindGameObjectWithTag("ClickerManager").GetComponent<ClickerManager>().DisableInputs();
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControler>().DisableInput();
+        }
+
+    }
+
+    private void EnableGame()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            GameObject.FindGameObjectWithTag("ClickerManager").GetComponent<ClickerManager>().EnableInputs();
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControler>().EnableInput();
+        }
+    }
+
 
     public void BackToOffice()
     {
@@ -86,11 +117,13 @@ public class PauseMenu : MonoBehaviour
         if (togglePauseGame)
         {
             pauseMenu.SetActive(true);
+            DisableGame();
             togglePauseGame = false;
         }
         else
         {
             pauseMenu.SetActive(false);
+            EnableGame();
             togglePauseGame = true;
         }
     }
