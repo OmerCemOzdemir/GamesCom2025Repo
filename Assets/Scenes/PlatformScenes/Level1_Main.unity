@@ -16004,9 +16004,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4910204177611787178, guid: 363dd500546c7a64f9c0a6ed38afaf23, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7300655709040924360, guid: 363dd500546c7a64f9c0a6ed38afaf23, type: 3}
       propertyPath: m_Name
       value: GUI_PauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300655709040924360, guid: 363dd500546c7a64f9c0a6ed38afaf23, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16698,7 +16706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1936281183}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &741143017
@@ -20198,6 +20206,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1936281183 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1962645864042925972, guid: 363dd500546c7a64f9c0a6ed38afaf23, type: 3}
+  m_PrefabInstance: {fileID: 534941722}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1951891097
 PrefabInstance:
   m_ObjectHideFlags: 0

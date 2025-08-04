@@ -190,7 +190,6 @@ public class PlayerControler : MonoBehaviour
         DisableInput();
         //playerRigid2D.MovePosition(pos);
         StartCoroutine(DelayOnTeleport(sec, pos));
-
     }
 
     IEnumerator DelayOnTeleport(float sec, Vector3 pos)
@@ -269,11 +268,11 @@ public class PlayerControler : MonoBehaviour
                 onPlayerWalkDistance?.Invoke();
                 walkSFXDistanceTravelled = 0f;
             }
-
         }
 
         previousPosition = transform.position;
-        }
+
+    }
 
     //This Functions just sends a event trigger to PlatformManager to deduct money.
     private void PlayerMoved(InputAction.CallbackContext context)

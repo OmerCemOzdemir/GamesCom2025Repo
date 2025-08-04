@@ -176,7 +176,10 @@ public class AudioManager : MonoBehaviour
 
     // Event Handlers
     private void HandlePlayerJump() => PlaySFX("jump");
-    private void HandlePlayerMove() => PlaySFX("walk");
+    private void HandlePlayerMove()
+    {
+        //PlaySFX("walk");
+    }
     private void HandlePlayerClimb() => PlaySFX("sprint");
 }
 
