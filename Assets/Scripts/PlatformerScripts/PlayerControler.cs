@@ -14,6 +14,7 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerClimb;
     public static event Action onPlayerSprintStart;
     public static event Action onPlayerSprintEnd;
+    public static event Action onPlayerWalkDistance;
 
     public static event Action<MoneySpent> onMoneySpent;
     public static event Action onPlayerPickUpItem;
@@ -44,9 +45,8 @@ public class PlayerControler : MonoBehaviour
     private float playerDefaultGravityScale;
     private float playerMaxGravityMultiplier;
     private Vector2 previousPosition;
-    private float moveDistanceTravelled = 0f;
     [SerializeField] private float moneyDeductDistanceThreshold = 5f;
-
+    private float moveDistanceTravelled = 0f;
 
     private float playerGravityActivationTimeTemp;
     //private float groundCheckRadius = 0.2f;
@@ -238,8 +238,10 @@ public class PlayerControler : MonoBehaviour
             float playerInputMovedWalking = Mathf.Abs(transform.position.x - previousPosition.x);
             moveDistanceTravelled += playerInputMovedWalking;
 
+            // Distance for money deduction
             if (moveDistanceTravelled >= moneyDeductDistanceThreshold)
             {
+                Debug.Log("Money deduct should be triggered");
                 onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
                 moveDistanceTravelled = 0f;
             }
@@ -977,9 +979,6 @@ public class PlayerControler : MonoBehaviour
     }
 
     #endregion
-
-
-
 }
 
 public enum Interaction
@@ -1010,7 +1009,6 @@ public enum PlayerMovement
     DefaultGravityScale,
     MaxGravityMultiplier
 }
-
 
 
 /*
