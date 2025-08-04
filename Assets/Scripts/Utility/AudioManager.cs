@@ -187,7 +187,11 @@ public class AudioManager : MonoBehaviour
     }
     private void HandlePlayerClimb() => PlaySFX("sprint");
     private void HandleMoneyZero() => PlaySFX("gameOverPlatformer");
-    private void HandleSprintStart() => PlaySFX("sprint");
+    private void HandleSprintStart()
+    {
+        if (sfxClips.TryGetValue("sprint", out AudioClip clip) && clip != null)
+            sfxSource.PlayOneShot(clip, 0.4f); // play ONLY this clip at reduced volume (because the current clip used is too loud by default)
+    }    
     private void HandleTalkNPC(GameObject npc)
     {
         PlaySFX("npcInteract");
