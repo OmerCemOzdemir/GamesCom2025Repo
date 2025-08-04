@@ -58,7 +58,7 @@ public class AudioManager : MonoBehaviour
         {
             // General
             { "menuClick", menuButtonClick },
-            { "gameOver", gameOver },
+            { "gameOverPlatformer", gameOver },
 
             // Clicker / Cookie Game
             { "buttonMoney", buttonMoneyClick },
@@ -84,7 +84,9 @@ public class AudioManager : MonoBehaviour
         PlayerControler.onPlayerMove += HandlePlayerMove;
         PlayerControler.onPlayerClimb += HandlePlayerClimb;
         PlayerControler.onPlayerWalkDistance += PlayStepSound;
-
+        PlatformerManager.onMoneyZero += HandleMoneyZero;
+        PlayerControler.onPlayerSprintStart += HandleSprintStart;
+        PlayerControler.onPlayerTalkNPC += HandleTalkNPC;
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
@@ -96,6 +98,9 @@ public class AudioManager : MonoBehaviour
         PlayerControler.onPlayerMove -= HandlePlayerMove;
         PlayerControler.onPlayerClimb -= HandlePlayerClimb;
         PlayerControler.onPlayerWalkDistance -= PlayStepSound;
+        PlatformerManager.onMoneyZero -= HandleMoneyZero;
+        PlayerControler.onPlayerSprintStart -= HandleSprintStart;
+        PlayerControler.onPlayerTalkNPC -= HandleTalkNPC;
     }
 
     void Start()
@@ -181,6 +186,12 @@ public class AudioManager : MonoBehaviour
         //PlaySFX("walk");
     }
     private void HandlePlayerClimb() => PlaySFX("sprint");
+    private void HandleMoneyZero() => PlaySFX("gameOverPlatformer");
+    private void HandleSprintStart() => PlaySFX("sprint");
+    private void HandleTalkNPC(GameObject npc)
+    {
+        PlaySFX("npcInteract");
+    }
 }
 
 public enum SFX
