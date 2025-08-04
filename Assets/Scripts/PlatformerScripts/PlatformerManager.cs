@@ -30,7 +30,7 @@ public class PlatformerManager : MonoBehaviour
     [SerializeField] private GameObject interactText;
     [SerializeField] private GameObject requiredMoneyText;
     [SerializeField] private float moneyRequiredMove = 10;
-    [SerializeField] private float moneyRequiredSprint = 20;
+    [SerializeField] private float moneyRequiredSprint = 50;
     [SerializeField] private float moneyRequiredJump = 100;
     [SerializeField] private float moneyRequiredClimb = 1000;
     [SerializeField] private float moneyRequiredPickUp = 2000;

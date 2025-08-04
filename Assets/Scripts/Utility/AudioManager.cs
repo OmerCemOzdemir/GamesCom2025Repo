@@ -10,8 +10,11 @@ public class AudioManager : MonoBehaviour
     public AudioSource bgmSource;
     public AudioSource sfxSource;
 
-    [Header("Background Music")] // Change at every scene
-    public AudioClip backgroundMusic;
+    [Header("Background Music")]
+    public AudioClip mainMenuMusic;
+    public AudioClip clickerMusic;
+    public AudioClip mainHubMusic;
+    public AudioClip platformerMusic;
 
     [Header("Sound Effects - General")]
     public AudioClip menuButtonClick;
@@ -36,7 +39,7 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-        /* // Singleton
+        // Singleton
         if (Instance == null)
         {
             Instance = this;
@@ -46,7 +49,7 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
             return;
-        } */
+        }
 
         DontDestroyOnLoad(gameObject);
 
@@ -80,6 +83,10 @@ public class AudioManager : MonoBehaviour
         PlayerControler.onPlayerJump += HandlePlayerJump;
         PlayerControler.onPlayerMove += HandlePlayerMove;
         PlayerControler.onPlayerClimb += HandlePlayerClimb;
+        PlayerControler.onPlayerWalkDistance += PlayStepSound;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     private void OnDisable()
@@ -88,30 +95,79 @@ public class AudioManager : MonoBehaviour
         PlayerControler.onPlayerJump -= HandlePlayerJump;
         PlayerControler.onPlayerMove -= HandlePlayerMove;
         PlayerControler.onPlayerClimb -= HandlePlayerClimb;
+        PlayerControler.onPlayerWalkDistance -= PlayStepSound;
     }
 
     void Start()
     {
+        bgmSource.volume = PlayerPrefs.GetFloat("bgmVolume", 0.5f);
+        sfxSource.volume = PlayerPrefs.GetFloat("sfxVolume", 0.5f);
+
         PlayBGM();
     }
 
     public void PlayBGM()
     {
-        if (bgmSource && backgroundMusic)
-        {
-            bgmSource.clip = backgroundMusic;
-            bgmSource.loop = true;
-            bgmSource.Play();
-        }
+        if (bgmSource == null) return;
+
+        AudioClip bgmPlaying = null;
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        if (sceneIndex == 0)
+            bgmPlaying = mainMenuMusic;
+        else if (sceneIndex == 1)
+            bgmPlaying = clickerMusic;
+        else if (sceneIndex == 2)
+            bgmPlaying = mainHubMusic;
+        else if (sceneIndex >= 3 && sceneIndex <= 7)
+            bgmPlaying = platformerMusic;
+        else
+            bgmPlaying = mainHubMusic;
+
+        if (bgmSource.clip == bgmPlaying) return; // prevent replaying same track
+
+        bgmSource.clip = bgmPlaying;
+        bgmSource.loop = true;
+        bgmSource.Play();
     }
 
     public void PlaySFX(string key)
     {
         if (sfxClips.ContainsKey(key) && sfxClips[key] != null)
         {
+            //sfxSource.pitch = Random.Range(0.95f, 1.05f);
             sfxSource.PlayOneShot(sfxClips[key]);
         }
     }
+
+    private void PlayStepSound()
+    {
+        if (playerWalk != null)
+            sfxSource.PlayOneShot(playerWalk);
+    }
+
+    public void SetBGMVolume(float volume)
+    {
+        if (bgmSource != null)
+            bgmSource.volume = volume;
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        if (sfxSource != null)
+            sfxSource.volume = volume;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        PlayBGM();
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        bgmSource.Stop();
+    }
+
     /* public void ReloadScene()
     {
         Destroy(AudioManager.Instance.gameObject); // Destroy before reload
@@ -122,4 +178,17 @@ public class AudioManager : MonoBehaviour
     private void HandlePlayerJump() => PlaySFX("jump");
     private void HandlePlayerMove() => PlaySFX("walk");
     private void HandlePlayerClimb() => PlaySFX("sprint");
+}
+
+public enum SFX
+{
+    Active,
+    Idle,
+    Walk,
+    Jump,
+    Sprint,
+    Interact,
+    NpcInteract,
+    ItemPickUp,
+    Generic
 }

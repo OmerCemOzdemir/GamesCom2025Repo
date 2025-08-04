@@ -14,7 +14,8 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerClimb;
     public static event Action onPlayerSprintStart;
     public static event Action onPlayerSprintEnd;
-
+    public static event Action onPlayerWalkDistance;
+    public static event Action onPlayerSprintDistance;
     public static event Action<MoneySpent> onMoneySpent;
     public static event Action onPlayerPickUpItem;
 
@@ -43,7 +44,14 @@ public class PlayerControler : MonoBehaviour
     private float playerGravityActivationTime;
     private float playerDefaultGravityScale;
     private float playerMaxGravityMultiplier;
-
+    private Vector2 previousPosition;
+    [SerializeField] private float moneyDeductDistanceThreshold = 5f;
+    [SerializeField] private float walkSFXDistanceThreshold = 2.5f; // How often walk SFX is played, based on money deduct threshold
+    private float moveDistanceTravelled = 0f;
+    private float walkSFXDistanceTravelled = 0f;
+    private float sprintDistanceTravelled = 0f;
+    [SerializeField] private float moneyDeductDistanceThresholdSprint = 5f;
+    [SerializeField] private bool isSprinting = false;
 
     private float playerGravityActivationTimeTemp;
     //private float groundCheckRadius = 0.2f;
@@ -164,6 +172,8 @@ public class PlayerControler : MonoBehaviour
         playerAnimator.SetTrigger("Idle");
         SetupPlayerPosition();
         //currentLocalScale = transform.localScale;
+
+        previousPosition = transform.position;
     }
     private void Update()
     {
@@ -212,9 +222,10 @@ public class PlayerControler : MonoBehaviour
     //If the player climb ability is active then this functions moves player up and down.
     private void Move()
     {
+        Vector2 _horizontalMovement = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
+
         if (enableMove)
         {
-            Vector2 _horizontalMovement = playerInputAction.PlayerPlatform.Move.ReadValue<Vector2>();
             if (climb)
             {
                 playerRigid2D.gravityScale = 0;
@@ -225,7 +236,45 @@ public class PlayerControler : MonoBehaviour
                 playerRigid2D.linearVelocity = new Vector2(_horizontalMovement.x * playerSpeed, playerRigid2D.linearVelocity.y);
             }
         }
-    }
+
+        // Deduct wallet upon moving
+        if (!climb && isGround() && Mathf.Abs(_horizontalMovement.x) > 0.01f)
+        {
+            float playerInputMovedWalking = Mathf.Abs(transform.position.x - previousPosition.x);
+
+            // Distance for money deduction
+            if (isSprinting)
+            {
+                sprintDistanceTravelled += playerInputMovedWalking;
+                if (sprintDistanceTravelled >= moneyDeductDistanceThresholdSprint)
+                {
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentSprint);
+                    sprintDistanceTravelled = 0f;
+                }
+            }
+            else
+            {
+                moveDistanceTravelled += playerInputMovedWalking;
+                if (moveDistanceTravelled >= moneyDeductDistanceThreshold)
+                {
+                    onMoneySpent?.Invoke(MoneySpent.moneySpentMove);
+                    moveDistanceTravelled = 0f;
+                }
+            }
+
+            // Distance for SFX played
+            walkSFXDistanceTravelled += playerInputMovedWalking;
+            if (walkSFXDistanceTravelled >= walkSFXDistanceThreshold)
+            {
+                onPlayerWalkDistance?.Invoke();
+                walkSFXDistanceTravelled = 0f;
+            }
+
+        }
+
+        previousPosition = transform.position;
+        }
+
     //This Functions just sends a event trigger to PlatformManager to deduct money.
     private void PlayerMoved(InputAction.CallbackContext context)
     {
@@ -239,9 +288,10 @@ public class PlayerControler : MonoBehaviour
         if (enableSprint)
         {
             onPlayerSprintStart?.Invoke();
-            onMoneySpent?.Invoke(MoneySpent.moneySpentSprint);
+            ///onMoneySpent?.Invoke(MoneySpent.moneySpentSprint);
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
             Debug.Log("Sprint Started");
+            isSprinting = true;
             playerSpeed += playerSprintMultiplier;
         }
 
@@ -255,7 +305,9 @@ public class PlayerControler : MonoBehaviour
             onPlayerSprintEnd?.Invoke();
             Debug.Log("Sprint Stopped");
             //basePlayerSpeed = basePlayerSpeed * basePlayerSprintMultiplier;
+            isSprinting = false;
             playerSpeed -= playerSprintMultiplier;
+            onPlayerSprintEnd?.Invoke();
         }
     }
     #endregion
@@ -956,8 +1008,6 @@ public class PlayerControler : MonoBehaviour
 
     #endregion
 
-
-
 }
 
 public enum Interaction
@@ -988,7 +1038,6 @@ public enum PlayerMovement
     DefaultGravityScale,
     MaxGravityMultiplier
 }
-
 
 
 /*

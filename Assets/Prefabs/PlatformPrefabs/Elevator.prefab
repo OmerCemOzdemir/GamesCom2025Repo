@@ -5136,8 +5136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc456c266fcf9b24fa044cffa7895c34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elevatorCoolDown: 2
-  elevatorSpeed: 25
+  elevatorCoolDown: 0
+  elevatorSpeed: 10
   target: {fileID: 2173377297043748769}
   cooldownEffect: {fileID: 3811938330919597547}
   burstEffect: {fileID: 3926618757934685575}
