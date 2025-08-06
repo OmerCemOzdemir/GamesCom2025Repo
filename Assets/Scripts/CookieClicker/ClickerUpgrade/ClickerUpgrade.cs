@@ -12,11 +12,13 @@ public class ClickerUpgrade : MonoBehaviour
 
     [SerializeField] private GameObject upgradeItemPrefab;
     [SerializeField] private Transform parentContext;
+    
     private ClickerItemSaveData[] itemsData = new ClickerItemSaveData[0];
     //private UpgradeItem[] upgradeItems;
     private List<ClickerUpgradeItem> upgradeItems = new List<ClickerUpgradeItem>();
     private GameObject[] upgradeItemInstances;
     private int clickerIndex = 0;
+    //private int buttonPosY = -110;
 
     public int ClickerIndex { get => clickerIndex; set => clickerIndex = value; }
 
@@ -90,10 +92,17 @@ public class ClickerUpgrade : MonoBehaviour
                 upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
             }
 
-            upgradeItemInstances[i].transform.SetParent(parentContext);
+            upgradeItemInstances[i].transform.SetParent(parentContext, false);
+            //Debug.Log("buttonPosY: " + buttonPosY + "position; " + upgradeItemInstances[i].transform.localPosition);
+            //upgradeItemInstances[i].transform.localPosition += new Vector3(0, buttonPosY, 0);
+            //buttonPosY -= 100;
             upgradeItemInstances[i].GetComponent<RectTransform>().localScale = Vector3.one;
 
         }
+
+        float newRectHeight = (upgradeItemInstances[0].GetComponent<RectTransform>().rect.height * upgradeItemInstances.Length) + 50;
+        float newRectWidth = parentContext.gameObject.GetComponent<RectTransform>().rect.width;
+        parentContext.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(newRectWidth, newRectHeight);
 
 
         for (int j = 0; j < upgradeItemInstances.Length; j++)
