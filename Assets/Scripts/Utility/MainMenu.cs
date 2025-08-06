@@ -20,7 +20,7 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         onPlaySFX?.Invoke(SFX.Generic);
-        GameManager.Instance.NextLevel(1);
+        GameManager.Instance.NextLevel(7);
     }
 
     public void QuitGame()
