@@ -180,6 +180,7 @@ public class TaxiUI : MonoBehaviour
             levelButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = levelData[i].levelName;
             levelButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().gameObject.name = "" + i;
             levelButtons[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "" + (i + 1);
+
             levelButtons[i].onClick.AddListener(() =>
             {
                 UpdateTexts(baseTravelCostLevel * (levelIndex + 1));
@@ -202,6 +203,18 @@ public class TaxiUI : MonoBehaviour
 
             }
         }
+
+
+        levelButtons[levelData.Length - 1].transform.GetChild(2).gameObject.SetActive(false);
+        float newWidth = (
+            (levelButtons[0].GetComponent<RectTransform>().rect.width
+             + levelButtons[0].transform.GetChild(2).GetComponent<RectTransform>().rect.width)
+             * levelData.Length) - 450;
+        float newHeight = levelButtonParent.GetComponent<RectTransform>().rect.height;
+
+        levelButtonParent.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, newHeight);
+
+
     }
 
     public void FirstLevel()
@@ -240,7 +253,7 @@ public class TaxiUI : MonoBehaviour
     private void UpdateTexts(float money)
     {
         moneyRequired.text = "$" + money;
-        levelTitle.text = "LevelButton " + SceneManager.GetActiveScene().name;
+        //levelTitle.text = "LevelButton " + SceneManager.GetActiveScene().name;
     }
 
     private void printLevelData(LevelSaveData[] levelData)

@@ -18,6 +18,7 @@ TagManager:
   - ElevatorControl
   - NPC
   - ClickerManager
+  - Bus
   layers:
   - Default
   - TransparentFX

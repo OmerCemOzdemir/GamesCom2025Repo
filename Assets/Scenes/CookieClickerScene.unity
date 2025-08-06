@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 239181092}
   - component: {fileID: 239181091}
   m_Layer: 5
-  m_Name: Scroll View
+  m_Name: CScroll View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1772,8 +1772,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 301208732}
   m_HandleRect: {fileID: 301208731}
   m_Direction: 2
-  m_Value: 0.9999994
-  m_Size: 0.8599214
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7144,10 +7144,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1424867470}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000064303924}
-  m_SizeDelta: {x: 0, y: 763}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -326.91, y: 328.05994}
+  m_SizeDelta: {x: 653.91, y: 656.12}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1703692388
 MonoBehaviour:
@@ -7475,7 +7475,7 @@ GameObject:
   - component: {fileID: 1845232324}
   m_Layer: 0
   m_Name: ClickerManager
-  m_TagString: Untagged
+  m_TagString: ClickerManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
