@@ -3,20 +3,13 @@ using TMPro;
 using System.Collections;
 using UnityEngine.UI;
 
-public class TextCutscenePlayer : MonoBehaviour
+public class TextTransition : MonoBehaviour
 {
-    public enum TransitionType
-    {
-        None,
-        Typewriter,
-        Fade
-    }
-
     [System.Serializable]
     public class DialogueSettings
     {
         public TransitionType transition = TransitionType.Typewriter;
-        public float speed = 0.03f; // Typewriter letter delay or fade duration
+        public float duration = 1.5f; // Typewriter letter delay or fade duration
     }
 
     // Choose which transition per line
@@ -24,10 +17,11 @@ public class TextCutscenePlayer : MonoBehaviour
 
     // Auto start on play
     public bool autoStart = true;
-    
+
     private TextMeshProUGUI textComponent;
     private string[] dialogueLines;
     private Coroutine routine;
+    public System.Action OnCutsceneComplete;
 
     private void Awake()
     {
@@ -58,10 +52,10 @@ public class TextCutscenePlayer : MonoBehaviour
             switch (settings.transition)
             {
                 case TransitionType.Typewriter:
-                    yield return StartCoroutine(ShowTypewriter(line, settings.speed));
+                    yield return StartCoroutine(ShowTypewriter(line, settings.duration));
                     break;
                 case TransitionType.Fade:
-                    yield return StartCoroutine(ShowFade(line, settings.speed));
+                    yield return StartCoroutine(ShowFade(line, settings.duration));
                     break;
                 default:
                     textComponent.text = line;
@@ -69,6 +63,12 @@ public class TextCutscenePlayer : MonoBehaviour
             }
 
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Z));
+
+            textComponent.text = "";
+            if (i == Mathf.Min(dialogueLines.Length, lineSettings.Length) - 1)
+            {
+                OnCutsceneComplete?.Invoke();
+            }
         }
 
         textComponent.text = "";
@@ -77,10 +77,13 @@ public class TextCutscenePlayer : MonoBehaviour
     private IEnumerator ShowTypewriter(string line, float letterDelay)
     {
         textComponent.text = "";
-        foreach (char c in line)
+        int charCount = line.Length;
+        float interval = (charCount > 0) ? letterDelay / charCount : 0.01f;
+
+        for (int i = 0; i < charCount; i++)
         {
-            textComponent.text += c;
-            yield return new WaitForSeconds(letterDelay);
+            textComponent.text += line[i];
+            yield return new WaitForSeconds(interval);
         }
     }
 
@@ -98,5 +101,12 @@ public class TextCutscenePlayer : MonoBehaviour
         }
 
         textComponent.alpha = 1;
+    }
+    
+    public enum TransitionType
+    {
+        None,
+        Typewriter,
+        Fade
     }
 }
