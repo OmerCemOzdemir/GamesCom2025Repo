@@ -36,8 +36,9 @@ public class ClickerTutorialManager : MonoBehaviour
     [SerializeField] private GameObject upgradePanel;
     [SerializeField] private GameObject exitButton;
 
-    [Header("Tutorial Text Listeners")]
-    [SerializeField] private TextTransition welcomeTextTransition;
+    // Tutorial Text Listeners
+    private GameObject currentPopup;
+    private TextTransition currentTextTransition;
 
     private TextTransition activeTextTransition;
     private bool canProceedText = false;
@@ -45,7 +46,7 @@ public class ClickerTutorialManager : MonoBehaviour
     private void Start()
     {
         GoToStep(TutorialStep.WelcomeToTutorial);
-        welcomeTextTransition.OnCutsceneComplete += OnWelcomeFinished;
+        //welcomeTextTransition.OnCutsceneComplete += OnWelcomeFinished;
     }
     private void Update()
     {
@@ -70,57 +71,51 @@ public class ClickerTutorialManager : MonoBehaviour
     {
         DisableAllPopups();
         DisableAllButtons();
+        UnsubscribeFromPreviousText();
+
         currentStep = step;
+        currentPopup = GetPopupForStep(step);
 
-        switch (step)
+        if (currentPopup != null)
         {
-            case TutorialStep.WelcomeToTutorial:
-                welcomeToTutorial.SetActive(true);
-                canProceedText = true;
-                break;
+            currentPopup.SetActive(true);
+            currentTextTransition = currentPopup.GetComponentInChildren<TextTransition>();
 
-            case TutorialStep.ClickerButton1:
-                clickerButton.SetActive(true);
-                clickerButton1.SetActive(true);
-                canProceedText = true;
-                break;
-
-            case TutorialStep.MoneyTo100:
-                moneyTo100.SetActive(true);
-                break;
-
-            case TutorialStep.MoneyReached100:
-                moneyReached100.SetActive(true);
-                canProceedText = true;
-                break;
-
-            case TutorialStep.UpgradeButton:
-                upgradeButton.SetActive(true);
-                canProceedText = true;
-                break;
-
-            case TutorialStep.MoneyTo1000:
-                moneyTo1000.SetActive(true);
-                break;
-
-            case TutorialStep.MoneyReached1000:
-                moneyReached1000.SetActive(true);
-                canProceedText = true;
-                break;
-
-            case TutorialStep.EnterMainHub:
-                enterMainHub.SetActive(true);
-                canProceedText = true;
-                break;
-
-            case TutorialStep.Complete:
-                GameManager.Instance.GetGameData().clickerTutorialPlayed = true;
-                GameManager.Instance.SaveGame();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                break;
+            if (currentTextTransition != null)
+            {
+                currentTextTransition.OnCutsceneComplete += OnTextComplete;
+            }
         }
+
+        // Optional: Handle unlockable elements directly
+        if (step == TutorialStep.ClickerButton1)
+            clickerButton.SetActive(true);
+        else if (step == TutorialStep.UpgradeButton)
+            upgradePanel.SetActive(true);
+        else if (step == TutorialStep.EnterMainHub)
+            exitButton.SetActive(true);
+        }
+
+    private void OnTextComplete()
+    {
+        UnsubscribeFromPreviousText();
+
+        if (currentPopup != null)
+            currentPopup.SetActive(false);
+
+        // Only auto-proceed if this step has no prerequisite
+        if (!StepHasPrerequisite(currentStep))
+            GoToNextStep();
     }
 
+    private void UnsubscribeFromPreviousText()
+    {
+        if (currentTextTransition != null)
+            currentTextTransition.OnCutsceneComplete -= OnTextComplete;
+
+        currentTextTransition = null;
+    }
+    
     private bool CanAdvanceStep()
     {
         switch (currentStep)
@@ -142,6 +137,17 @@ public class ClickerTutorialManager : MonoBehaviour
             default:
                 return false;
         }
+    }
+    private bool StepHasPrerequisite(TutorialStep step)
+    {
+        return step switch
+        {
+            TutorialStep.ClickerButton1 => true,  // wait for $1
+            TutorialStep.MoneyTo100 => true,      // wait for $100
+            TutorialStep.UpgradeButton => true,   // wait for upgrade
+            TutorialStep.MoneyTo1000 => true,     // wait for $1000
+            _ => false
+        };
     }
 
     private void DisableAllPopups()
@@ -217,11 +223,20 @@ public class ClickerTutorialManager : MonoBehaviour
         }
     }
     
-    private void OnWelcomeFinished()
+    private GameObject GetPopupForStep(TutorialStep step)
     {
-        welcomeTextTransition.OnCutsceneComplete -= OnWelcomeFinished;
-        welcomeToTutorial.SetActive(false);
-        GoToStep(TutorialStep.ClickerButton1);
+        return step switch
+        {
+            TutorialStep.WelcomeToTutorial => welcomeToTutorial,
+            TutorialStep.ClickerButton1 => clickerButton1,
+            TutorialStep.MoneyTo100 => moneyTo100,
+            TutorialStep.MoneyReached100 => moneyReached100,
+            TutorialStep.UpgradeButton => upgradeButton,
+            TutorialStep.MoneyTo1000 => moneyTo1000,
+            TutorialStep.MoneyReached1000 => moneyReached1000,
+            TutorialStep.EnterMainHub => enterMainHub,
+            _ => null,
+        };
     }
 }
 
