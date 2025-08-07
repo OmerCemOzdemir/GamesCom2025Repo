@@ -45,6 +45,7 @@ public class ClickerTutorialManager : MonoBehaviour
 
     private void Start()
     {
+        DisableAllButtons();
         GoToStep(TutorialStep.WelcomeToTutorial);
         //welcomeTextTransition.OnCutsceneComplete += OnWelcomeFinished;
     }
@@ -70,7 +71,6 @@ public class ClickerTutorialManager : MonoBehaviour
     private void GoToStep(TutorialStep step)
     {
         DisableAllPopups();
-        DisableAllButtons();
         UnsubscribeFromPreviousText();
 
         currentStep = step;
