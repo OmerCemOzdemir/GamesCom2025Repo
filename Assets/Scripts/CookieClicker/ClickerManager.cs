@@ -29,6 +29,7 @@ public class ClickerManager : MonoBehaviour
     private float idleMoneyIncrement;
     private float idleMoneyMultiplier;
     private float idleTime;
+    private bool isMouseOverButton = false;
 
 
     [Tooltip("Increase this to longer the elevatorSpeed of idle money")]
@@ -113,7 +114,7 @@ public class ClickerManager : MonoBehaviour
 
     private void ActiveMoney()
     {
-        if (activeToggle && mouseEnable)
+        if (activeToggle && mouseEnable && isMouseOverButton)
         {
             StartCoroutine(ActiveClicker());
             clickTimer = 0;
@@ -140,7 +141,13 @@ public class ClickerManager : MonoBehaviour
         ActiveMoney();
     }
 
+    public void SetClickingEnabled(bool enabled)
+    {
+        mouseEnable = enabled;
 
+        if (effect != null && effect.TryGetComponent(out Animator anim))
+            anim.enabled = enabled;
+    }
 
 
     #endregion
@@ -256,9 +263,9 @@ public class ClickerManager : MonoBehaviour
         GameManager.Instance.NextLevel(index);
     }
 
-    private void CheckMousePos(bool checkMouseEnable)
+    private void CheckMousePos(bool isHover)
     {
-        mouseEnable = checkMouseEnable;
+        isMouseOverButton = isHover;
     }
 
 

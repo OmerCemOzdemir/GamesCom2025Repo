@@ -20,6 +20,7 @@ public class ClickerTutorialManager : MonoBehaviour
     }
 
     private TutorialStep currentStep;
+    private ClickerManager clickerManager;
 
     [Header("Popup GameObjects")]
     [SerializeField] private GameObject welcomeToTutorial;
@@ -32,11 +33,14 @@ public class ClickerTutorialManager : MonoBehaviour
     [SerializeField] private GameObject enterMainHub;
 
     [Header("Clicker Interactive Elements")]
-    [SerializeField] private GameObject clickerButton;
+    [SerializeField] private GameObject clickerButtonObj;
+    private CheckMousePos clickerMousePosScript;
+    private animationManager clickerButtonAnimation;
     [SerializeField] private Button upgradeButtonObj;
     [SerializeField] private GameObject exitButton;
 
     // Tutorial Text Listeners
+    
     private GameObject currentPopup;
     private TextTransition currentTextTransition;
 
@@ -45,8 +49,14 @@ public class ClickerTutorialManager : MonoBehaviour
 
     private void Start()
     {
+        clickerManager = FindObjectOfType<ClickerManager>();
+
         DisableAllButtons();
         upgradeButton.gameObject.SetActive(false);
+
+        clickerMousePosScript = clickerButtonObj.GetComponent<CheckMousePos>();
+        clickerButtonAnimation = clickerButtonObj.GetComponent<animationManager>();
+
         GoToStep(TutorialStep.WelcomeToTutorial);
         //welcomeTextTransition.OnCutsceneComplete += OnWelcomeFinished;
     }
@@ -86,18 +96,21 @@ public class ClickerTutorialManager : MonoBehaviour
             {
                 currentTextTransition.OnCutsceneComplete += OnTextComplete;
             }
+
+            SetClickerButtonInteractivity(false);
         }
 
         // Handle unlockable elements directly
         if (step == TutorialStep.ClickerButton1)
         {
-            clickerButton.SetActive(true);
+            clickerButtonObj.SetActive(true);
         }
-        /* else if (step == TutorialStep.UpgradeButton)
+        else if (step == TutorialStep.UpgradeButton)
         {
             upgradeButtonObj.gameObject.SetActive(true);
+            upgradeButtonObj.interactable = false;
             upgradeButtonObj.onClick.AddListener(OnUpgradeTutorialClicked);
-        } */
+        }
         else if (step == TutorialStep.EnterMainHub)
         {
             exitButton.SetActive(true);
@@ -114,9 +127,39 @@ public class ClickerTutorialManager : MonoBehaviour
         if (currentStep == TutorialStep.UpgradeButton)
         {
             upgradeButtonObj.gameObject.SetActive(true);
-            upgradeButtonObj.onClick.RemoveListener(OnUpgradeTutorialClicked); // prevent stacking
+            upgradeButtonObj.interactable = true;
+            upgradeButtonObj.onClick.RemoveListener(OnUpgradeTutorialClicked); // reset from previous popup
             upgradeButtonObj.onClick.AddListener(OnUpgradeTutorialClicked);
             return; // wait for button click
+        }
+
+        switch (currentStep)
+        {
+            case TutorialStep.ClickerButton1:
+                SetClickerButtonInteractivity(true);
+                if (enabled && clickerMousePosScript != null)
+                {
+                    clickerMousePosScript.ForceHover(true);
+                }
+                break;
+            case TutorialStep.MoneyTo100:
+                SetClickerButtonInteractivity(true);
+                if (enabled && clickerMousePosScript != null)
+                {
+                    clickerMousePosScript.ForceHover(true);
+                }
+                break;
+            case TutorialStep.MoneyReached100:
+            case TutorialStep.MoneyTo1000:
+                SetClickerButtonInteractivity(true);
+                if (enabled && clickerMousePosScript != null)
+                {
+                    clickerMousePosScript.ForceHover(true);
+                }
+                break;
+            default:
+                SetClickerButtonInteractivity(false);
+                break;
         }
 
         // Only auto-proceed if this step has no prerequisite
@@ -180,9 +223,24 @@ public class ClickerTutorialManager : MonoBehaviour
 
     private void DisableAllButtons()
     {
-        clickerButton.SetActive(false);
+        clickerButtonObj.SetActive(false);
         upgradeButton.gameObject.SetActive(false);
         exitButton.SetActive(false);
+    }
+
+    private void SetClickerButtonInteractivity(bool enabled)
+    {
+        if (clickerMousePosScript != null)
+            clickerMousePosScript.enabled = enabled;
+
+        if (clickerButtonAnimation != null && clickerButtonAnimation.TryGetComponent(out Animator animator))
+            animator.enabled = enabled;
+
+        if (clickerManager != null)
+            clickerManager.SetClickingEnabled(enabled);
+            
+        if (enabled && clickerMousePosScript != null)
+        clickerMousePosScript.ForceHover(true);
     }
 
     // === Triggers ===
@@ -201,12 +259,13 @@ public class ClickerTutorialManager : MonoBehaviour
         var clickerManager = FindObjectOfType<ClickerManager>();
         if (clickerManager != null)
         {
-            GameManager.Instance.GetGameData().clickerItems[0].tier = 1; // or whatever upgrade logic applies
+            GameManager.Instance.GetGameData().clickerItems[0].tier = 1;
             clickerManager.SetUpData();
             clickerManager.PrintFields(); // debug
         }
 
         upgradeButtonObj.onClick.RemoveListener(OnUpgradeTutorialClicked);
+        upgradeButtonObj.interactable = false;
 
         GoToStep(TutorialStep.MoneyTo1000);
     }
@@ -229,7 +288,7 @@ public class ClickerTutorialManager : MonoBehaviour
                 break;
 
             case TutorialStep.ClickerButton1:
-                clickerButton.SetActive(true);
+                clickerButtonObj.SetActive(true);
                 GoToStep(TutorialStep.MoneyTo100);
                 break;
 
@@ -237,10 +296,10 @@ public class ClickerTutorialManager : MonoBehaviour
                 GoToStep(TutorialStep.UpgradeButton);
                 break;
 
-            /* case TutorialStep.UpgradeButton:
-                upgradeButtonObj.gameObject.SetActive(true);
+            case TutorialStep.UpgradeButton:
+                //upgradeButtonObj.gameObject.SetActive(true);
                 GoToStep(TutorialStep.MoneyTo1000);
-                break; */
+                break;
 
             case TutorialStep.MoneyReached1000:
                 GoToStep(TutorialStep.EnterMainHub);

@@ -761,8 +761,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cutscenePlayer: {fileID: 41493297}
-  nextSceneName: CookieClickerScene
-  nextSceneIndex: 1
+  nextSceneName: ClickerTutorialScene
+  nextSceneIndex: 8
   transitionDelay: 0
 --- !u!4 &2004724328
 Transform:

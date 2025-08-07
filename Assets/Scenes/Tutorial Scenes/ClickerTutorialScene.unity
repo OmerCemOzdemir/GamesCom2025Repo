@@ -935,7 +935,7 @@ MonoBehaviour:
   moneyTo1000: {fileID: 2009332671}
   moneyReached1000: {fileID: 1570852280}
   enterMainHub: {fileID: 1839345815}
-  clickerButton: {fileID: 322353953}
+  clickerButtonObj: {fileID: 1006438425}
   upgradeButtonObj: {fileID: 1871370918}
   exitButton: {fileID: 1987773911}
 --- !u!4 &507756206

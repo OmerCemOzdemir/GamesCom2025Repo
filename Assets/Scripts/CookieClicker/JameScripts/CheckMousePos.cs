@@ -14,4 +14,10 @@ public class CheckMousePos : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         onMouseOver?.Invoke(false);
     }
+
+    public void ForceHover(bool hovering)
+    {
+        onMouseOver?.Invoke(hovering);
+    }
+    
 }
