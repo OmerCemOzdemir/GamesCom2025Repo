@@ -33,7 +33,7 @@ public class ClickerTutorialManager : MonoBehaviour
 
     [Header("Clicker Interactive Elements")]
     [SerializeField] private GameObject clickerButton;
-    [SerializeField] private GameObject upgradePanel;
+    [SerializeField] private Button upgradeButtonObj;
     [SerializeField] private GameObject exitButton;
 
     // Tutorial Text Listeners
@@ -46,6 +46,7 @@ public class ClickerTutorialManager : MonoBehaviour
     private void Start()
     {
         DisableAllButtons();
+        upgradeButton.gameObject.SetActive(false);
         GoToStep(TutorialStep.WelcomeToTutorial);
         //welcomeTextTransition.OnCutsceneComplete += OnWelcomeFinished;
     }
@@ -87,14 +88,21 @@ public class ClickerTutorialManager : MonoBehaviour
             }
         }
 
-        // Optional: Handle unlockable elements directly
+        // Handle unlockable elements directly
         if (step == TutorialStep.ClickerButton1)
+        {
             clickerButton.SetActive(true);
-        else if (step == TutorialStep.UpgradeButton)
-            upgradePanel.SetActive(true);
+        }
+        /* else if (step == TutorialStep.UpgradeButton)
+        {
+            upgradeButtonObj.gameObject.SetActive(true);
+            upgradeButtonObj.onClick.AddListener(OnUpgradeTutorialClicked);
+        } */
         else if (step == TutorialStep.EnterMainHub)
+        {
             exitButton.SetActive(true);
         }
+    }
 
     private void OnTextComplete()
     {
@@ -102,6 +110,14 @@ public class ClickerTutorialManager : MonoBehaviour
 
         if (currentPopup != null)
             currentPopup.SetActive(false);
+
+        if (currentStep == TutorialStep.UpgradeButton)
+        {
+            upgradeButtonObj.gameObject.SetActive(true);
+            upgradeButtonObj.onClick.RemoveListener(OnUpgradeTutorialClicked); // prevent stacking
+            upgradeButtonObj.onClick.AddListener(OnUpgradeTutorialClicked);
+            return; // wait for button click
+        }
 
         // Only auto-proceed if this step has no prerequisite
         if (!StepHasPrerequisite(currentStep))
@@ -165,7 +181,7 @@ public class ClickerTutorialManager : MonoBehaviour
     private void DisableAllButtons()
     {
         clickerButton.SetActive(false);
-        upgradePanel.SetActive(false);
+        upgradeButton.gameObject.SetActive(false);
         exitButton.SetActive(false);
     }
 
@@ -179,6 +195,20 @@ public class ClickerTutorialManager : MonoBehaviour
         {
             GoToStep(TutorialStep.MoneyTo1000);
         }
+    }
+    private void OnUpgradeTutorialClicked()
+    {
+        var clickerManager = FindObjectOfType<ClickerManager>();
+        if (clickerManager != null)
+        {
+            GameManager.Instance.GetGameData().clickerItems[0].tier = 1; // or whatever upgrade logic applies
+            clickerManager.SetUpData();
+            clickerManager.PrintFields(); // debug
+        }
+
+        upgradeButtonObj.onClick.RemoveListener(OnUpgradeTutorialClicked);
+
+        GoToStep(TutorialStep.MoneyTo1000);
     }
 
     public void OnExitClicked()
@@ -207,10 +237,10 @@ public class ClickerTutorialManager : MonoBehaviour
                 GoToStep(TutorialStep.UpgradeButton);
                 break;
 
-            case TutorialStep.UpgradeButton:
-                upgradePanel.SetActive(true); // or newUpgradeButton.SetActive(true);
+            /* case TutorialStep.UpgradeButton:
+                upgradeButtonObj.gameObject.SetActive(true);
                 GoToStep(TutorialStep.MoneyTo1000);
-                break;
+                break; */
 
             case TutorialStep.MoneyReached1000:
                 GoToStep(TutorialStep.EnterMainHub);

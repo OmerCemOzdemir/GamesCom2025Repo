@@ -346,7 +346,7 @@ public class ClickerManager : MonoBehaviour
 
     }
 
-    private void SetUpData()
+    public void SetUpData()
     {
         GameManager.Instance.GetGameData();
 
