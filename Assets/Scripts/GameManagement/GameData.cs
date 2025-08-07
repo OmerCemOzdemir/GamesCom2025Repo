@@ -5,6 +5,9 @@ public class GameData
     public bool clickerNewGame = true;
     public bool platformNewGame = true;
     public bool levelNewGame = true;
+    public bool IntroCutscenePlayed = false;
+    public bool clickerTutorialPlayed = false;
+    public bool PlatformerTutorialPlayed = false;
     public double totalMoney;
     public double maxTotalMoney;
     public int walletLevel = 0;

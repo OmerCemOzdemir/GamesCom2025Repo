@@ -763,7 +763,7 @@ MonoBehaviour:
   cutscenePlayer: {fileID: 41493297}
   nextSceneName: CookieClickerScene
   nextSceneIndex: 1
-  transitionDelay: 0.5
+  transitionDelay: 0
 --- !u!4 &2004724328
 Transform:
   m_ObjectHideFlags: 0
