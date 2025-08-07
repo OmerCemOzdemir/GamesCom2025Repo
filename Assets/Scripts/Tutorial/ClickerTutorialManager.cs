@@ -97,6 +97,7 @@ public class ClickerTutorialManager : MonoBehaviour
                 currentTextTransition.OnCutsceneComplete += OnTextComplete;
             }
 
+            // disable clicker button when tutorial popup is active
             SetClickerButtonInteractivity(false);
         }
 
@@ -136,26 +137,12 @@ public class ClickerTutorialManager : MonoBehaviour
         switch (currentStep)
         {
             case TutorialStep.ClickerButton1:
-                SetClickerButtonInteractivity(true);
-                if (enabled && clickerMousePosScript != null)
-                {
-                    clickerMousePosScript.ForceHover(true);
-                }
-                break;
             case TutorialStep.MoneyTo100:
                 SetClickerButtonInteractivity(true);
-                if (enabled && clickerMousePosScript != null)
-                {
-                    clickerMousePosScript.ForceHover(true);
-                }
                 break;
             case TutorialStep.MoneyReached100:
             case TutorialStep.MoneyTo1000:
                 SetClickerButtonInteractivity(true);
-                if (enabled && clickerMousePosScript != null)
-                {
-                    clickerMousePosScript.ForceHover(true);
-                }
                 break;
             default:
                 SetClickerButtonInteractivity(false);
@@ -239,8 +226,14 @@ public class ClickerTutorialManager : MonoBehaviour
         if (clickerManager != null)
             clickerManager.SetClickingEnabled(enabled);
             
-        if (enabled && clickerMousePosScript != null)
-        clickerMousePosScript.ForceHover(true);
+        if (enabled && clickerMousePosScript != null && currentPopup == null)
+        {
+            clickerMousePosScript.ForceHover(true);
+        }
+        else if (!enabled && clickerMousePosScript != null)
+        {
+            clickerMousePosScript.ForceHover(false);
+        }
     }
 
     // === Triggers ===
