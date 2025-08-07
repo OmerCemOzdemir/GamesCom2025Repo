@@ -31,31 +31,58 @@ public class ClickerTutorialManager : MonoBehaviour
     [SerializeField] private GameObject moneyReached1000;
     [SerializeField] private GameObject enterMainHub;
 
-    [Header("Interactable Elements")]
+    [Header("Clicker Interactive Elements")]
     [SerializeField] private GameObject clickerButton;
     [SerializeField] private GameObject upgradePanel;
     [SerializeField] private GameObject exitButton;
 
+    [Header("Tutorial Text Listeners")]
+    [SerializeField] private TextTransition welcomeTextTransition;
+
+    private TextTransition activeTextTransition;
+    private bool canProceedText = false;
+
     private void Start()
     {
         GoToStep(TutorialStep.WelcomeToTutorial);
+        welcomeTextTransition.OnCutsceneComplete += OnWelcomeFinished;
+    }
+    private void Update()
+    {
+        double money = GameManager.Instance.GetGameData().totalMoney;
+
+        if (Input.GetKeyDown(KeyCode.Z) && CanAdvanceStep())
+        {
+            GoToNextStep();
+        }
+
+        if (currentStep == TutorialStep.ClickerButton1 && money >= 1)
+            GoToStep(TutorialStep.MoneyTo100);
+
+        if (currentStep == TutorialStep.MoneyTo100 && money >= 100)
+            GoToStep(TutorialStep.MoneyReached100);
+
+        if (currentStep == TutorialStep.MoneyTo1000 && money >= 1000)
+            GoToStep(TutorialStep.MoneyReached1000);
     }
 
     private void GoToStep(TutorialStep step)
     {
         DisableAllPopups();
+        DisableAllButtons();
         currentStep = step;
 
         switch (step)
         {
             case TutorialStep.WelcomeToTutorial:
                 welcomeToTutorial.SetActive(true);
-                DisableAllButtons();
+                canProceedText = true;
                 break;
 
             case TutorialStep.ClickerButton1:
-                clickerButton1.SetActive(true);
                 clickerButton.SetActive(true);
+                clickerButton1.SetActive(true);
+                canProceedText = true;
                 break;
 
             case TutorialStep.MoneyTo100:
@@ -64,34 +91,56 @@ public class ClickerTutorialManager : MonoBehaviour
 
             case TutorialStep.MoneyReached100:
                 moneyReached100.SetActive(true);
-                clickerButton.SetActive(false);
+                canProceedText = true;
                 break;
 
             case TutorialStep.UpgradeButton:
                 upgradeButton.SetActive(true);
-                upgradePanel.SetActive(true);
+                canProceedText = true;
                 break;
 
             case TutorialStep.MoneyTo1000:
                 moneyTo1000.SetActive(true);
-                clickerButton.SetActive(true);
                 break;
 
             case TutorialStep.MoneyReached1000:
                 moneyReached1000.SetActive(true);
-                clickerButton.SetActive(false);
+                canProceedText = true;
                 break;
 
             case TutorialStep.EnterMainHub:
                 enterMainHub.SetActive(true);
-                exitButton.SetActive(true);
+                canProceedText = true;
                 break;
 
             case TutorialStep.Complete:
                 GameManager.Instance.GetGameData().clickerTutorialPlayed = true;
                 GameManager.Instance.SaveGame();
-                GameManager.Instance.NextLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 break;
+        }
+    }
+
+    private bool CanAdvanceStep()
+    {
+        switch (currentStep)
+        {
+            case TutorialStep.WelcomeToTutorial:
+            case TutorialStep.ClickerButton1:
+                return false;
+            case TutorialStep.MoneyTo100:
+                return false;
+            case TutorialStep.MoneyReached100:
+            case TutorialStep.UpgradeButton:
+                return false;
+            case TutorialStep.MoneyTo1000:
+                return false;
+            case TutorialStep.MoneyReached1000:
+            case TutorialStep.EnterMainHub:
+                return canProceedText;
+
+            default:
+                return false;
         }
     }
 
@@ -115,27 +164,15 @@ public class ClickerTutorialManager : MonoBehaviour
     }
 
     // === Triggers ===
-    public void OnPopupNext_Welcome()
-    {
-        GoToStep(TutorialStep.ClickerButton1);
-    }
-
-    public void OnReached100Money()
-    {
-        if (currentStep == TutorialStep.MoneyTo100)
-            GoToStep(TutorialStep.MoneyReached100);
-    }
-
     public void OnUpgradeBought()
     {
-        if (currentStep == TutorialStep.UpgradeButton)
-            GoToStep(TutorialStep.MoneyTo1000);
-    }
-
-    public void OnReached1000Money()
-    {
         if (currentStep == TutorialStep.MoneyTo1000)
-            GoToStep(TutorialStep.MoneyReached1000);
+            return;
+
+        if (currentStep == TutorialStep.UpgradeButton)
+        {
+            GoToStep(TutorialStep.MoneyTo1000);
+        }
     }
 
     public void OnExitClicked()
@@ -144,18 +181,47 @@ public class ClickerTutorialManager : MonoBehaviour
             GoToStep(TutorialStep.Complete);
     }
 
-    private void Update()
+    private void GoToNextStep()
     {
-        double money = GameManager.Instance.GetGameData().totalMoney;
+        DisableAllPopups();
+        canProceedText = false;
 
-        if (currentStep == TutorialStep.ClickerButton1 && money >= 1)
-            GoToStep(TutorialStep.MoneyTo100);
+        switch (currentStep)
+        {
+            case TutorialStep.WelcomeToTutorial:
+                GoToStep(TutorialStep.ClickerButton1);
+                break;
 
-        if (currentStep == TutorialStep.MoneyTo100 && money >= 100)
-            OnReached100Money();
+            case TutorialStep.ClickerButton1:
+                clickerButton.SetActive(true);
+                GoToStep(TutorialStep.MoneyTo100);
+                break;
 
-        if (currentStep == TutorialStep.MoneyTo1000 && money >= 1000)
-            OnReached1000Money();
+            case TutorialStep.MoneyReached100:
+                GoToStep(TutorialStep.UpgradeButton);
+                break;
+
+            case TutorialStep.UpgradeButton:
+                upgradePanel.SetActive(true); // or newUpgradeButton.SetActive(true);
+                GoToStep(TutorialStep.MoneyTo1000);
+                break;
+
+            case TutorialStep.MoneyReached1000:
+                GoToStep(TutorialStep.EnterMainHub);
+                break;
+
+            case TutorialStep.EnterMainHub:
+                exitButton.SetActive(true);
+                GoToStep(TutorialStep.Complete);
+                break;
+        }
+    }
+    
+    private void OnWelcomeFinished()
+    {
+        welcomeTextTransition.OnCutsceneComplete -= OnWelcomeFinished;
+        welcomeToTutorial.SetActive(false);
+        GoToStep(TutorialStep.ClickerButton1);
     }
 }
 
