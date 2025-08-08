@@ -15,9 +15,9 @@ public class PlayerControler : MonoBehaviour
     public static event Action onPlayerSprintStart;
     public static event Action onPlayerSprintEnd;
     public static event Action onPlayerWalkDistance;
-    public static event Action onPlayerSprintDistance;
+    //public static event Action onPlayerSprintDistance;
     public static event Action<MoneySpent> onMoneySpent;
-    public static event Action onPlayerPickUpItem;
+    //public static event Action onPlayerPickUpItem;
 
     public static event Action onPlayerOpenShop;
     public static event Action onPlayerGetInTaxi;
@@ -26,8 +26,6 @@ public class PlayerControler : MonoBehaviour
 
     public static event Action<string> onPlayerDebug;
 
-    public static event Action<SFX> onPlaySFX;
-    public static event Action<Music> onPlayMusic;
 
     [SerializeField] private float basePlayerSpeed = 5; // default value is 5
     [SerializeField] private float basePlayerSprintMultiplier = 1.5f; // default value is 1.5f
@@ -68,7 +66,7 @@ public class PlayerControler : MonoBehaviour
     private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
 
     private Vector2 flipSpriteVector;
-    private float flipTimer = 5;
+    //private float flipTimer = 5;
     //private Vector3 currentLocalScale;
 
     private GameObject currentInteractedGameObject;
@@ -130,7 +128,7 @@ public class PlayerControler : MonoBehaviour
 
         PlatformerManager.onGameObjectInteract += SetUpGameObjectInteraction;
         Door.onDoorTravel += TeleportPlayer;
-        TaxiUI.onPlayerTravel += TeleportPlayer;
+        //TaxiUI.onPlayerTravel += TeleportPlayer;
     }
 
     private void OnDisable()
@@ -164,7 +162,7 @@ public class PlayerControler : MonoBehaviour
         PlatformerUI.onNPCdone -= ToggleInteraction;    
         PlatformerManager.onGameObjectInteract -= SetUpGameObjectInteraction;
         Door.onDoorTravel -= TeleportPlayer;
-        TaxiUI.onPlayerTravel -= TeleportPlayer;
+        //TaxiUI.onPlayerTravel -= TeleportPlayer;
 
     }
 
@@ -495,7 +493,6 @@ public class PlayerControler : MonoBehaviour
             if (currentInteractedGameObject.GetComponent<TempPlaformItem>().Item.name == currentItemData[i].ID)
             {
                 GameManager.Instance.GetGameData().clickerItems[i].unlock = true;
-                onPlaySFX?.Invoke(SFX.ItemPickUp);
                 Debug.Log("Get Item " + GameManager.Instance.GetGameData().clickerItems[i].unlock);
 
             }

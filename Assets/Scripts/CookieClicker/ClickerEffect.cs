@@ -32,7 +32,7 @@ public class ClickerEffect : MonoBehaviour
 
     public void StopEffect()
     {
-        clickerEffect.Stop();
+        clickerEffect.Pause();
 
     }
 

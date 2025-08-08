@@ -1,7 +1,8 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using TMPro;
 using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ClickerTutorialManager : MonoBehaviour
@@ -31,6 +32,7 @@ public class ClickerTutorialManager : MonoBehaviour
     [SerializeField] private GameObject moneyTo1000;
     [SerializeField] private GameObject moneyReached1000;
     [SerializeField] private GameObject enterMainHub;
+    [Space(10)]
 
     [Header("Clicker Interactive Elements")]
     [SerializeField] private GameObject clickerButtonObj;
@@ -38,18 +40,46 @@ public class ClickerTutorialManager : MonoBehaviour
     private animationManager clickerButtonAnimation;
     [SerializeField] private Button upgradeButtonObj;
     [SerializeField] private GameObject exitButton;
+    [Space(10)]
+
+    [Header("Tutorial Effects")]
+    [SerializeField] private ParticleSystem tutorialConfetiEffect;
+
 
     // Tutorial Text Listeners
-    
+
     private GameObject currentPopup;
     private TextTransition currentTextTransition;
+    private InputSystem playerInputAction;
+
 
     private TextTransition activeTextTransition;
     private bool canProceedText = false;
 
+
+    private void Awake()
+    {
+        playerInputAction = new InputSystem();
+
+    }
+
+    private void OnEnable()
+    {
+        playerInputAction.PlayerCookie.Enable();
+        playerInputAction.PlayerCookie.IterateTutorial.performed += IterateTutorial;
+    }
+
+    private void OnDisable()
+    {
+        playerInputAction.PlayerCookie.Disable();
+        playerInputAction.PlayerCookie.IterateTutorial.performed -= IterateTutorial;
+
+    }
+
     private void Start()
     {
         clickerManager = FindObjectOfType<ClickerManager>();
+
 
         DisableAllButtons();
         upgradeButton.gameObject.SetActive(false);
@@ -60,6 +90,7 @@ public class ClickerTutorialManager : MonoBehaviour
         GoToStep(TutorialStep.WelcomeToTutorial);
         //welcomeTextTransition.OnCutsceneComplete += OnWelcomeFinished;
     }
+
     private void Update()
     {
         double money = GameManager.Instance.GetGameData().totalMoney;
@@ -73,10 +104,23 @@ public class ClickerTutorialManager : MonoBehaviour
             GoToStep(TutorialStep.MoneyTo100);
 
         if (currentStep == TutorialStep.MoneyTo100 && money >= 100)
+        {
+            tutorialConfetiEffect.Play();
             GoToStep(TutorialStep.MoneyReached100);
+        }
+
 
         if (currentStep == TutorialStep.MoneyTo1000 && money >= 1000)
+        {
+            tutorialConfetiEffect.Play();
             GoToStep(TutorialStep.MoneyReached1000);
+        }
+    }
+
+    //Get user input to iterate to the next step of the Tutorial, Used for GoToStep Func
+    private void IterateTutorial(InputAction.CallbackContext context)
+    {
+
     }
 
     private void GoToStep(TutorialStep step)
@@ -161,7 +205,7 @@ public class ClickerTutorialManager : MonoBehaviour
 
         currentTextTransition = null;
     }
-    
+
     private bool CanAdvanceStep()
     {
         switch (currentStep)
@@ -225,7 +269,7 @@ public class ClickerTutorialManager : MonoBehaviour
 
         if (clickerManager != null)
             clickerManager.SetClickingEnabled(enabled);
-            
+
         if (enabled && clickerMousePosScript != null && currentPopup == null)
         {
             clickerMousePosScript.ForceHover(true);
@@ -249,6 +293,7 @@ public class ClickerTutorialManager : MonoBehaviour
     }
     private void OnUpgradeTutorialClicked()
     {
+        
         var clickerManager = FindObjectOfType<ClickerManager>();
         if (clickerManager != null)
         {
@@ -308,7 +353,7 @@ public class ClickerTutorialManager : MonoBehaviour
                 break;
         }
     }
-    
+
     private GameObject GetPopupForStep(TutorialStep step)
     {
         return step switch

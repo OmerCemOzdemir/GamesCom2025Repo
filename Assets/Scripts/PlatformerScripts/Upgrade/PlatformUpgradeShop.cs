@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class PlatformUpgradeShop : MonoBehaviour
 {
-    public static event Action<bool[]> onItemExchange;
+    //public static event Action<bool[]> onItemExchange;
     public static event Action onNewGame;
 
     [SerializeField] private GameObject upgradeShopUI;

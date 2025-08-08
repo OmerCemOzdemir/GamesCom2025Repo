@@ -681,6 +681,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "IterateTutorial",
+                    "type": "Button",
+                    "id": "4dc7782e-522c-40b1-8190-578651754b91",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -692,6 +701,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "GetMoney",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cce59d95-d3f4-4c72-aedf-7d4da6ca1ae3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "IterateTutorial",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c215c5b-e0bb-4887-9b56-fc174d4e07b8",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "IterateTutorial",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

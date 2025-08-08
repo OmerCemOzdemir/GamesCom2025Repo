@@ -2,6 +2,7 @@
 public class GameData
 {
     //Data For Multi-Scene;
+    public bool startNewGame = true;
     public bool clickerNewGame = true;
     public bool platformNewGame = true;
     public bool levelNewGame = true;

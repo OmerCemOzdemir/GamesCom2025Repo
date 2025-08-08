@@ -4,6 +4,7 @@ using UnityEngine;
 public class ClickerUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI currentMoney;
+    
 
     private void OnEnable()
     {
@@ -16,6 +17,11 @@ public class ClickerUI : MonoBehaviour
         ClickerManager.onActiveClick -= UpdateText;
         ClickerManager.onIdleClick -= UpdateText;
 
+    }
+
+    public void SetUpFirst()
+    {
+        UpdateText();
     }
 
     private void UpdateText()

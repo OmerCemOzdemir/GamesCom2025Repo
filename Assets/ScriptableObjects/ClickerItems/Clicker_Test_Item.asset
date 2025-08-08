@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: test item
   itemDescription: Increase money per click
-  itemIcon: {fileID: 5600935968268953345, guid: a9c7f2b57fec6de47a7b7fef69678fab, type: 3}
+  itemIcon: {fileID: 0}
   itemUnlocked: 1
   maxTier: 5
   itemEffector: 0

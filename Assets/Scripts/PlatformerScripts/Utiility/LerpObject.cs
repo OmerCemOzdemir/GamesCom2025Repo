@@ -11,7 +11,7 @@ public class LerpObject : MonoBehaviour
     private Vector3 startVector;
     private Vector3 newStartVector;
     private Vector3 newEndVector;
-    public static event Action onlerpOpDone;  //Triggered when the lerp operation is done
+    //public static event Action onlerpOpDone;  //Triggered when the lerp operation is done
     public static event Action onlerpOpStart;  //Triggered when the lerp operation is done
     private bool toggleElevator = true;
     private Elevator elevator;
