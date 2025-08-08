@@ -9,7 +9,7 @@ public class CheckpointManager : MonoBehaviour
 {
     [SerializeField] private GameObject checkpointPrefab;
     private Vector3[] checkpointPositions;
-    public static event Action<Vector3[]> onCheckpointLoad;
+    //public static event Action<Vector3[]> onCheckpointLoad;
     private List<string> levelPaths = new List<string>();
     private string[] levelName;
 

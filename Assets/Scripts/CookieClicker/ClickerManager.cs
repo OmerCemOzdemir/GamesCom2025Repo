@@ -5,6 +5,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class ClickerManager : MonoBehaviour
 {
@@ -55,6 +56,7 @@ public class ClickerManager : MonoBehaviour
         ClickerUpgrade.onItemExchange += ImplementUpgrades;
 
     }
+
     private void OnDisable()
     {
         inputSystem.PlayerCookie.GetMoney.Disable();
@@ -70,8 +72,7 @@ public class ClickerManager : MonoBehaviour
         SetUpData();
         effect = transform.GetChild(0).gameObject.GetComponent<ClickerEffect>();
         inputSystem = new InputSystem();
-        effect.StartEffect();
-        effect.IncreaseClickEffect(0);
+
     }
 
     private void FixedUpdate()
@@ -92,6 +93,7 @@ public class ClickerManager : MonoBehaviour
         if (idleToggle)
         {
             StartCoroutine(IdleClicker());
+            effect.StartEffect();
             effect.IncreaseClickEffect(2);
             idleToggle = false;
         }
@@ -106,13 +108,13 @@ public class ClickerManager : MonoBehaviour
 
     IEnumerator IdleClicker()
     {
-        yield return new WaitForSeconds(idleTime);
         onIdleClick?.Invoke();
+        yield return new WaitForSeconds(idleTime);
         onPlaySFX?.Invoke(SFX.Idle);
         idleToggle = true;
     }
 
-    private void ActiveMoney()
+    public void ActiveMoney()
     {
         if (activeToggle && mouseEnable && isMouseOverButton)
         {
@@ -124,8 +126,9 @@ public class ClickerManager : MonoBehaviour
 
     IEnumerator ActiveClicker()
     {
-        yield return new WaitForSeconds(baseActiveTime);
         onActiveClick?.Invoke();
+        Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
+        yield return new WaitForSeconds(baseActiveTime);
         onPlaySFX?.Invoke(SFX.Active);
         effect.IncreaseClickEffect(10);
         activeToggle = true;
@@ -138,6 +141,7 @@ public class ClickerManager : MonoBehaviour
 
     public void OnButtonClick(InputAction.CallbackContext context)
     {
+        Debug.Log("Mouse Enable: " + mouseEnable);
         ActiveMoney();
     }
 
@@ -171,7 +175,7 @@ public class ClickerManager : MonoBehaviour
             money = (float)Math.Round(money);
             GameManager.Instance.GetGameData().totalMoney = money;
         }
-
+        FindAnyObjectByType<ClickerUI>().SetUpFirst();
         //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
     }
 
@@ -371,7 +375,8 @@ public class ClickerManager : MonoBehaviour
             maxTotalMoney *= 10;
         }
         GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
-        onActiveClick?.Invoke();
+        //onActiveClick?.Invoke();
+        FindAnyObjectByType<ClickerUI>().SetUpFirst();
 
         PlatformItemSaveData[] platformItemData = GameManager.Instance.GetGameData().platformItems;
         for (int i = 0; i < platformItemData.Length; i++)

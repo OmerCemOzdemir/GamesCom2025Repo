@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class TaxiUI : MonoBehaviour
 {
-    public static event Action<Vector3, float> onPlayerTravel;
+    //public static event Action<Vector3, float> onPlayerTravel;
 
     [Header("Gameobject Setup: ")]
     [SerializeField] private Transform checkpointButtonParent;

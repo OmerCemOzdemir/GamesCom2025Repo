@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: test item 2
   itemDescription: add idle money
+  itemIcon: {fileID: 0}
   itemUnlocked: 1
   maxTier: 3
-  itemIcon: {fileID: -3950103776136749925, guid: e686ecee89cc2a14087b2c69ee21d41a, type: 3}
   itemEffector: 2
   itemOperationOnItemEffector: 2
   itemTiers:
