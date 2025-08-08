@@ -72,7 +72,8 @@ public class ClickerManager : MonoBehaviour
         SetUpData();
         effect = transform.GetChild(0).gameObject.GetComponent<ClickerEffect>();
         inputSystem = new InputSystem();
-
+        effect.StartEffect();
+        effect.IncreaseClickEffect(0);
     }
 
     private void FixedUpdate()

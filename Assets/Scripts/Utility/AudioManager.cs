@@ -124,8 +124,12 @@ public class AudioManager : MonoBehaviour
             bgmPlaying = clickerMusic;
         else if (sceneIndex == 2)
             bgmPlaying = mainHubMusic;
-        else if (sceneIndex >= 3 && sceneIndex <= 7)
+        else if (sceneIndex >= 3 && sceneIndex <= 6)
             bgmPlaying = platformerMusic;
+        else if (sceneIndex == 7) // Intro cutscene
+            bgmPlaying = mainHubMusic;
+        else if (sceneIndex == 8) // Clicker Tutorial
+            bgmPlaying = clickerMusic;
         else
             bgmPlaying = mainHubMusic;
 
