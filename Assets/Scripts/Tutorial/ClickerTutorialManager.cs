@@ -301,6 +301,10 @@ public class ClickerTutorialManager : MonoBehaviour
             case TutorialStep.EnterMainHub:
                 exitButton.SetActive(true);
                 GoToStep(TutorialStep.Complete);
+                if (clickerManager != null)
+                {
+                    clickerManager.SetClickingEnabled(true);
+                }
                 break;
         }
     }

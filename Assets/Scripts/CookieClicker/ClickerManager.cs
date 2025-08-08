@@ -72,6 +72,7 @@ public class ClickerManager : MonoBehaviour
         inputSystem = new InputSystem();
         effect.StartEffect();
         effect.IncreaseClickEffect(0);
+        SetClickingEnabled(true);
     }
 
     private void FixedUpdate()
