@@ -28,12 +28,13 @@ public class ClickerManager : MonoBehaviour
     [SerializeField] private float baseActiveTime = 1;
     [Space(10)]
 
-    [Header("Animation")]
+    [Header("Animation and Effect")]
     [SerializeField] private Animator backgroundAnimator;
     [SerializeField] private AnimationClip backgroundAnimClipSpeed0;
     [SerializeField] private AnimationClip backgroundAnimClipSpeed1;
     [SerializeField] private AnimationClip backgroundAnimClipSpeed2;
     [SerializeField] private float speedInterval = 1;
+    [SerializeField] private ClickerEffects effects;
     private int clickSpeed = 1000; //Bigger the number slower the speed
 
     private float activeMoneyIncrement;
@@ -78,6 +79,7 @@ public class ClickerManager : MonoBehaviour
         onIdleClick -= IncreaseIdleMoney;
         ClickerUpgrade.onItemExchange -= ImplementUpgrades;
     }
+
     private void Awake()
     {
         InitilizeScriptableObjects();
@@ -108,18 +110,19 @@ public class ClickerManager : MonoBehaviour
 
     private void HandleAnimSpeed()
     {
-        currentFrame = Time.frameCount;
-        clickSpeed = (currentFrame - previousFrame);
-        clickAnimTimer += 1;
-        if (clickAnimTimer > 100)
+        clickAnimTimer += 3*Time.deltaTime;
+        //Debug.Log("clickAnimTimer: " + clickAnimTimer);
+        if (clickAnimTimer > 10)
         {
-
+            currentFrame = Time.frameCount;
+            clickSpeed = (currentFrame - previousFrame);
             clickSpeed = 1000;
             clickAnimTimer = 0;
         }
 
         if (animToggle)
         {
+            //Debug.Log("Click Speed: " + clickSpeed);
             StartAnimation(clickSpeed);
             //StartCoroutine(TestRoutine(10));
 
@@ -141,9 +144,9 @@ public class ClickerManager : MonoBehaviour
     private void StartAnimation(int speed)
     {
         //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + speed);
-        if (speed <= 200)
+        if (speed <= 100)
         {
-            //Debug.Log("Current Click Speed: " + clickSpeed + "ClickerAnimSpeed_2");
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_2");
 
             //SetAnim_1
             backgroundAnimator.SetTrigger("SetAnim_2");
@@ -153,9 +156,9 @@ public class ClickerManager : MonoBehaviour
             }));
             //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep2.length));
         }
-        else if (201 < speed && speed <= 800)
+        else if (101 < speed && speed <= 800)
         {
-            //Debug.Log("Current Click Speed: " + clickSpeed + "ClickerAnimSpeed_1");
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_1");
             backgroundAnimator.SetTrigger("SetAnim_1");
 
             StartCoroutine(CheckAnimation(backgroundAnimClipSpeed1.length, () =>
@@ -167,6 +170,7 @@ public class ClickerManager : MonoBehaviour
         }
         else if (speed >= 900)
         {
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_0");
             backgroundAnimator.SetTrigger("SetAnim_0");
             StartCoroutine(CheckAnimation(backgroundAnimClipSpeed0.length, () =>
             {
@@ -214,15 +218,17 @@ public class ClickerManager : MonoBehaviour
 
     IEnumerator ActiveClicker()
     {
+        effects.SpawnParticle();
         clickAnimTimer = 0;
         previousFrame = currentFrame;
         currentFrame = Time.frameCount;
+        clickSpeed = (currentFrame - previousFrame);
         if (animToggleOnce)
         {
             animToggle = true;
             animToggleOnce = false;
         }
-
+        Debug.Log("Clicker Speed: " + clickSpeed);
         onActiveClick?.Invoke();
         //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
         yield return new WaitForSeconds(baseActiveTime);

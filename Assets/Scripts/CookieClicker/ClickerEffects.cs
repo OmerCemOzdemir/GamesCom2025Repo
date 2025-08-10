@@ -4,7 +4,13 @@ using UnityEngine;
 public class ClickerEffects : MonoBehaviour
 {
     [SerializeField] private GameObject moneyParticle;
-
+    [Header("Effect Pref: ")]
+    [SerializeField] private float basePosIncreament = 0.001f;
+    [SerializeField] private float baseScaleDecrease = 0.003f;
+    [Range(0, 1)]
+    [SerializeField] private float minRandMultiplier = 1.0f;
+    [Range(1, 2)]
+    [SerializeField] private float maxRandMultiplier = 2.0f;
 
 
     void Update()
@@ -26,11 +32,10 @@ public class ClickerEffects : MonoBehaviour
 
     private IEnumerator TransformParticle(GameObject particle)
     {
-        float basePosIncreament = 0.001f;
-        float baseScaleDecrease = 0.003f;
+
         float randMultiplierX = Random.Range(0, 0.04f);
         float randMultiplierY = Random.Range(0, 0.04f);
-        float randMultiplier = Random.Range(1, 3);
+        float randMultiplier = Random.Range(maxRandMultiplier, minRandMultiplier);
 
 
         int randDirection = Random.Range(0, 2);
@@ -38,14 +43,14 @@ public class ClickerEffects : MonoBehaviour
         {
             if (randDirection == 0)
             {
-                particle.transform.position += new Vector3(-(randMultiplier * basePosIncreament + randMultiplierX), Mathf.Pow(basePosIncreament,2)  + randMultiplierY, 0);
+                particle.transform.position += new Vector3(-(randMultiplier * (basePosIncreament + randMultiplierX)), Mathf.Pow(basePosIncreament, 2) + randMultiplierY, 0);
             }
             else
             {
-                particle.transform.position += new Vector3((randMultiplier * basePosIncreament + randMultiplierX), Mathf.Pow(basePosIncreament, 2) + randMultiplierY, 0);
+                particle.transform.position += new Vector3((randMultiplier * (basePosIncreament + randMultiplierX)), Mathf.Pow(basePosIncreament, 2) + randMultiplierY, 0);
             }
             particle.transform.localScale -= new Vector3(baseScaleDecrease, baseScaleDecrease, 0);
-            Debug.Log(" particle: Pos:" + particle.transform.position + " Scale: " + particle.transform.localScale);
+            //Debug.Log(" particle: Pos:" + particle.transform.position + " Scale: " + particle.transform.localScale);
             yield return null;
         }
 

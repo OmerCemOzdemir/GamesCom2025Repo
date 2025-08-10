@@ -163,8 +163,6 @@ public class ClickerUpgrade : MonoBehaviour
 
         }
 
-
-
     }
 
     public void Buy()
@@ -229,7 +227,7 @@ public class ClickerUpgrade : MonoBehaviour
         else
         {
             itemsData = GameManager.Instance.GetGameData().clickerItems;
-            PrintArr(itemsData);
+            //PrintArr(itemsData);
         }
 
     }
