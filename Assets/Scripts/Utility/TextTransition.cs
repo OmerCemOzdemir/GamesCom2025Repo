@@ -11,13 +11,20 @@ public class TextTransition : MonoBehaviour
         public TransitionType transition = TransitionType.Typewriter;
         public float duration = 1.5f; // Typewriter letter delay or fade duration
     }
+    [Header("Progress Dialogue")]
+    [SerializeField] private bool requireInput = true; // If true, require input to continue. Otherwise, autostart.
+    [SerializeField] private KeyCode advanceKey = KeyCode.Z;
+
+    [Header("Hide Dialogue Elements")] // Optional elements; does not need to be all
+    [SerializeField] private HideMode hideMode = HideMode.DisableRendererOnParent;
+    [SerializeField] private GameObject specificTargetToHide; // disables specific GameObject; use if all elements need to be disabled
+    [SerializeField] private Graphic uiGraphicToHide; // target only a Raw image or Sprite Renderer
 
     // Choose which transition per line
-    public DialogueSettings[] lineSettings;
+    public DialogueSettings lineSettings = new DialogueSettings();
 
     // Auto start on play
     public bool autoStart = true;
-
     private TextMeshProUGUI textComponent;
     private string[] dialogueLines;
     private Coroutine routine;
@@ -26,8 +33,9 @@ public class TextTransition : MonoBehaviour
     private void Awake()
     {
         textComponent = GetComponent<TextMeshProUGUI>();
-        dialogueLines = textComponent.text.Split('\n');
+        dialogueLines = textComponent.text.Split(new[] { '\n' }, System.StringSplitOptions.None);
         textComponent.text = "";
+        textComponent.alpha = 1f;
     }
 
     private void Start()
@@ -47,31 +55,33 @@ public class TextTransition : MonoBehaviour
         for (int i = 0; i < dialogueLines.Length; i++)
         {
             string line = dialogueLines[i];
-            DialogueSettings settings = (i < lineSettings.Length) ? lineSettings[i] : new DialogueSettings();
 
-            switch (settings.transition)
+            switch (lineSettings.transition)
             {
                 case TransitionType.Typewriter:
-                    yield return StartCoroutine(ShowTypewriter(line, settings.duration));
+                    yield return StartCoroutine(ShowTypewriter(line, lineSettings.duration));
                     break;
                 case TransitionType.Fade:
-                    yield return StartCoroutine(ShowFade(line, settings.duration));
+                    yield return StartCoroutine(ShowFade(line, lineSettings.duration));
                     break;
                 default:
                     textComponent.text = line;
                     break;
             }
 
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Z));
+            if (requireInput)
+            {
+                yield return null;
+                yield return new WaitUntil(() => Input.GetKeyDown(advanceKey));
+            }
 
             textComponent.text = "";
-            if (i == Mathf.Min(dialogueLines.Length, lineSettings.Length) - 1)
-            {
-                OnCutsceneComplete?.Invoke();
-            }
+            textComponent.alpha = 1f; // reset visibility if fade was used
+        
         }
 
-        textComponent.text = "";
+        OnCutsceneComplete?.Invoke();
+        ApplyHideBehavior();
     }
 
     private IEnumerator ShowTypewriter(string line, float letterDelay)
@@ -102,11 +112,70 @@ public class TextTransition : MonoBehaviour
 
         textComponent.alpha = 1;
     }
-    
+
+    private void ApplyHideBehavior()
+    {
+        switch (hideMode)
+        {
+            case HideMode.None:
+                return;
+
+            case HideMode.DisableThisGameObject:
+                gameObject.SetActive(false);
+                return;
+
+            case HideMode.DisableParentGameObject:
+                if (transform.parent != null) transform.parent.gameObject.SetActive(false);
+                return;
+
+            case HideMode.SpecificGameObject:
+                if (specificTargetToHide != null) specificTargetToHide.SetActive(false);
+                return;
+
+            case HideMode.DisableRendererOnParent:
+                // Prioritise direct reference
+                if (uiGraphicToHide != null)
+                {
+                    uiGraphicToHide.enabled = false; return;
+                }
+
+                // Find component on parent if not referenced
+                var parentGraphic = GetComponentInParent<Graphic>();
+                if (parentGraphic != null)
+                {
+                    parentGraphic.enabled = false;
+                    return;
+                }
+
+                var parentRenderer = GetComponentInParent<Renderer>();
+                if (parentRenderer != null)
+                {
+                    parentRenderer.enabled = false;
+                    return;
+                }
+
+                // If no element, disable parent
+                if (transform.parent != null)
+                { 
+                    transform.parent.gameObject.SetActive(false);
+                }
+                return;
+        }
+    }
+
     public enum TransitionType
     {
         None,
         Typewriter,
         Fade
+    }
+    
+    public enum HideMode
+    {
+        None,
+        DisableThisGameObject,
+        DisableParentGameObject,
+        SpecificGameObject,
+        DisableRendererOnParent
     }
 }
