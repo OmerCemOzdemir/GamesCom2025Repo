@@ -5,7 +5,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+
 
 public class ClickerManager : MonoBehaviour
 {
@@ -14,16 +14,27 @@ public class ClickerManager : MonoBehaviour
     public static event Action<SFX> onPlaySFX;
     public static event Action<Music> onPlayMusic;
 
-    private ClickerEffect effect;
+    //private ClickerEffect effect;
     private List<ClickerUpgradeItem> upgradeClickerItems = new List<ClickerUpgradeItem>();
     private List<PlatformUpgradeItem> upgradePlatformItems = new List<PlatformUpgradeItem>();
 
-
+    [Header("Parameters")]
     [SerializeField] private float baseActiveMoneyIncrement = 1; //Default is 1
     [SerializeField] private float baseActiveMoneyMultiplier = 1; //Default is 1
     [SerializeField] private float baseIdleMoneyIncrement = 0; //Default is 0
     [SerializeField] private float baseIdleMoneyMultiplier = 1; //Default is 1
+    [Tooltip("Increase this to longer the elevatorSpeed of idle money")]
+    [SerializeField] private float baseIdleTime = 1;
+    [SerializeField] private float baseActiveTime = 1;
+    [Space(10)]
 
+    [Header("Animation")]
+    [SerializeField] private Animator backgroundAnimator;
+    [SerializeField] private AnimationClip backgroundAnimClipSpeed0;
+    [SerializeField] private AnimationClip backgroundAnimClipSpeed1;
+    [SerializeField] private AnimationClip backgroundAnimClipSpeed2;
+    [SerializeField] private float speedInterval = 1;
+    private int clickSpeed = 1000; //Bigger the number slower the speed
 
     private float activeMoneyIncrement;
     private float activeMoneyMultiplier;
@@ -32,15 +43,16 @@ public class ClickerManager : MonoBehaviour
     private float idleTime;
     private bool isMouseOverButton = false;
 
-
-    [Tooltip("Increase this to longer the elevatorSpeed of idle money")]
-    [SerializeField] private float baseIdleTime = 1;
-    [SerializeField] private float baseActiveTime = 1;
     private bool idleToggle = true;
     private bool activeToggle = true;
     private bool gameToggle = true;
     private bool mouseEnable = false;
+    private bool animToggle = false;
+    private bool animToggleOnce = true;
     private float clickTimer = 0;
+    private float clickAnimTimer = 0;
+    private int currentFrame = 0;
+    private int previousFrame = 0;
 
     private InputSystem inputSystem;
 
@@ -70,10 +82,11 @@ public class ClickerManager : MonoBehaviour
     {
         InitilizeScriptableObjects();
         SetUpData();
-        effect = transform.GetChild(0).gameObject.GetComponent<ClickerEffect>();
+        //effect = transform.GetChild(0).gameObject.GetComponent<ClickerEffect>();
         inputSystem = new InputSystem();
-        effect.StartEffect();
-        effect.IncreaseClickEffect(0);
+        //effect.StartEffect();
+        //effect.IncreaseClickEffect(0);
+        SetClickingEnabled(true);
     }
 
     private void FixedUpdate()
@@ -84,18 +97,92 @@ public class ClickerManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        HandleAnimSpeed();
+    }
+
     #endregion
 
-
     #region Active&IdleLogic
+
+    private void HandleAnimSpeed()
+    {
+        currentFrame = Time.frameCount;
+        clickSpeed = (currentFrame - previousFrame);
+        clickAnimTimer += 1;
+        if (clickAnimTimer > 100)
+        {
+
+            clickSpeed = 1000;
+            clickAnimTimer = 0;
+        }
+
+        if (animToggle)
+        {
+            StartAnimation(clickSpeed);
+            //StartCoroutine(TestRoutine(10));
+
+            //Debug.Log("Animation Parameters: " + " clickSpeed: " + clickSpeed + " clickAnimTimer: " + clickAnimTimer + " animToggle: " + animToggle);
+            //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + clickSpeed);
+            animToggle = false;
+        }
+
+    }
+
+    private IEnumerator CheckAnimation(float timer, Action Oncomplete)
+    {
+        //Debug.Log("Animation is running");
+        yield return new WaitForSeconds(timer);
+        animToggle = true;
+        Oncomplete?.Invoke();
+    }
+
+    private void StartAnimation(int speed)
+    {
+        //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + speed);
+        if (speed <= 200)
+        {
+            //Debug.Log("Current Click Speed: " + clickSpeed + "ClickerAnimSpeed_2");
+
+            //SetAnim_1
+            backgroundAnimator.SetTrigger("SetAnim_2");
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed2.length, () =>
+            {
+                animToggle = true;
+            }));
+            //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep2.length));
+        }
+        else if (201 < speed && speed <= 800)
+        {
+            //Debug.Log("Current Click Speed: " + clickSpeed + "ClickerAnimSpeed_1");
+            backgroundAnimator.SetTrigger("SetAnim_1");
+
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed1.length, () =>
+            {
+                animToggle = true;
+            }));
+            //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep1.length));
+
+        }
+        else if (speed >= 900)
+        {
+            backgroundAnimator.SetTrigger("SetAnim_0");
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed0.length, () =>
+            {
+                animToggle = true;
+            }));
+        }
+
+    }
 
     private void IdleMoney()
     {
         if (idleToggle)
         {
             StartCoroutine(IdleClicker());
-            effect.StartEffect();
-            effect.IncreaseClickEffect(2);
+            //effect.StartEffect();
+            //effect.IncreaseClickEffect(2);
             idleToggle = false;
         }
 
@@ -127,22 +214,31 @@ public class ClickerManager : MonoBehaviour
 
     IEnumerator ActiveClicker()
     {
+        clickAnimTimer = 0;
+        previousFrame = currentFrame;
+        currentFrame = Time.frameCount;
+        if (animToggleOnce)
+        {
+            animToggle = true;
+            animToggleOnce = false;
+        }
+
         onActiveClick?.Invoke();
-        Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
+        //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
         yield return new WaitForSeconds(baseActiveTime);
         onPlaySFX?.Invoke(SFX.Active);
-        effect.IncreaseClickEffect(10);
+        //effect.IncreaseClickEffect(10);
         activeToggle = true;
     }
 
     private void StopActiveClicker()
     {
-        effect.IncreaseClickEffect(2);
+        //effect.IncreaseClickEffect(0);
     }
 
     public void OnButtonClick(InputAction.CallbackContext context)
     {
-        Debug.Log("Mouse Enable: " + mouseEnable);
+        //Debug.Log("Mouse Enable: " + mouseEnable);
         ActiveMoney();
     }
 
@@ -150,13 +246,10 @@ public class ClickerManager : MonoBehaviour
     {
         mouseEnable = enabled;
 
-        if (effect != null && effect.TryGetComponent(out Animator anim))
-            anim.enabled = enabled;
+        
+       // if (effect != null && effect.TryGetComponent(out Animator anim))
+       //     anim.enabled = enabled;
     }
-
-
-    #endregion
-
 
     private void IncreaseActiveMoney()
     {
@@ -200,6 +293,10 @@ public class ClickerManager : MonoBehaviour
 
         //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
     }
+
+    #endregion
+
+    #region Upgrades
 
     private void ImplementUpgrades(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems)
     {
@@ -261,19 +358,6 @@ public class ClickerManager : MonoBehaviour
         }
     }
 
-    public void NextScene(int index)
-    {
-        GameManager.Instance.GetGameData().checkpointEnable = false;
-        GameManager.Instance.SaveGame();
-        GameManager.Instance.NextLevel(index);
-    }
-
-    private void CheckMousePos(bool isHover)
-    {
-        isMouseOverButton = isHover;
-    }
-
-
     private void InitilizeScriptableObjects()
     {
         //Assets/ScriptableObjects/ClickerItems
@@ -302,11 +386,25 @@ public class ClickerManager : MonoBehaviour
 
     }
 
+    #endregion
+
+    public void NextScene(int index)
+    {
+        GameManager.Instance.GetGameData().checkpointEnable = false;
+        GameManager.Instance.SaveGame();
+        GameManager.Instance.NextLevel(index);
+    }
+
+    private void CheckMousePos(bool isHover)
+    {
+        isMouseOverButton = isHover;
+    }
+
     public void EnableInputs()
     {
         inputSystem.PlayerCookie.GetMoney.Enable();
         gameToggle = true;
-        effect.StartEffect();
+        //effect.StartEffect();
 
     }
 
@@ -314,7 +412,7 @@ public class ClickerManager : MonoBehaviour
     {
         inputSystem.PlayerCookie.GetMoney.Disable();
         gameToggle = false;
-        effect.StopEffect();
+        //effect.PauseEffect();
 
     }
 
@@ -417,8 +515,6 @@ public class ClickerManager : MonoBehaviour
 
         return text;
     }
-
-
 
 }
 
@@ -557,6 +653,60 @@ public class ClickerManager : MonoBehaviour
                 break;
         }
 
+
+        if (clicksPerTick >= speedInterval)
+        {
+            clickSpeed++;
+            clicksPerTick = 0;
+            speedInterval += 1;
+        }
+        else
+        {
+            if (speedInterval != 10)
+            {
+                speedInterval--;
+            }
+
+            if (clickSpeed != 0)
+            {
+                clickSpeed--;
+            }
+        }
+
+    IEnumerator StopAnimationSlowly()
+    {
+
+        yield return new WaitForSeconds(backgroundAnimator.speed);
+        effect.IncreaseClickEffect(0);
+        animToggle = true;
+
+    }
+    IEnumerator AnimationSlowly(float length)
+    {
+        Debug.Log("Animation len: " + length);
+        yield return new WaitForSeconds(backgroundAnimator.speed);
+        animToggle = true;
+    }
+
+            backgroundAnimator.SetBool("StartAnim_2", true);
+            backgroundAnimator.SetBool("StartAnim_1", false);
+            backgroundAnimator.SetBool("StopAnim", false);
+
+
+    //backgroundAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime>1 && !backgroundAnimator.IsInTransition(0)
+    //!backgroundAnimator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnim)
+
+    public IEnumerator CheckAnimationCompleted(string CurrentAnim, Action Oncomplete)
+    {
+        //Debug.Log("outside the while loop CheckAnimation");
+        //StopAnimationSignal();
+        while (!backgroundAnimator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnim))
+        {
+            Debug.Log("inside the while loop CheckAnimation");
+            yield return null;
+        }
+        Oncomplete?.Invoke();
+    }
 
 
  */

@@ -1,22 +1,10 @@
 fileFormatVersion: 2
-guid: c244bad6383fd114bb8a78ef5459c511
+guid: ee985250014194c4cad4a157491b0524
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3518883083843707496
-    second: button-asset_0
-  - first:
-      213: -4511906740118288882
-    second: button-asset_1
-  - first:
-      213: -2362601070953566167
-    second: button-asset_2
-  - first:
-      213: 7830467384677468232
-    second: button-asset_3
-  - first:
-      213: -2474066643828564730
-    second: button-asset_4
+      213: 3365324440493804163
+    second: ClickerSceneAnim10_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,7 +97,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -125,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: button-asset_0
+      name: ClickerSceneAnim10_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 3
-        width: 27
-        height: 25
+        x: 0
+        y: 0
+        width: 800
+        height: 450
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,96 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 862a2aa558595d030800000000000000
-      internalID: 3518883083843707496
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: button-asset_1
-      rect:
-        serializedVersion: 2
-        x: 35
-        y: 3
-        width: 27
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e060f8799bc7261c0800000000000000
-      internalID: -4511906740118288882
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: button-asset_2
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 3
-        width: 27
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 920fad3f7da563fd0800000000000000
-      internalID: -2362601070953566167
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: button-asset_3
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 3
-        width: 27
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8488bf849986bac60800000000000000
-      internalID: 7830467384677468232
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: button-asset_4
-      rect:
-        serializedVersion: 2
-        x: 131
-        y: 3
-        width: 27
-        height: 25
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 60d94ffde795aadd0800000000000000
-      internalID: -2474066643828564730
+      spriteID: 38ac2959fb804be20800000000000000
+      internalID: 3365324440493804163
       vertices: []
       indices: 
       edges: []
@@ -248,11 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      button-asset_0: 3518883083843707496
-      button-asset_1: -4511906740118288882
-      button-asset_2: -2362601070953566167
-      button-asset_3: 7830467384677468232
-      button-asset_4: -2474066643828564730
+      ClickerSceneAnim10_0: 3365324440493804163
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
