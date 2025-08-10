@@ -476,6 +476,11 @@ public class PlayerControler : MonoBehaviour
                     interactionToggle = false;
                 }
                 break;
+            case Interaction.Bus:
+                //Interaction Toggle Not needed
+                Debug.Log("Get in Bus");
+
+                break;
             default:
                 break;
         }
@@ -1063,7 +1068,8 @@ public enum Interaction
     Wallet,
     Item,
     ElevatorControl,
-    NPC
+    NPC,
+    Bus
 
 }
 

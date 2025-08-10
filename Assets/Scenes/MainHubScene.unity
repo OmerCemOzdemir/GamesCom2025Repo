@@ -1196,6 +1196,10 @@ PrefabInstance:
       propertyPath: m_Offset.x
       value: 0.56700134
       objectReference: {fileID: 0}
+    - target: {fileID: 4964048291160294614, guid: a3961208270fa2647b4bb30c15cfc794, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6821810722794627220, guid: a3961208270fa2647b4bb30c15cfc794, type: 3}
       propertyPath: m_Name
       value: Bus

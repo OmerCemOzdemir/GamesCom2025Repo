@@ -1091,7 +1091,6 @@ GameObject:
   - component: {fileID: 7036498134696770010}
   - component: {fileID: 4964048291160294614}
   - component: {fileID: 3437967453294155489}
-  - component: {fileID: 8161254108866636272}
   m_Layer: 12
   m_Name: Bus
   m_TagString: Taxi
@@ -1216,19 +1215,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4.785656, y: 2.7799501}
   m_EdgeRadius: 0
---- !u!114 &8161254108866636272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6821810722794627220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe139fde4f760b145a135e4cb2c5d55f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointPrefab: {fileID: 1493023532741198575, guid: e5bdb62cbeb3eac4a9e64a49ce27d57a, type: 3}
 --- !u!1 &7538445832509085995
 GameObject:
   m_ObjectHideFlags: 0
