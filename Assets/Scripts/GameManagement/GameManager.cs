@@ -57,6 +57,18 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadSceneAsync(level);
     }
 
+    public void GoToLevel(string level)
+    {
+        SceneManager.LoadSceneAsync(level);
+        SaveGame();
+    }
+
+    public void GoToLevel(int level)
+    {
+        SceneManager.LoadSceneAsync(level);
+        SaveGame();
+    }
+
     //Save Game by calling this function
     public void SaveGame()
     {

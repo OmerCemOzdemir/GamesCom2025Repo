@@ -20,7 +20,7 @@ public class PlayerControler : MonoBehaviour
     //public static event Action onPlayerPickUpItem;
 
     public static event Action onPlayerOpenShop;
-    public static event Action onPlayerGetInTaxi;
+    public static event Action onPlayerGetInBus;
     public static event Action<GameObject> onPlayerTalkNPC;
 
 
@@ -125,6 +125,7 @@ public class PlayerControler : MonoBehaviour
         Bridge.onBridgeDone += ToggleInteraction;
         //NPC Talked
         PlatformerUI.onNPCdone += ToggleInteraction;
+        BusUI.onBusExit += ToggleInteraction;
 
         PlatformerManager.onGameObjectInteract += SetUpGameObjectInteraction;
         Door.onDoorTravel += TeleportPlayer;
@@ -159,7 +160,8 @@ public class PlayerControler : MonoBehaviour
         //Bridge is Passed 
         Bridge.onBridgeDone -= ToggleInteraction;
         //NPc Talked
-        PlatformerUI.onNPCdone -= ToggleInteraction;    
+        PlatformerUI.onNPCdone -= ToggleInteraction;
+        BusUI.onBusExit -= ToggleInteraction;
         PlatformerManager.onGameObjectInteract -= SetUpGameObjectInteraction;
         Door.onDoorTravel -= TeleportPlayer;
         //TaxiUI.onPlayerTravel -= TeleportPlayer;
@@ -422,7 +424,7 @@ public class PlayerControler : MonoBehaviour
             case Interaction.Taxi:
                 //Interaction Toggle Not needed
                 Debug.Log("Get in Taxi");
-                onPlayerGetInTaxi?.Invoke();
+                //onPlayerGetInBus?.Invoke();
                 break;
             case Interaction.Sign:
                 //Interaction Toggle Not needed
@@ -478,8 +480,12 @@ public class PlayerControler : MonoBehaviour
                 break;
             case Interaction.Bus:
                 //Interaction Toggle Not needed
-                Debug.Log("Get in Bus");
-
+                //Debug.Log("Get in Bus");
+                if (interactionToggle)
+                {
+                    DisableInput();
+                    onPlayerGetInBus?.Invoke();
+                }
                 break;
             default:
                 break;
