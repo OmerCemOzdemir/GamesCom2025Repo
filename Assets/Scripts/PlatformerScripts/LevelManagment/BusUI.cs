@@ -1,14 +1,17 @@
 using System;
-using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class TaxiUI : MonoBehaviour
+public class BusUI : MonoBehaviour
 {
     //public static event Action<Vector3, float> onPlayerTravel;
+    [Header("Level Setup: ")]
+    [SerializeField] private SceneInfo[] levelInfos;
+    [Space(10)]
+
 
     [Header("Gameobject Setup: ")]
     [SerializeField] private Transform checkpointButtonParent;
@@ -17,7 +20,7 @@ public class TaxiUI : MonoBehaviour
     [SerializeField] private GameObject levelButtonPrefab;
     [Space(10)]
     [Header("UI: ")]
-    [SerializeField] private GameObject taxiPanel;
+    [SerializeField] private GameObject busPanel;
     [SerializeField] private TextMeshProUGUI moneyRequired;
     [SerializeField] private TextMeshProUGUI levelTitle;
     [SerializeField] private GameObject levelsPanel;
@@ -30,12 +33,14 @@ public class TaxiUI : MonoBehaviour
     [SerializeField] private float baseTravelCostLevel = 100;
     [SerializeField] private float baseTravelCostCheckpoint = 10;
 
+    public static event Action onBusExit;
+
     //Checkpoint Var:
     private Button[] checkpointButtons;
     private Vector3[][] checpointPositions;
     private int checkpointIndex = 0;
     public int CheckpointIndex { get => checkpointIndex; set => checkpointIndex = value; }
-
+    public bool firstLevel = true;
     //Level Var:
     private Button[] levelButtons;
     private int levelIndex = 0;
@@ -45,12 +50,12 @@ public class TaxiUI : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerControler.onPlayerGetInTaxi += OpenTaxi;
+        PlayerControler.onPlayerGetInBus += OpenBus;
     }
 
     private void OnDisable()
     {
-        PlayerControler.onPlayerGetInTaxi -= OpenTaxi;
+        PlayerControler.onPlayerGetInBus -= OpenBus;
     }
 
 
@@ -63,23 +68,26 @@ public class TaxiUI : MonoBehaviour
     private void Start()
     {
         SetUpData();
-
     }
 
     private void SetUpData()
     {
-        Debug.Log("Run SetUpData");
+        //Debug.Log("Run SetUpData");
         LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
         //printLevelData(levelData);
         Vector3[][] checkpointsPos = new Vector3[levelData.Length][];
         //Force unlock the first level
-        levelData[0].unlock = true;
 
         for (int i = 0; i < levelData.Length; i++)
         {
-            if (levelData[i].unlock)
+            firstLevel = levelData[0].firstLevel;
+            if (firstLevel)
             {
-                if (checkpointsPos[i] != null)
+                levelData[0].unlock = true;
+            }
+            else
+            {
+                if (levelData[i].unlock)
                 {
                     checkpointsPos[i] = new Vector3[levelData[i].checkpointX.Length];
                     for (int j = 0; j < levelData[i].checkpointX.Length; j++)
@@ -87,30 +95,26 @@ public class TaxiUI : MonoBehaviour
                         checkpointsPos[i][j] = new Vector3(levelData[i].checkpointX[j], levelData[i].checkpointY[j], levelData[i].checkpointZ[j]);
                     }
                 }
-                else
-                {
-
-                }
-
             }
+
+
         }
         checpointPositions = checkpointsPos;
         SetupLevels(levelData);
-
-
     }
 
 
     #region UI
 
-    private void OpenTaxi()
+    private void OpenBus()
     {
-        taxiPanel.SetActive(true);
+        busPanel.SetActive(true);
     }
 
-    public void CloseTaxi()
+    public void CloseBus()
     {
-        taxiPanel.SetActive(false);
+        busPanel.SetActive(false);
+        onBusExit?.Invoke();
     }
 
     public void OpenLevelsPanel()
@@ -224,13 +228,6 @@ public class TaxiUI : MonoBehaviour
     }
 
 
-    public void TravelFirstLevel()
-    {
-        LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
-        GameManager.Instance.NextLevel(levelData[0].levelIndex);
-
-    }
-
     public void UpdateCheckpoints()
     {
         if (checkpointButtonParent.childCount == 0)
@@ -262,11 +259,17 @@ public class TaxiUI : MonoBehaviour
 
         for (int i = 0; i < levelData.Length; i++)
         {
-            Debug.Log("" + levelData[i].levelName
-                + "levelData[i].unlock: " + levelData[i].unlock
-                );
+            //Debug.Log("" + levelData[i].levelName + "levelData[i].unlock: " + levelData[i].unlock);
         }
 
+    }
+
+
+    public void TravelFirstLevel()
+    {
+        LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
+        GameManager.Instance.GetGameData().levelData[0].firstLevel = false;
+        GameManager.Instance.NextLevel(levelData[0].levelIndex);
     }
 
     public void Travel()
@@ -300,6 +303,16 @@ public class TaxiUI : MonoBehaviour
 
 
     }
+
+    public void PrintCurrentCheckpoint()
+    {
+        LevelSaveData[] levelData = GameManager.Instance.GetGameData().levelData;
+        Debug.Log("New Pos: " + levelData[levelIndex].checkpointX[checkpointIndex]
+ + " " + levelData[levelIndex].checkpointY[checkpointIndex]
+ + " " + levelData[levelIndex].checkpointZ[checkpointIndex]);
+    }
+
+
 
 }
 

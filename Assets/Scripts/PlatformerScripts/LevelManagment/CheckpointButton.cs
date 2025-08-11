@@ -7,7 +7,8 @@ public class CheckpointButton : MonoBehaviour
     {
         int index = int.Parse(transform.GetChild(0).name);
         Debug.Log("Checkpoint Button index: " + index);
-        transform.root.GetComponent<TaxiUI>().CheckpointIndex = index;
+        transform.root.GetComponent<BusUI>().CheckpointIndex = index;
+        transform.root.GetComponent<BusUI>().PrintCurrentCheckpoint();
     }
 
 }

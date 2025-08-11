@@ -5,14 +5,29 @@ public class ClickerEffects : MonoBehaviour
 {
     [SerializeField] private GameObject moneyParticle;
     [Header("Effect Pref: ")]
+    [Space(5)]
+
+    [Header("Set Base Speed: ")]
     [SerializeField] private float basePosIncreament = 0.001f;
+    [Header("Set Base Scale Decrease: ")]
     [SerializeField] private float baseScaleDecrease = 0.003f;
+    [Space(10)]
+
+    [Header("Set Random Spread: ")]
     [Range(0, 1)]
     [SerializeField] private float minRandMultiplier = 1.0f;
-    [Range(1, 2)]
-    [SerializeField] private float maxRandMultiplier = 2.0f;
-
-
+    [Range(0, 1)]
+    [SerializeField] private float maxRandMultiplier = 1.0f;
+    [Range(0, 0.1f)]
+    [Header("Set Random X Speed: ")]
+    [SerializeField] private float minRandMultiplierX = 0f;
+    [Range(0, 0.1f)]
+    [SerializeField] private float maxRandMultiplierX = 0.04f;
+    [Header("Set Random Y Speed: ")]
+    [Range(0, 0.1f)]
+    [SerializeField] private float minRandMultiplierY = 0f;
+    [Range(0, 0.1f)]
+    [SerializeField] private float maxRandMultiplierY = 0.04f;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -33,8 +48,8 @@ public class ClickerEffects : MonoBehaviour
     private IEnumerator TransformParticle(GameObject particle)
     {
 
-        float randMultiplierX = Random.Range(0, 0.04f);
-        float randMultiplierY = Random.Range(0, 0.04f);
+        float randMultiplierX = Random.Range(minRandMultiplierX, maxRandMultiplierX);
+        float randMultiplierY = Random.Range(minRandMultiplierY, maxRandMultiplierY);
         float randMultiplier = Random.Range(maxRandMultiplier, minRandMultiplier);
 
 

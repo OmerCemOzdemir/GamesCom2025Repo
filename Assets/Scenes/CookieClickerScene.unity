@@ -643,7 +643,11 @@ MonoBehaviour:
   basePosIncreament: 0.001
   baseScaleDecrease: 0.003
   minRandMultiplier: 0
-  maxRandMultiplier: 1
+  maxRandMultiplier: 0.669
+  minRandMultiplierX: 0
+  maxRandMultiplierX: 0.0208
+  minRandMultiplierY: 0
+  maxRandMultiplierY: 0.0212
 --- !u!1 &588604463
 GameObject:
   m_ObjectHideFlags: 0

@@ -274,7 +274,7 @@ public class PlatformerManager : MonoBehaviour
             {
                 //Debug.Log("Ladder can NOT be used");
                 onInteract?.Invoke(Interaction.Taxi);
-                EnableInteractText("Bus");
+                EnableInteractText("Taxi");
 
             }
 
@@ -317,6 +317,15 @@ public class PlatformerManager : MonoBehaviour
                 onGameObjectInteract?.Invoke(collision.gameObject);
                 EnableInteractText("Talk");
             }
+
+            if (collision.CompareTag("Bus"))
+            {
+                //Debug.Log("Ladder can NOT be used");
+                onInteract?.Invoke(Interaction.Bus);
+                EnableInteractText("Bus");
+
+            }
+
         }
 
     }
@@ -426,6 +435,14 @@ public class PlatformerManager : MonoBehaviour
             //Debug.Log("Ladder can NOT be used");
             onInteract?.Invoke(Interaction.Empty);
             DisableInteractText();
+        }
+
+        if (collision.CompareTag("Bus"))
+        {
+            //Debug.Log("Ladder can NOT be used");
+            onInteract?.Invoke(Interaction.Empty);
+            DisableInteractText();
+
         }
 
     }
