@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Unity.VisualScripting;
 
 public class TutorialTracker : MonoBehaviour
 {
@@ -16,6 +17,14 @@ public class TutorialTracker : MonoBehaviour
     {
         ShowTutorialText(collision.tag, collision.gameObject.name);
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        tutorialDialogueBox.SetActive(false);
+        tutorialDialogueText.text = $"";
+        Debug.Log($"Exit interactable");
+    }
+
 
     private void ShowTutorialText(string tag, string objectName)
     {
@@ -42,7 +51,7 @@ public class TutorialTracker : MonoBehaviour
             {
                 Debug.Log($"No Box or Text detected via Tracker");
             }
-            
+
             Debug.Log($"First time entered {objectName} via Tracker");
         }
 
