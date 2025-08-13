@@ -29,7 +29,9 @@ public class ClickerManager : MonoBehaviour
     [Space(10)]
 
     [Header("Animation and Effect")]
-    [SerializeField] private Animator backgroundAnimator;
+    [SerializeField] private Animator playerOfficeAnimator;
+    [SerializeField] private Animator playerClickEffectAnimator;
+
     [SerializeField] private AnimationClip backgroundAnimClipSpeed0;
     [SerializeField] private AnimationClip backgroundAnimClipSpeed1;
     [SerializeField] private AnimationClip backgroundAnimClipSpeed2;
@@ -50,6 +52,8 @@ public class ClickerManager : MonoBehaviour
     private bool mouseEnable = false;
     private bool animToggle = false;
     private bool animToggleOnce = true;
+    private bool animToggleOfficePlayer = true;
+
     private float clickTimer = 0;
     private float clickAnimTimer = 0;
     private int currentFrame = 0;
@@ -101,7 +105,19 @@ public class ClickerManager : MonoBehaviour
 
     private void Update()
     {
-        HandleAnimSpeed();
+        //HandleAnimSpeed();
+        clickAnimTimer += 6 * Time.deltaTime;
+        //Debug.Log("clickAnimTimer: " + clickAnimTimer);
+        if (clickAnimTimer > 3)
+        {
+            animToggleOfficePlayer = true;
+            playerOfficeAnimator.SetTrigger("Idle");
+            //currentFrame = Time.frameCount;
+            //clickSpeed = (currentFrame - previousFrame);
+            //clickSpeed = 1000;
+            clickAnimTimer = 0;
+        }
+
     }
 
     #endregion
@@ -110,20 +126,21 @@ public class ClickerManager : MonoBehaviour
 
     private void HandleAnimSpeed()
     {
-        clickAnimTimer += 3*Time.deltaTime;
+        clickAnimTimer += 4 * Time.deltaTime;
         //Debug.Log("clickAnimTimer: " + clickAnimTimer);
         if (clickAnimTimer > 10)
         {
-            currentFrame = Time.frameCount;
-            clickSpeed = (currentFrame - previousFrame);
-            clickSpeed = 1000;
+            //currentFrame = Time.frameCount;
+            //clickSpeed = (currentFrame - previousFrame);
+            //clickSpeed = 1000;
             clickAnimTimer = 0;
+            playerOfficeAnimator.SetTrigger("Idle");
         }
 
         if (animToggle)
         {
             //Debug.Log("Click Speed: " + clickSpeed);
-            StartAnimation(clickSpeed);
+            //StartAnimation(clickSpeed);
             //StartCoroutine(TestRoutine(10));
 
             //Debug.Log("Animation Parameters: " + " clickSpeed: " + clickSpeed + " clickAnimTimer: " + clickAnimTimer + " animToggle: " + animToggle);
@@ -149,7 +166,7 @@ public class ClickerManager : MonoBehaviour
             Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_2");
 
             //SetAnim_1
-            backgroundAnimator.SetTrigger("SetAnim_2");
+            playerOfficeAnimator.SetTrigger("SetAnim_2");
             StartCoroutine(CheckAnimation(backgroundAnimClipSpeed2.length, () =>
             {
                 animToggle = true;
@@ -159,7 +176,7 @@ public class ClickerManager : MonoBehaviour
         else if (101 < speed && speed <= 800)
         {
             Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_1");
-            backgroundAnimator.SetTrigger("SetAnim_1");
+            playerOfficeAnimator.SetTrigger("SetAnim_1");
 
             StartCoroutine(CheckAnimation(backgroundAnimClipSpeed1.length, () =>
             {
@@ -171,7 +188,7 @@ public class ClickerManager : MonoBehaviour
         else if (speed >= 900)
         {
             Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_0");
-            backgroundAnimator.SetTrigger("SetAnim_0");
+            playerOfficeAnimator.SetTrigger("SetAnim_0");
             StartCoroutine(CheckAnimation(backgroundAnimClipSpeed0.length, () =>
             {
                 animToggle = true;
@@ -218,10 +235,16 @@ public class ClickerManager : MonoBehaviour
 
     IEnumerator ActiveClicker()
     {
+        if (animToggleOfficePlayer)
+        {
+            playerOfficeAnimator.SetTrigger("Working");
+            animToggleOfficePlayer = false;
+        }
+        playerClickEffectAnimator.SetTrigger("Click");
         effects.SpawnParticle();
         clickAnimTimer = 0;
-        previousFrame = currentFrame;
-        currentFrame = Time.frameCount;
+        //previousFrame = currentFrame;
+        //currentFrame = Time.frameCount;
         clickSpeed = (currentFrame - previousFrame);
         if (animToggleOnce)
         {
@@ -252,9 +275,9 @@ public class ClickerManager : MonoBehaviour
     {
         mouseEnable = enabled;
 
-        
-       // if (effect != null && effect.TryGetComponent(out Animator anim))
-       //     anim.enabled = enabled;
+
+        // if (effect != null && effect.TryGetComponent(out Animator anim))
+        //     anim.enabled = enabled;
     }
 
     private void IncreaseActiveMoney()

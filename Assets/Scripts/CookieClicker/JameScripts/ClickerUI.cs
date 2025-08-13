@@ -4,7 +4,7 @@ using UnityEngine;
 public class ClickerUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI currentMoney;
-    
+
 
     private void OnEnable()
     {
@@ -26,7 +26,19 @@ public class ClickerUI : MonoBehaviour
 
     private void UpdateText()
     {
-        currentMoney.text = GameManager.Instance.GetGameData().maxTotalMoney + " / $" + GameManager.Instance.GetGameData().totalMoney;
+        double money = GameManager.Instance.GetGameData().totalMoney;
+        double maxMoney = GameManager.Instance.GetGameData().maxTotalMoney;
+
+        if (money >= maxMoney)
+        {
+            currentMoney.color = Color.red;
+        }
+        else
+        {
+            currentMoney.color = Color.green;
+        }
+        currentMoney.text ="$" + GameManager.Instance.GetGameData().totalMoney;
+
     }
 
 }
