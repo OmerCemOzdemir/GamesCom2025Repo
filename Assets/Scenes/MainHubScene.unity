@@ -1666,7 +1666,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93388f3e2556a12458e7a8b4090766c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactableTags: []
+  tutorialDialogueBox: {fileID: 360906339}
+  tutorialDialogueText: {fileID: 620378476}
 --- !u!1 &489707990
 GameObject:
   m_ObjectHideFlags: 0
@@ -2346,7 +2347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  hideMode: 4
+  hideMode: 3
   specificTargetToHide: {fileID: 360906339}
   uiGraphicToHide: {fileID: 1512742950}
   lineSettings:

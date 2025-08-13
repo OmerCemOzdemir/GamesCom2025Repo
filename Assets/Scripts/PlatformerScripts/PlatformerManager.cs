@@ -324,8 +324,6 @@ public class PlatformerManager : MonoBehaviour
                 EnableInteractText("Bus");
 
             }
-
-            ShowTutorialText(collision.tag, collision.gameObject.name);
         }
 
     }
@@ -446,28 +444,6 @@ public class PlatformerManager : MonoBehaviour
         }
 
     }
-    
-    private void ShowTutorialText(string tag, string objectName)
-    {
-        if (!Enum.TryParse(tag, out TutorialObjects _))
-            return;
-
-        var data = GameManager.Instance.GetGameData();
-
-        // Scene-qualified ID avoids collisions across levels
-        string id = $"{SceneManager.GetActiveScene().name}:{tag}:{objectName}";
-
-        bool firstTime = !data.visitedInteractables.Contains(id);
-        if (firstTime)
-            data.visitedInteractables.Add(id);
-
-        // Use player’s debug event via proxy
-        if (firstTime)
-            Debug.Log($"First time entered {objectName}");
-         else
-            Debug.Log($"Has visited {objectName}");
-    }
-
 }
 
 public enum MoneySpent
