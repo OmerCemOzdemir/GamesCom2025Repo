@@ -458,12 +458,6 @@ public enum MoneySpent
     moneySpentPassBridge
 }
 
-public enum TutorialObjects
-{
-    Shop,
-    Sign,
-    Bus
-}
 /*
  * 
     private void SaveGameData(bool[] items)

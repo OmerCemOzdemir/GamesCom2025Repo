@@ -40,7 +40,7 @@ public class TextTransition : MonoBehaviour
 
     private void Start()
     {
-        if (autoStart)
+        if (autoStart && dialogueLines != null && dialogueLines.Length > 0 && !string.IsNullOrEmpty(string.Join("", dialogueLines)))
             PlayCutscene();
     }
 
@@ -161,6 +161,22 @@ public class TextTransition : MonoBehaviour
                 }
                 return;
         }
+    }
+
+    public void ResetTextAndPlay(string fullText)
+    {
+        // Stop any running playback
+        if (routine != null)
+            StopCoroutine(routine);
+
+        // Reset for new lines (requires new text to be set externally)
+        textComponent.text = fullText ?? "";
+        dialogueLines = textComponent.text.Split(new[] { '\n' }, System.StringSplitOptions.None);
+
+        // Reset visual state and start
+        textComponent.text = "";
+        textComponent.alpha = 1f;
+        routine = StartCoroutine(PlayLines());
     }
 
     public enum TransitionType
