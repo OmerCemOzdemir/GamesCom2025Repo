@@ -39,7 +39,6 @@ public class PlatformerManager : MonoBehaviour
     [SerializeField] public float moneyRequiredPassBridge = 6000;
 
 
-
     private void OnEnable()
     {
         PlayerControler.onMoneySpent += SpentMoney;
@@ -118,7 +117,7 @@ public class PlatformerManager : MonoBehaviour
     }
 
 
-    
+
 
     //These Functions calculate the money spent and reduce the money.
     private void SpentMoney(MoneySpent moneySpent)
@@ -185,7 +184,7 @@ public class PlatformerManager : MonoBehaviour
 
     }
     //moneySpentSprint
-   
+
     private void EnableInteractText(string txt)
     {
         interactText.SetActive(true);
@@ -326,6 +325,7 @@ public class PlatformerManager : MonoBehaviour
 
             }
 
+            ShowTutorialText(collision.tag, collision.gameObject.name);
         }
 
     }
@@ -446,6 +446,27 @@ public class PlatformerManager : MonoBehaviour
         }
 
     }
+    
+    private void ShowTutorialText(string tag, string objectName)
+    {
+        if (!Enum.TryParse(tag, out TutorialObjects _))
+            return;
+
+        var data = GameManager.Instance.GetGameData();
+
+        // Scene-qualified ID avoids collisions across levels
+        string id = $"{SceneManager.GetActiveScene().name}:{tag}:{objectName}";
+
+        bool firstTime = !data.visitedInteractables.Contains(id);
+        if (firstTime)
+            data.visitedInteractables.Add(id);
+
+        // Use player’s debug event via proxy
+        if (firstTime)
+            Debug.Log($"First time entered {objectName}");
+         else
+            Debug.Log($"Has visited {objectName}");
+    }
 
 }
 
@@ -461,7 +482,12 @@ public enum MoneySpent
     moneySpentPassBridge
 }
 
-
+public enum TutorialObjects
+{
+    Shop,
+    Sign,
+    Bus
+}
 /*
  * 
     private void SaveGameData(bool[] items)
