@@ -15,7 +15,7 @@ public class ClickerUpgrade : MonoBehaviour
     
     private ClickerItemSaveData[] itemsData = new ClickerItemSaveData[0];
     //private UpgradeItem[] upgradeItems;
-    private List<ClickerUpgradeItem> upgradeItems = new List<ClickerUpgradeItem>();
+    public List<ClickerUpgradeItem> upgradeItems = new List<ClickerUpgradeItem>();
     private GameObject[] upgradeItemInstances;
     private int clickerIndex = 0;
     //private int buttonPosY = -110;

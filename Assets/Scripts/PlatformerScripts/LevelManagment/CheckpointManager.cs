@@ -34,7 +34,7 @@ public class CheckpointManager : MonoBehaviour
 
     private void InitilizeSaveData()
     {
-        Debug.Log("Current LevelButton: " + SceneManager.GetActiveScene().name);
+        //Debug.Log("Current LevelButton: " + SceneManager.GetActiveScene().name);
         if (SceneManager.GetActiveScene().name == "MainHubScene")
         {
             if (GameManager.Instance.GetGameData().levelNewGame)
@@ -81,7 +81,7 @@ public class CheckpointManager : MonoBehaviour
 
                 }
             }
-            PrintArr();
+            //PrintArr();
             GameManager.Instance.GetGameData().levelData = levelSaveData;
         }
     }
@@ -118,6 +118,7 @@ public class CheckpointManager : MonoBehaviour
             Debug.Log("Save Level Data" + i);
             levelSaveData[i] = new LevelSaveData();
             levelSaveData[i].levelName = levelName[i];
+            if (i == 0) { levelSaveData[0].firstLevel = true; }
             levelSaveData[i].unlock = false;
             levelSaveData[i].levelIndex = SceneUtility.GetBuildIndexByScenePath(levelPaths[i]);
 
