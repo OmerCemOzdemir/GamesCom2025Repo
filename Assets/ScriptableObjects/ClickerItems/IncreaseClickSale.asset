@@ -27,11 +27,11 @@ MonoBehaviour:
   itemTiers:
   - tierEffect: 10
     tierCost: 100
-  - tierEffect: 20
+  - tierEffect: 1
     tierCost: 200
-  - tierEffect: 30
+  - tierEffect: 2
     tierCost: 400
-  - tierEffect: 40
-    tierCost: 500
-  - tierEffect: 40
-    tierCost: 500
+  - tierEffect: 3
+    tierCost: 800
+  - tierEffect: 4
+    tierCost: 1200

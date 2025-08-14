@@ -10,28 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98c461c3c92a14f45845bb4abff5c9e4, type: 3}
-  m_Name: Sneakers
+  m_Name: JumpHeight
   m_EditorClassIdentifier: 
-  itemName: Sneakers
-  itemDescription: Increases movement speed
-  itemIcon: {fileID: -4523831514545042849, guid: ddf56d11c1c234740a13b6e9c4b5a804, type: 3}
-  itemCost: 300
-  itemType: 1
-  hasItemEffectOnMoney: 0
+  itemName: Jumping Boots
+  itemDescription: Increase Jump Height
+  itemIcon: {fileID: -2516195779808049870, guid: 0204e5e9dcc62fb4eb88f5eeccb28978, type: 3}
+  itemCost: 500
+  itemType: 0
+  hasItemEffectOnMoney: 1
   hasItemEffectOnMovement: 1
   itemEffectOnMoney:
-    value: 0
-    operations: 0
-    moneySpent: 0
-  itemEffectOnMovement:
-    value: 0
+    value: 100
     operations: 2
-    playerMovement: 0
+    moneySpent: 2
+  itemEffectOnMovement:
+    value: 2
+    operations: 0
+    playerMovement: 2
   itemEffectSpecial: 0
-  hasTier: 1
-  effectTiersPercentage:
-  - 10
-  - 12.5
-  costTiers:
-  - 100
-  - 200
+  hasTier: 0
+  effectTiersPercentage: []
+  costTiers: []

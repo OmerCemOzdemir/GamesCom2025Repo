@@ -23,9 +23,9 @@ MonoBehaviour:
   itemEffector: 5
   itemOperationOnItemEffector: 2
   itemTiers:
-  - tierEffect: 1
-    tierCost: 200
-  - tierEffect: 1
-    tierCost: 200
-  - tierEffect: 1
-    tierCost: 200
+  - tierEffect: 2000
+    tierCost: 2000
+  - tierEffect: 5000
+    tierCost: 10000
+  - tierEffect: 8000
+    tierCost: 18000

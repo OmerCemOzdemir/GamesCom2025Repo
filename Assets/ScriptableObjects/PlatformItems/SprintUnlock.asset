@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98c461c3c92a14f45845bb4abff5c9e4, type: 3}
-  m_Name: SprintBoots
+  m_Name: SprintUnlock
   m_EditorClassIdentifier: 
-  itemName: Sprint Boots
-  itemDescription: 'Enables sprint '
-  itemIcon: {fileID: -7458137046505257974, guid: 02430c824d37d3e4bb9761aaf2a3e67a, type: 3}
+  itemName: EnergyDrink
+  itemDescription: Unlock Sprint using SHIFT
+  itemIcon: {fileID: 7328140473457635117, guid: e00ebf4d61b281f4c8c747749e1ccc91, type: 3}
   itemCost: 300
   itemType: 0
   hasItemEffectOnMoney: 0
