@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: test item 2
   itemDescription: add idle money
-  itemIcon: {fileID: 0}
+  itemIcon:
+  - {fileID: -6157151721061765284, guid: b2a62e75c8251564e8ae9c4e0256a051, type: 3}
+  - {fileID: -1330621349993832296, guid: 81141ad03c21da344881fa03ccdb892c, type: 3}
+  - {fileID: -3238339437373671902, guid: 62ffc0418c1b78b4eb5f308c2a563459, type: 3}
+  - {fileID: -5482197460053532283, guid: fe3cc4ba50df3a747953577c027d564c, type: 3}
+  - {fileID: 5011977863393494875, guid: dba6facbcffaa3a4b9fb4052ba7509b9, type: 3}
   itemUnlocked: 1
-  maxTier: 3
+  maxTier: 5
   itemEffector: 2
   itemOperationOnItemEffector: 2
   itemTiers:
@@ -24,5 +29,9 @@ MonoBehaviour:
     tierCost: 100
   - tierEffect: 40
     tierCost: 200
-  - tierEffect: 40
-    tierCost: 200
+  - tierEffect: 80
+    tierCost: 300
+  - tierEffect: 160
+    tierCost: 400
+  - tierEffect: 240
+    tierCost: 500

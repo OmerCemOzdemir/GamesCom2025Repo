@@ -31,13 +31,25 @@ public class ClickerManager : MonoBehaviour
     [Header("Animation and Effect")]
     [SerializeField] private Animator playerOfficeAnimator;
     [SerializeField] private Animator playerClickEffectAnimator;
+    [SerializeField] private Animator AFKAnimator1;
+    [SerializeField] private Animator AFKAnimator2;
+    [SerializeField] private Animator AFKAnimator3;
+    [SerializeField] private Animator AFKAnimator4;
 
-    [SerializeField] private AnimationClip backgroundAnimClipSpeed0;
-    [SerializeField] private AnimationClip backgroundAnimClipSpeed1;
-    [SerializeField] private AnimationClip backgroundAnimClipSpeed2;
+    [SerializeField] private AnimationClip AFKWalkClip1;
+    [SerializeField] private AnimationClip AFKWalkClip2;
+    [SerializeField] private AnimationClip AFKWalkClip3;
+    [SerializeField] private AnimationClip AFKWalkClip4;
+
+
     [SerializeField] private float speedInterval = 1;
     [SerializeField] private ClickerEffects effects;
+    [SerializeField] private AFKEffectManager AFKEffectManager;
+
     private int clickSpeed = 1000; //Bigger the number slower the speed
+    private float idleMoneyProfitRate = 0;
+    private bool[] AFKBools = { true, true, true, true };
+
 
     private float activeMoneyIncrement;
     private float activeMoneyMultiplier;
@@ -93,6 +105,13 @@ public class ClickerManager : MonoBehaviour
         //effect.StartEffect();
         //effect.IncreaseClickEffect(0);
         SetClickingEnabled(true);
+        //idleMoneyInitialProfit = ((idleMoneyIncrement + 1) * idleMoneyMultiplier);
+    }
+
+    private void Start()
+    {
+        //InvokeRepeating(nameof(AccumulateMoney), 2.0f, 1f);
+        InvokeRepeating(nameof(CalculateMoneyPerSec), 5f, 1f);
     }
 
     private void FixedUpdate()
@@ -124,77 +143,65 @@ public class ClickerManager : MonoBehaviour
 
     #region Active&IdleLogic
 
-    private void HandleAnimSpeed()
+
+    private void HandleAFKAnim()
     {
-        clickAnimTimer += 4 * Time.deltaTime;
-        //Debug.Log("clickAnimTimer: " + clickAnimTimer);
-        if (clickAnimTimer > 10)
+        // profit increase formula: ((y-x)/x)*100
+        //idleMoneyProfitPercentage = (((idleMoneyIncrement * idleMoneyMultiplier) - idleMoneyInitialProfit) / idleMoneyInitialProfit) * 100;
+
+        if (idleMoneyProfitRate >= 40 && idleMoneyProfitRate < 160)
         {
-            //currentFrame = Time.frameCount;
-            //clickSpeed = (currentFrame - previousFrame);
-            //clickSpeed = 1000;
-            clickAnimTimer = 0;
-            playerOfficeAnimator.SetTrigger("Idle");
+            if (AFKBools[0])
+            {
+                Debug.Log("The Profit rate: AFK_1");
+                PlayerAFKAnim(AFKAnimator1, AFKWalkClip1);
+                AFKBools[0] = false;
+            }
+        }
+        else if (idleMoneyProfitRate >= 160 && idleMoneyProfitRate < 360)
+        {
+            if (AFKBools[1])
+            {
+                Debug.Log("The Profit rate: AFK_2");
+                PlayerAFKAnim(AFKAnimator2, AFKWalkClip2);
+                AFKBools[1] = false;
+            }
+        }
+        else if (idleMoneyProfitRate > 360)
+        {
+            if (AFKBools[2])
+            {
+                Debug.Log("The Profit rate: AFK_3");
+                PlayerAFKAnim(AFKAnimator3, AFKWalkClip3);
+                AFKBools[2] = false;
+            }
         }
 
-        if (animToggle)
-        {
-            //Debug.Log("Click Speed: " + clickSpeed);
-            //StartAnimation(clickSpeed);
-            //StartCoroutine(TestRoutine(10));
+        //59000
+        //Debug.Log("The Profit rate: " + idleMoneyProfitPercentage);
+    }
 
-            //Debug.Log("Animation Parameters: " + " clickSpeed: " + clickSpeed + " clickAnimTimer: " + clickAnimTimer + " animToggle: " + animToggle);
-            //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + clickSpeed);
-            animToggle = false;
-        }
+    private void PlayerAFKAnim(Animator anim, AnimationClip clip)
+    {
+        anim.SetTrigger("Walk");
+        StartCoroutine(DelayOnAFKAnim(anim, clip));
 
     }
 
-    private IEnumerator CheckAnimation(float timer, Action Oncomplete)
+    IEnumerator DelayOnAFKAnim(Animator anim, AnimationClip clip)
     {
-        //Debug.Log("Animation is running");
-        yield return new WaitForSeconds(timer);
-        animToggle = true;
-        Oncomplete?.Invoke();
+        yield return new WaitForSeconds(clip.length);
+        anim.SetTrigger("Work");
+        AFKEffectManager.ActivateEffects();
+
     }
 
-    private void StartAnimation(int speed)
+
+    private void CalculateMoneyPerSec()
     {
-        //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + speed);
-        if (speed <= 100)
-        {
-            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_2");
-
-            //SetAnim_1
-            playerOfficeAnimator.SetTrigger("SetAnim_2");
-            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed2.length, () =>
-            {
-                animToggle = true;
-            }));
-            //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep2.length));
-        }
-        else if (101 < speed && speed <= 800)
-        {
-            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_1");
-            playerOfficeAnimator.SetTrigger("SetAnim_1");
-
-            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed1.length, () =>
-            {
-                animToggle = true;
-            }));
-            //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep1.length));
-
-        }
-        else if (speed >= 900)
-        {
-            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_0");
-            playerOfficeAnimator.SetTrigger("SetAnim_0");
-            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed0.length, () =>
-            {
-                animToggle = true;
-            }));
-        }
-
+        //idleMoneyProfitRatePre = idleMoneyProfitRate;
+        Debug.Log("Profit: " + idleMoneyProfitRate);
+        idleMoneyProfitRate = 0;
     }
 
     private void IdleMoney()
@@ -207,6 +214,8 @@ public class ClickerManager : MonoBehaviour
             idleToggle = false;
         }
 
+
+
         clickTimer += Time.deltaTime + 1;
         //Debug.Log("clickTimer: " + clickTimer);
         if (clickTimer > 10)
@@ -218,6 +227,9 @@ public class ClickerManager : MonoBehaviour
     IEnumerator IdleClicker()
     {
         onIdleClick?.Invoke();
+        idleMoneyProfitRate += idleMoneyIncrement * idleMoneyMultiplier;
+        AFKEffectManager.SpawnEffects();
+        HandleAFKAnim();
         yield return new WaitForSeconds(idleTime);
         onPlaySFX?.Invoke(SFX.Idle);
         idleToggle = true;
@@ -346,6 +358,13 @@ public class ClickerManager : MonoBehaviour
                 break;
             case ClickerItemEffetors.baseIdleTime:
                 idleTime = ImplementOperations(index, itemsData, upgradeItems, idleTime);
+                break;
+            case ClickerItemEffetors.walletLevel:
+                Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
+                GameManager.Instance.GetGameData().walletLevel = itemsData[index].tier; //(int)ImplementOperations(index, itemsData, upgradeItems, idleTime);
+                Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
+
+                CalculateWallet();
                 break;
             default:
                 break;
@@ -485,24 +504,34 @@ public class ClickerManager : MonoBehaviour
 
     }
 
+    public void CalculateWallet()
+    {
+        //GameManager.Instance.GetGameData().walletLevel = walletLevel;
+        int walletLevel = GameManager.Instance.GetGameData().walletLevel;
+        float maxTotalMoney = 10000;
+        for (int i = 0; i < walletLevel; i++)
+        {
+            maxTotalMoney *= 10;
+        }
+        //Debug.Log("Wallet Level: " + walletLevel);
+        //Debug.Log("Max Money: " + maxTotalMoney);
+        GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
+
+    }
+
     public void SetUpData()
     {
         GameManager.Instance.GetGameData();
 
         //UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems);
-        int walletLevel = GameManager.Instance.GetGameData().walletLevel;
-        float maxTotalMoney = 0;
+
         //Debug.Log("max Money: " + walletLevel);
         ResetFields();
         onPlayMusic?.Invoke(Music.Clicker);
-        UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems, upgradeClickerItems);
 
-        maxTotalMoney = 10000;
-        for (int i = 0; i < walletLevel; i++)
-        {
-            maxTotalMoney *= 10;
-        }
-        GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
+        UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems, upgradeClickerItems);
+        CalculateWallet();
+
         //onActiveClick?.Invoke();
         FindAnyObjectByType<ClickerUI>().SetUpFirst();
 
@@ -735,6 +764,79 @@ public class ClickerManager : MonoBehaviour
             yield return null;
         }
         Oncomplete?.Invoke();
+    }
+
+    private void HandleAnimSpeed()
+    {
+        clickAnimTimer += 4 * Time.deltaTime;
+        //Debug.Log("clickAnimTimer: " + clickAnimTimer);
+        if (clickAnimTimer > 10)
+        {
+            //currentFrame = Time.frameCount;
+            //clickSpeed = (currentFrame - previousFrame);
+            //clickSpeed = 1000;
+            clickAnimTimer = 0;
+            playerOfficeAnimator.SetTrigger("Idle");
+        }
+
+        if (animToggle)
+        {
+            //Debug.Log("Click Speed: " + clickSpeed);
+            //StartAnimation(clickSpeed);
+            //StartCoroutine(TestRoutine(10));
+
+            //Debug.Log("Animation Parameters: " + " clickSpeed: " + clickSpeed + " clickAnimTimer: " + clickAnimTimer + " animToggle: " + animToggle);
+            //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + clickSpeed);
+            animToggle = false;
+        }
+
+    }
+
+    private IEnumerator CheckAnimation(float timer, Action Oncomplete)
+    {
+        //Debug.Log("Animation is running");
+        yield return new WaitForSeconds(timer);
+        animToggle = true;
+        Oncomplete?.Invoke();
+    }
+
+    private void StartAnimation(int speed)
+    {
+        //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + speed);
+        if (speed <= 100)
+        {
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_2");
+
+            //SetAnim_1
+            playerOfficeAnimator.SetTrigger("SetAnim_2");
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed2.length, () =>
+            {
+                animToggle = true;
+            }));
+            //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep2.length));
+        }
+        else if (101 < speed && speed <= 800)
+        {
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_1");
+            playerOfficeAnimator.SetTrigger("SetAnim_1");
+
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed1.length, () =>
+            {
+                animToggle = true;
+            }));
+            //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep1.length));
+
+        }
+        else if (speed >= 900)
+        {
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_0");
+            playerOfficeAnimator.SetTrigger("SetAnim_0");
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed0.length, () =>
+            {
+                animToggle = true;
+            }));
+        }
+
     }
 
 

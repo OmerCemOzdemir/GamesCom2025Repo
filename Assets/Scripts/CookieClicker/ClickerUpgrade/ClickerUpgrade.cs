@@ -15,7 +15,7 @@ public class ClickerUpgrade : MonoBehaviour
     
     private ClickerItemSaveData[] itemsData = new ClickerItemSaveData[0];
     //private UpgradeItem[] upgradeItems;
-    public List<ClickerUpgradeItem> upgradeItems = new List<ClickerUpgradeItem>();
+    [HideInInspector] public List<ClickerUpgradeItem> upgradeItems = new List<ClickerUpgradeItem>();
     private GameObject[] upgradeItemInstances;
     private int clickerIndex = 0;
     //private int buttonPosY = -110;
@@ -77,7 +77,7 @@ public class ClickerUpgrade : MonoBehaviour
             upgradeItemInstances[i].transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = upgradeItems[i].itemDescription;
             upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
             upgradeItemInstances[i].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "" + itemsData[i].tier;
-            upgradeItemInstances[i].transform.GetChild(4).gameObject.GetComponent<Image>().sprite = upgradeItems[i].itemIcon;
+            upgradeItemInstances[i].transform.GetChild(4).gameObject.GetComponent<Image>().sprite = upgradeItems[i].itemIcon[0];
 
             cost = itemsData[i].cost;
             double calcMoney = money - cost;
@@ -127,6 +127,8 @@ public class ClickerUpgrade : MonoBehaviour
             double calcMoney = money - cost;
             upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
             upgradeItemInstances[i].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "" + itemsData[i].tier;
+            upgradeItemInstances[i].transform.GetChild(4).gameObject.GetComponent<Image>().sprite = upgradeItems[i].itemIcon[itemsData[i].tier];
+
             if (itemsData[i].unlock)
             {
                 if (calcMoney <= 0)

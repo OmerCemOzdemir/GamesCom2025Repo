@@ -32,12 +32,13 @@ public class ClickerUI : MonoBehaviour
         if (money >= maxMoney)
         {
             currentMoney.color = Color.red;
+            currentMoney.text = "! $" + GameManager.Instance.GetGameData().totalMoney;
         }
         else
         {
             currentMoney.color = Color.green;
+            currentMoney.text = "$" + GameManager.Instance.GetGameData().totalMoney;
         }
-        currentMoney.text ="$" + GameManager.Instance.GetGameData().totalMoney;
 
     }
 
