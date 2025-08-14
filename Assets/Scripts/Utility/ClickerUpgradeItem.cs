@@ -6,7 +6,7 @@ public class ClickerUpgradeItem : ScriptableObject
 {
     [SerializeField] public string itemName;
     [SerializeField] public string itemDescription;
-    [SerializeField] public Sprite itemIcon;
+    [SerializeField] public Sprite[] itemIcon; 
 
     [SerializeField] public bool itemUnlocked = true;
     [SerializeField] public int maxTier = 0;
@@ -22,7 +22,8 @@ public enum ClickerItemEffetors
     baseActiveMoneyMultiplier,
     baseIdleMoneyIncrement,
     baseIdleMoneyMultiplier,
-    baseIdleTime
+    baseIdleTime,
+    walletLevel
 }
 
 public enum Operations

@@ -27,7 +27,7 @@ public class ClickerInfo : MonoBehaviour
         if (enable)
         {
             //Debug.Log("Upgrade Item: " + upgradeItem.itemName);
-            infoIcon.sprite = upgradeItem.itemIcon;
+            infoIcon.sprite = upgradeItem.itemIcon[0];
             infoTitle.text = upgradeItem.itemName;
             infoBody.text = upgradeItem.itemDescription;
 

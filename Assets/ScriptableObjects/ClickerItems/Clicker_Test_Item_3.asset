@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: test item 3
   itemDescription: does nothing
-  itemIcon: {fileID: 0}
+  itemIcon:
+  - {fileID: -6157151721061765284, guid: b2a62e75c8251564e8ae9c4e0256a051, type: 3}
+  - {fileID: -1330621349993832296, guid: 81141ad03c21da344881fa03ccdb892c, type: 3}
   itemUnlocked: 1
-  maxTier: 3
+  maxTier: 2
   itemEffector: 4
-  itemOperationOnItemEffector: 4
+  itemOperationOnItemEffector: 1
   itemTiers:
-  - tierEffect: 20
-    tierCost: 100
-  - tierEffect: 40
+  - tierEffect: 2
     tierCost: 200
-  - tierEffect: 40
+  - tierEffect: 2
     tierCost: 200
