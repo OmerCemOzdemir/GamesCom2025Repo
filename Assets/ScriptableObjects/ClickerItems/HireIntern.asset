@@ -16,7 +16,7 @@ MonoBehaviour:
   itemDescription: Passively generates income
   itemIcon: {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   itemUnlocked: 1
-  maxTier: 3
+  maxTier: 2
   itemEffector: 4
   itemOperationOnItemEffector: 3
   itemTiers:

@@ -16,7 +16,7 @@ MonoBehaviour:
   itemDescription: Increases sale revenue from interns
   itemIcon: {fileID: 5018328064093855790, guid: df6ec30aeb5ca024285f51e8353a39dc, type: 3}
   itemUnlocked: 1
-  maxTier: 3
+  maxTier: 5
   itemEffector: 2
   itemOperationOnItemEffector: 2
   itemTiers:

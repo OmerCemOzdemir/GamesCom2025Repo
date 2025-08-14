@@ -8,7 +8,7 @@ public class TempPlaformItem : MonoBehaviour
 
     private void Awake()
     {
-        GetComponent<SpriteRenderer>().sprite = item.itemIcon;
+        GetComponent<SpriteRenderer>().sprite = item.itemIcon[0];
     }
 
     public void OnPickUpItem()

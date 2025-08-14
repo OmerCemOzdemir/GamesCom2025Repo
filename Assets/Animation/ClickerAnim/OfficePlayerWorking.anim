@@ -21,27 +21,27 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: 217cae54d9b26eb419d037dddb868adc, type: 3}
+      value: {fileID: 21300000, guid: a1bc52f4955b1b946a5f96691a597ce4, type: 3}
     - time: 0.1
-      value: {fileID: 21300000, guid: 0b81092402c18fb45bcdc6491104513a, type: 3}
+      value: {fileID: 21300000, guid: d90824750aebbd646833fe43bfe2c456, type: 3}
     - time: 0.2
-      value: {fileID: 21300000, guid: 8a0bd56b5175d5444a92bd9e629c8684, type: 3}
+      value: {fileID: 21300000, guid: 8f32edc81c443c44e97293bcaf357c30, type: 3}
     - time: 0.3
-      value: {fileID: 21300000, guid: ff66045d141bc2845a38ff4698e4bf74, type: 3}
+      value: {fileID: 21300000, guid: 8474026e6344e3e4f84393d8df89c5df, type: 3}
     - time: 0.4
-      value: {fileID: 21300000, guid: 02d6d57588394304aa7e1db24a803550, type: 3}
+      value: {fileID: 21300000, guid: db9ab350ddce8574c9a6109683cba932, type: 3}
     - time: 0.5
-      value: {fileID: 21300000, guid: 217cae54d9b26eb419d037dddb868adc, type: 3}
+      value: {fileID: 21300000, guid: 2b4584f570cf40f459d6b2e6df97a88f, type: 3}
     - time: 0.6
-      value: {fileID: 21300000, guid: 16d07d2912c898f42acc85b13ada045e, type: 3}
+      value: {fileID: 21300000, guid: e97ea05a24ae18043ad2f7fb63a0663e, type: 3}
     - time: 0.7
-      value: {fileID: 21300000, guid: dbe56c165fd1ad349953666f6e9a5217, type: 3}
+      value: {fileID: 21300000, guid: 850708bdfb55dc74892ba76678487c1c, type: 3}
     - time: 0.8
-      value: {fileID: 21300000, guid: 1f707f21e7c2e6a4899bb8241d54ba9c, type: 3}
+      value: {fileID: 21300000, guid: 89025a28693bb1b458d4f76cc2907075, type: 3}
     - time: 0.9
-      value: {fileID: 21300000, guid: f8dca3174aa392341a1ab1cac5a947e1, type: 3}
+      value: {fileID: 21300000, guid: 76f2d4930ce0ec442bd963c97d00054f, type: 3}
     - time: 1
-      value: {fileID: 21300000, guid: 38f0de000ad2d5444a0e873effa7639f, type: 3}
+      value: {fileID: 21300000, guid: c61c43857da53e34781bc0d0500f24bb, type: 3}
     attribute: m_Sprite
     path: Desk
     classID: 114
@@ -102,17 +102,17 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 217cae54d9b26eb419d037dddb868adc, type: 3}
-    - {fileID: 21300000, guid: 0b81092402c18fb45bcdc6491104513a, type: 3}
-    - {fileID: 21300000, guid: 8a0bd56b5175d5444a92bd9e629c8684, type: 3}
-    - {fileID: 21300000, guid: ff66045d141bc2845a38ff4698e4bf74, type: 3}
-    - {fileID: 21300000, guid: 02d6d57588394304aa7e1db24a803550, type: 3}
-    - {fileID: 21300000, guid: 217cae54d9b26eb419d037dddb868adc, type: 3}
-    - {fileID: 21300000, guid: 16d07d2912c898f42acc85b13ada045e, type: 3}
-    - {fileID: 21300000, guid: dbe56c165fd1ad349953666f6e9a5217, type: 3}
-    - {fileID: 21300000, guid: 1f707f21e7c2e6a4899bb8241d54ba9c, type: 3}
-    - {fileID: 21300000, guid: f8dca3174aa392341a1ab1cac5a947e1, type: 3}
-    - {fileID: 21300000, guid: 38f0de000ad2d5444a0e873effa7639f, type: 3}
+    - {fileID: 21300000, guid: a1bc52f4955b1b946a5f96691a597ce4, type: 3}
+    - {fileID: 21300000, guid: d90824750aebbd646833fe43bfe2c456, type: 3}
+    - {fileID: 21300000, guid: 8f32edc81c443c44e97293bcaf357c30, type: 3}
+    - {fileID: 21300000, guid: 8474026e6344e3e4f84393d8df89c5df, type: 3}
+    - {fileID: 21300000, guid: db9ab350ddce8574c9a6109683cba932, type: 3}
+    - {fileID: 21300000, guid: 2b4584f570cf40f459d6b2e6df97a88f, type: 3}
+    - {fileID: 21300000, guid: e97ea05a24ae18043ad2f7fb63a0663e, type: 3}
+    - {fileID: 21300000, guid: 850708bdfb55dc74892ba76678487c1c, type: 3}
+    - {fileID: 21300000, guid: 89025a28693bb1b458d4f76cc2907075, type: 3}
+    - {fileID: 21300000, guid: 76f2d4930ce0ec442bd963c97d00054f, type: 3}
+    - {fileID: 21300000, guid: c61c43857da53e34781bc0d0500f24bb, type: 3}
     - {fileID: 21300000, guid: e9c08bb5d32997245b03858985bcbdab, type: 3}
     - {fileID: 21300000, guid: 72386900c07c8ca419ccc8f686d01f0a, type: 3}
     - {fileID: 21300000, guid: 3647984188e6a3e4784ed911e4dd80c7, type: 3}
