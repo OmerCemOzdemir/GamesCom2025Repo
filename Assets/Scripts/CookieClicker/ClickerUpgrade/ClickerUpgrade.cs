@@ -132,10 +132,10 @@ public class ClickerUpgrade : MonoBehaviour
             upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
             upgradeItemInstances[i].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "" + itemsData[i].tier;
             upgradeItemInstances[i].transform.GetChild(4).gameObject.GetComponent<Image>().sprite = upgradeItems[i].itemIcon[itemsData[i].tier];
-
+            //Debug.Log("Calc Money : " + calcMoney);
             if (itemsData[i].unlock)
             {
-                if (calcMoney <= 0)
+                if (money < cost)
                 {
                     upgradeItemInstances[i].GetComponent<Button>().interactable = false;
                     upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
