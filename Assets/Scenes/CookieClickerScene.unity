@@ -9161,7 +9161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseActiveMoneyIncrement: 1
   baseActiveMoneyMultiplier: 1
-  baseIdleMoneyIncrement: 0
+  baseIdleMoneyIncrement: 1
   baseIdleMoneyMultiplier: 1
   baseIdleTime: 1
   baseActiveTime: 0
@@ -9178,6 +9178,10 @@ MonoBehaviour:
   speedInterval: 10
   effects: {fileID: 445194807}
   AFKEffectManager: {fileID: 1199789636}
+  AFKRateIntervals:
+  - 50
+  - 100
+  - 150
 --- !u!4 &1845232325
 Transform:
   m_ObjectHideFlags: 0

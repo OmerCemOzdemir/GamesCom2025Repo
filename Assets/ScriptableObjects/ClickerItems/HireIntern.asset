@@ -21,7 +21,7 @@ MonoBehaviour:
   itemUnlocked: 1
   maxTier: 3
   itemEffector: 4
-  itemOperationOnItemEffector: 3
+  itemOperationOnItemEffector: 1
   itemTiers:
   - tierEffect: 2
     tierCost: 100
