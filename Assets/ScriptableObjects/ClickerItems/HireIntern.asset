@@ -19,13 +19,27 @@ MonoBehaviour:
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   itemUnlocked: 1
-  maxTier: 3
+  maxTier: 10
   itemEffector: 4
-  itemOperationOnItemEffector: 1
+  itemOperationOnItemEffector: 3
   itemTiers:
   - tierEffect: 0.2
-    tierCost: 100
+    tierCost: 1000
   - tierEffect: 0.2
     tierCost: 200
+  - tierEffect: 0.2
+    tierCost: 2200
+  - tierEffect: 0.2
+    tierCost: 5400
+  - tierEffect: 0.2
+    tierCost: 8000
+  - tierEffect: 0.2
+    tierCost: 14000
+  - tierEffect: 0.2
+    tierCost: 20000
+  - tierEffect: 0.2
+    tierCost: 28000
+  - tierEffect: 0.2
+    tierCost: 40000
   - tierEffect: 0.2
     tierCost: 200
