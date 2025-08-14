@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 448eff057de9e5b42844a140ddf7b130
+guid: a9fa87b9934f43747a30005ada0d2949
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7722654891345554819
-    second: Preview_0
+      213: 8007835721411687745
+    second: ClickerSceneAFK_5_Discuss1_0
+  - first:
+      213: 3279248962051203309
+    second: ClickerSceneAFK_5_Discuss1_1
+  - first:
+      213: -8358355244745922042
+    second: ClickerSceneAFK_5_Discuss1_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -97,19 +103,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -126,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Preview_0
+      name: ClickerSceneAFK_5_Discuss1_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 918
-        height: 515
+        x: 784
+        y: 239
+        width: 16
+        height: 37
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +134,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 38da59115b16c2b60800000000000000
-      internalID: 7722654891345554819
+      spriteID: 1457d6a492c812f60800000000000000
+      internalID: 8007835721411687745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClickerSceneAFK_5_Discuss1_1
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 144
+        width: 26
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de061298e8b328d20800000000000000
+      internalID: 3279248962051203309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClickerSceneAFK_5_Discuss1_2
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 0
+        width: 77
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60a656a7038210c80800000000000000
+      internalID: -8358355244745922042
       vertices: []
       indices: 
       edges: []
@@ -151,7 +188,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Preview_0: 7722654891345554819
+      ClickerSceneAFK_5_Discuss1_0: 8007835721411687745
+      ClickerSceneAFK_5_Discuss1_1: 3279248962051203309
+      ClickerSceneAFK_5_Discuss1_2: -8358355244745922042
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
