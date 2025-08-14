@@ -39,7 +39,6 @@ public class PlatformerManager : MonoBehaviour
     [SerializeField] public float moneyRequiredPassBridge = 6000;
 
 
-
     private void OnEnable()
     {
         PlayerControler.onMoneySpent += SpentMoney;
@@ -118,7 +117,7 @@ public class PlatformerManager : MonoBehaviour
     }
 
 
-    
+
 
     //These Functions calculate the money spent and reduce the money.
     private void SpentMoney(MoneySpent moneySpent)
@@ -185,7 +184,7 @@ public class PlatformerManager : MonoBehaviour
 
     }
     //moneySpentSprint
-   
+
     private void EnableInteractText(string txt)
     {
         interactText.SetActive(true);
@@ -325,7 +324,6 @@ public class PlatformerManager : MonoBehaviour
                 EnableInteractText("Bus");
 
             }
-
         }
 
     }
@@ -446,7 +444,6 @@ public class PlatformerManager : MonoBehaviour
         }
 
     }
-
 }
 
 public enum MoneySpent
@@ -460,7 +457,6 @@ public enum MoneySpent
     moneySpentUseElevator,
     moneySpentPassBridge
 }
-
 
 /*
  * 

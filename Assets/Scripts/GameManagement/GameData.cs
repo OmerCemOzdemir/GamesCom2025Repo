@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 [System.Serializable]
 public class GameData
 {
@@ -24,6 +26,8 @@ public class GameData
     //Data For only Cookie Clicker Game:
     public ClickerItemSaveData[] clickerItems;
 
+    // Tutorial Data
+    public List<string> visitedInteractables = new List<string>();
 
 }
 

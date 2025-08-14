@@ -82,6 +82,10 @@ public class PlayerControler : MonoBehaviour
     public InputSystem PlayerInputAction { get => playerInputAction; set => playerInputAction = value; }
     public List<PlatformUpgradeItem> UpgradeItems { get => upgradeItems; set => upgradeItems = value; }
 
+    // Tutorial Event
+    public static event Action<GameObject, string, bool> onContactWithTutorialObject;
+
+
     private void Awake()
     {
         playerAnimator = transform.GetChild(0).GetComponent<Animator>();
@@ -130,6 +134,9 @@ public class PlayerControler : MonoBehaviour
         PlatformerManager.onGameObjectInteract += SetUpGameObjectInteraction;
         Door.onDoorTravel += TeleportPlayer;
         //TaxiUI.onPlayerTravel += TeleportPlayer;
+
+        TutorialTracker.OnInteractableTriggered += HandleInteractableTriggered;
+
     }
 
     private void OnDisable()
@@ -165,6 +172,8 @@ public class PlayerControler : MonoBehaviour
         PlatformerManager.onGameObjectInteract -= SetUpGameObjectInteraction;
         Door.onDoorTravel -= TeleportPlayer;
         //TaxiUI.onPlayerTravel -= TeleportPlayer;
+
+        TutorialTracker.OnInteractableTriggered -= HandleInteractableTriggered;
 
     }
 
@@ -1057,6 +1066,19 @@ public class PlayerControler : MonoBehaviour
     }
 
     #endregion
+
+    private void HandleInteractableTriggered(string id, bool firstTime)
+    {
+        if (firstTime)
+            onPlayerDebug?.Invoke($"First time entered {id}");
+        else
+            onPlayerDebug?.Invoke($"Has visited {id}");
+    }
+
+    /* public static void RaiseDebug(string msg)
+    {
+        onPlayerDebug?.Invoke(msg);
+    } */
 
 }
 
