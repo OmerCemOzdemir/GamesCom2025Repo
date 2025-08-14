@@ -30,7 +30,6 @@ public class ClickerUpgrade : MonoBehaviour
     private void OnDisable()
     {
         ClickerManager.onIdleClick -= UpdateUpgradeButtons;
-
     }
 
     private void Awake()
@@ -39,6 +38,11 @@ public class ClickerUpgrade : MonoBehaviour
         SetUpData();
         CreateUpgradeButtons();
 
+    }
+
+    private void FixedUpdate()
+    {
+        UpdateUpgradeButtons();
     }
 
     private void InitilizeScriptableObjects()

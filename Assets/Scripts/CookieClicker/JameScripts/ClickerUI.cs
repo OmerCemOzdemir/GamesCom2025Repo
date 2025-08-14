@@ -19,12 +19,12 @@ public class ClickerUI : MonoBehaviour
 
     }
 
-    public void SetUpFirst()
+    private void FixedUpdate()
     {
         UpdateText();
     }
 
-    private void UpdateText()
+    public void UpdateText()
     {
         double money = GameManager.Instance.GetGameData().totalMoney;
         double maxMoney = GameManager.Instance.GetGameData().maxTotalMoney;
