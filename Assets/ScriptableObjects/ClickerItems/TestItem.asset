@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b6d8e2e997ef46428455826c9f2195e, type: 3}
+  m_Name: TestItem
+  m_EditorClassIdentifier: 
+  itemName: Test Item
+  itemDescription: This is a Test Item
+  itemIcon:
+  - {fileID: -6157151721061765284, guid: b2a62e75c8251564e8ae9c4e0256a051, type: 3}
+  - {fileID: -1330621349993832296, guid: 81141ad03c21da344881fa03ccdb892c, type: 3}
+  - {fileID: -3238339437373671902, guid: 62ffc0418c1b78b4eb5f308c2a563459, type: 3}
+  - {fileID: -5482197460053532283, guid: fe3cc4ba50df3a747953577c027d564c, type: 3}
+  itemUnlocked: 1
+  maxTier: 4
+  itemEffector: 0
+  itemOperationOnItemEffector: 2
+  itemTiers:
+  - tierEffect: 1
+    tierCost: 10
+  - tierEffect: 1
+    tierCost: 10
+  - tierEffect: 1
+    tierCost: 10
+  - tierEffect: 1
+    tierCost: 10

@@ -136,7 +136,7 @@ public class ClickerManager : MonoBehaviour
             //clickSpeed = (currentFrame - previousFrame);
             //clickSpeed = 1000;
             clickAnimTimer = 0;
-            
+
         }
 
     }
@@ -342,7 +342,7 @@ public class ClickerManager : MonoBehaviour
 
     private void ImplementUpgrades(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems)
     {
-        ResetFields(upgradeItems[index].itemEffector);
+        //ResetFields(upgradeItems[index].itemEffector);
         switch (upgradeItems[index].itemEffector)
         {
             case ClickerItemEffetors.baseActiveMoneyIncrement:
@@ -361,7 +361,7 @@ public class ClickerManager : MonoBehaviour
                 break;
             case ClickerItemEffetors.baseIdleTime:
                 idleTime = ImplementOperations(index, itemsData, upgradeItems, idleTime);
-                if (itemsData[index].tier > 0) {enableIdleMoney = true; }
+                if (itemsData[index].tier > 0) { enableIdleMoney = true; }
                 break;
             case ClickerItemEffetors.walletLevel:
                 //Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
@@ -570,8 +570,8 @@ public class ClickerManager : MonoBehaviour
     + " activeMoneyMultiplier: " + activeMoneyMultiplier + "\n"
     + " idleMoneyIncrement: " + idleMoneyIncrement + "\n"
     + " idleMoneyMultiplier: " + idleMoneyMultiplier + "\n"
-    + " idleTime: " + idleTime + "\n";
-
+    + " idleTime: " + idleTime + "\n"
+    + " idle profit rate: " + idleMoneyProfitRate + "\n";
         Debug.Log(text);
 
         return text;

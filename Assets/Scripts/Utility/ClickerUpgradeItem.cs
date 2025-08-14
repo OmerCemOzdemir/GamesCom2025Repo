@@ -6,7 +6,7 @@ public class ClickerUpgradeItem : ScriptableObject
 {
     [SerializeField] public string itemName;
     [SerializeField] public string itemDescription;
-    [SerializeField] public Sprite[] itemIcon; 
+    [SerializeField] public Sprite[] itemIcon;
 
     [SerializeField] public bool itemUnlocked = true;
     [SerializeField] public int maxTier = 0;
@@ -84,11 +84,9 @@ public class ClickerUpgradeItemCustomInspector : Editor
 
         ClickerUpgradeItem item = (ClickerUpgradeItem)target;
 
-        if (item.itemTiers.Length != 0)
-        {
-            item.maxTier = item.itemTiers.Length;
-            EditorGUILayout.LabelField("Max Tier Size: " + item.maxTier);
-        }
+        item.maxTier = item.itemTiers.Length;
+        EditorGUILayout.LabelField("Max Tier Size: " + item.maxTier);
+
 
         serializedObject.ApplyModifiedProperties();
     }
