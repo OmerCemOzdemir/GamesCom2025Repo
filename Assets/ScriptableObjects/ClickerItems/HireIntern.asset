@@ -18,6 +18,13 @@ MonoBehaviour:
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
+  - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
+  - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
+  - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
+  - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
+  - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
+  - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
+  - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   itemUnlocked: 1
   maxTier: 10
   itemEffector: 4
@@ -42,4 +49,4 @@ MonoBehaviour:
   - tierEffect: 0.2
     tierCost: 40000
   - tierEffect: 0.2
-    tierCost: 200
+    tierCost: 80000

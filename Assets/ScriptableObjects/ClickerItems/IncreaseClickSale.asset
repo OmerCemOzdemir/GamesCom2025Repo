@@ -25,7 +25,7 @@ MonoBehaviour:
   itemEffector: 0
   itemOperationOnItemEffector: 2
   itemTiers:
-  - tierEffect: 1
+  - tierEffect: 10
     tierCost: 100
   - tierEffect: 1
     tierCost: 200
