@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b6d8e2e997ef46428455826c9f2195e, type: 3}
-  m_Name: HireIntern
+  m_Name: HireIntern4
   m_EditorClassIdentifier: 
-  itemName: Hire Intern
-  itemDescription: Base Idle Increment +0.2
+  itemName: Hire Intern 4
+  itemDescription: Base Idle Time -0.5
   itemIcon:
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   itemUnlocked: 1
   maxTier: 3
-  itemEffector: 2
-  itemOperationOnItemEffector: 2
+  itemEffector: 4
+  itemOperationOnItemEffector: 3
   itemTiers:
-  - tierEffect: 0.2
+  - tierEffect: 0.5
     tierCost: 100
-  - tierEffect: 0.2
+  - tierEffect: 0.5
     tierCost: 200
-  - tierEffect: 0.2
+  - tierEffect: 0.5
     tierCost: 200

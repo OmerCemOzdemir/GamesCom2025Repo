@@ -10,24 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98c461c3c92a14f45845bb4abff5c9e4, type: 3}
-  m_Name: SpringSoles
+  m_Name: MovementSpeed
   m_EditorClassIdentifier: 
-  itemName: Spring Soles
-  itemDescription: Higher jump height
-  itemIcon: {fileID: -100712731447974267, guid: a6263bd840ab1ff4884ca4445f4e80de, type: 3}
-  itemCost: 500
-  itemType: 0
-  hasItemEffectOnMoney: 1
+  itemName: Sneakers
+  itemDescription: Increases movement speed
+  itemIcon: {fileID: -714534961146650543, guid: 7269704295741084099839ebfe9f8296, type: 3}
+  itemCost: 300
+  itemType: 1
+  hasItemEffectOnMoney: 0
   hasItemEffectOnMovement: 1
   itemEffectOnMoney:
-    value: 100
-    operations: 2
-    moneySpent: 2
-  itemEffectOnMovement:
-    value: 2
+    value: 0
     operations: 0
-    playerMovement: 2
+    moneySpent: 0
+  itemEffectOnMovement:
+    value: 0
+    operations: 2
+    playerMovement: 0
   itemEffectSpecial: 0
-  hasTier: 0
-  effectTiersPercentage: []
-  costTiers: []
+  hasTier: 1
+  effectTiersPercentage:
+  - 10
+  - 12.5
+  costTiers:
+  - 100
+  - 200

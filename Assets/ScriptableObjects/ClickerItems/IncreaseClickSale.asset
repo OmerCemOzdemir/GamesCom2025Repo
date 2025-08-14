@@ -18,6 +18,8 @@ MonoBehaviour:
   - {fileID: -2264833514754738103, guid: 7b68b7d8be7a1b349b57a121bbfa8bf1, type: 3}
   - {fileID: -2264833514754738103, guid: 7b68b7d8be7a1b349b57a121bbfa8bf1, type: 3}
   - {fileID: -2264833514754738103, guid: 7b68b7d8be7a1b349b57a121bbfa8bf1, type: 3}
+  - {fileID: -2264833514754738103, guid: 7b68b7d8be7a1b349b57a121bbfa8bf1, type: 3}
+  - {fileID: -2264833514754738103, guid: 7b68b7d8be7a1b349b57a121bbfa8bf1, type: 3}
   itemUnlocked: 1
   maxTier: 5
   itemEffector: 0
