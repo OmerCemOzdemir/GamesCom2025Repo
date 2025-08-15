@@ -110,7 +110,7 @@ public class ClickerTutorialManager : MonoBehaviour
         }
 
 
-        if (currentStep == TutorialStep.MoneyTo1000 && money >= 1000)
+        if (currentStep == TutorialStep.MoneyTo1000 && money >= 200)
         {
             tutorialConfetiEffect.Play();
             GoToStep(TutorialStep.MoneyReached1000);
@@ -291,13 +291,15 @@ public class ClickerTutorialManager : MonoBehaviour
             GoToStep(TutorialStep.MoneyTo1000);
         }
     }
-    private void OnUpgradeTutorialClicked()
+    public void OnUpgradeTutorialClicked()
     {
-        
+        var data = GameManager.Instance.GetGameData();
         var clickerManager = FindObjectOfType<ClickerManager>();
+
         if (clickerManager != null)
         {
-            GameManager.Instance.GetGameData().clickerItems[0].tier = 1;
+            clickerManager.ImplementTutorialActiveIncrement(1f);
+            // data.clickerItems[0].tier = 1; // if using scriptable index to upgrade
             clickerManager.SetUpData();
             clickerManager.PrintFields(); // debug
         }

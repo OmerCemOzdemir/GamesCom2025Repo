@@ -822,7 +822,7 @@ MonoBehaviour:
   uiGraphicToHide: {fileID: 0}
   lineSettings:
     transition: 1
-    duration: 1.5
+    duration: 0.5
   autoStart: 1
 --- !u!114 &251244206
 MonoBehaviour:
@@ -980,7 +980,7 @@ MonoBehaviour:
   uiGraphicToHide: {fileID: 0}
   lineSettings:
     transition: 1
-    duration: 1.5
+    duration: 0.5
   autoStart: 1
 --- !u!114 &282443217
 MonoBehaviour:
@@ -1970,7 +1970,7 @@ MonoBehaviour:
   uiGraphicToHide: {fileID: 0}
   lineSettings:
     transition: 1
-    duration: 1.5
+    duration: 0.5
   autoStart: 1
 --- !u!114 &555213616
 MonoBehaviour:
@@ -1992,7 +1992,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Click on the button to make a sale.
+  m_text: Click on your cublicle to make a sale.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
   m_sharedMaterial: {fileID: 8676620777337174328, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
@@ -2920,7 +2920,7 @@ MonoBehaviour:
   uiGraphicToHide: {fileID: 0}
   lineSettings:
     transition: 1
-    duration: 1.5
+    duration: 0.5
   autoStart: 1
 --- !u!114 &672650719
 MonoBehaviour:
@@ -3648,7 +3648,7 @@ MonoBehaviour:
   uiGraphicToHide: {fileID: 0}
   lineSettings:
     transition: 1
-    duration: 1.5
+    duration: 0.5
   autoStart: 1
 --- !u!114 &802942316
 MonoBehaviour:
@@ -4568,7 +4568,7 @@ MonoBehaviour:
   uiGraphicToHide: {fileID: 0}
   lineSettings:
     transition: 1
-    duration: 1.5
+    duration: 0.5
   autoStart: 1
 --- !u!114 &1031319232
 MonoBehaviour:
@@ -4592,7 +4592,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Your sales make more money now.
 
-    Let''s make $1000.'
+    Let''s make $200.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
   m_sharedMaterial: {fileID: 8676620777337174328, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
@@ -4760,7 +4760,7 @@ MonoBehaviour:
   uiGraphicToHide: {fileID: 0}
   lineSettings:
     transition: 1
-    duration: 1.5
+    duration: 0.5
   autoStart: 1
 --- !u!114 &1153175537
 MonoBehaviour:
@@ -5260,6 +5260,7 @@ MonoBehaviour:
   AFK_1_effects: {fileID: 1882363937}
   AFK_2_effects: {fileID: 2080744378}
   AFK_3_effects: {fileID: 1900256738}
+  AFK_4_effects: {fileID: 0}
 --- !u!1 &1241822275
 GameObject:
   m_ObjectHideFlags: 0
@@ -5317,7 +5318,7 @@ MonoBehaviour:
   uiGraphicToHide: {fileID: 0}
   lineSettings:
     transition: 1
-    duration: 1.5
+    duration: 0.5
   autoStart: 1
 --- !u!114 &1241822278
 MonoBehaviour:
@@ -5351,7 +5352,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278910720
-  m_fontColor: {r: 0, g: 1, b: 0.037588835, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -16125,16 +16126,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1451780930}
-  m_LocalRotation: {x: -0, y: -0, z: -0.10105626, w: 0.99488074}
+  m_LocalRotation: {x: -0, y: -0, z: -0.40334567, w: 0.9150477}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.00008, y: 1.00008, z: 1.0000798}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 248520432}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -11.6}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -47.575}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 333, y: 226}
+  m_AnchoredPosition: {x: -72, y: 260}
   m_SizeDelta: {x: 158.75, y: 293.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1451780932
@@ -16641,16 +16642,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1603282814}
-  m_LocalRotation: {x: 0, y: -0, z: 0.6142852, w: -0.78908414}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9159121, w: -0.40137878}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0000799, y: 1.0000799, z: 1.0000798}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1689376505}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 284.2}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 227.329}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 404, y: 332}
+  m_AnchoredPosition: {x: 400, y: -241}
   m_SizeDelta: {x: 158.75, y: 293.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1603282816
@@ -17413,6 +17414,7 @@ MonoBehaviour:
   effects: {fileID: 445194807}
   AFKEffectManager: {fileID: 1199789636}
   AFKRateIntervals: []
+  activeMoneyIncrement: 0
 --- !u!4 &1845232325
 Transform:
   m_ObjectHideFlags: 0
@@ -18050,7 +18052,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1969734142}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 427842722}
+        m_TargetAssemblyTypeName: ClickerTutorialManager, Assembly-CSharp
+        m_MethodName: OnUpgradeTutorialClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1969734142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18125,7 +18139,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 783, y: 407}
+  m_AnchoredPosition: {x: 733, y: -398}
   m_SizeDelta: {x: 329.32, y: 193.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1987773913

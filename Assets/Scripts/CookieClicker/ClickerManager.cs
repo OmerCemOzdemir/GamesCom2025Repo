@@ -52,7 +52,7 @@ public class ClickerManager : MonoBehaviour
     private bool[] AFKBools = { true, true, true, true };
 
 
-    private float activeMoneyIncrement;
+    public float activeMoneyIncrement;
     private float activeMoneyMultiplier;
     private float idleMoneyIncrement;
     private float idleMoneyMultiplier;
@@ -383,6 +383,13 @@ public class ClickerManager : MonoBehaviour
         }
 
         SaveParameters();
+    }
+
+    public void ImplementTutorialActiveIncrement(float delta)
+    {
+        activeMoneyIncrement += delta;  // change runtime value
+        SaveParameters();
+        //FindAnyObjectByType<ClickerUI>()?.UpdateText();
     }
 
     private float ImplementOperations(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems, float fieldEffected)
