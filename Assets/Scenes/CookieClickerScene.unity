@@ -9180,10 +9180,10 @@ MonoBehaviour:
   effects: {fileID: 445194807}
   AFKEffectManager: {fileID: 1199789636}
   AFKRateIntervals:
-  - 0.2
-  - 2
-  - 7
-  - 10
+  - 5
+  - 4.8
+  - 4.6
+  - 4
 --- !u!4 &1845232325
 Transform:
   m_ObjectHideFlags: 0

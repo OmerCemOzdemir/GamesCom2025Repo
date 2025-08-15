@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HireIntern
   m_EditorClassIdentifier: 
   itemName: Hire Intern
-  itemDescription: Base Idle Increment +0.2
+  itemDescription: Base Idle Increment -0.2
   itemIcon:
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
   - {fileID: 7496027283188331554, guid: 6419911f2f86b354d95c301b74100efe, type: 3}
