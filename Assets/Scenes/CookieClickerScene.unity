@@ -9180,7 +9180,7 @@ MonoBehaviour:
   effects: {fileID: 445194807}
   AFKEffectManager: {fileID: 1199789636}
   AFKRateIntervals:
-  - 0.2
+  - 0
   - 2
   - 7
   - 10
