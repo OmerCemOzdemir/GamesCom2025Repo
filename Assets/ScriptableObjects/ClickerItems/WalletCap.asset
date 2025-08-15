@@ -21,11 +21,11 @@ MonoBehaviour:
   itemUnlocked: 0
   maxTier: 3
   itemEffector: 5
-  itemOperationOnItemEffector: 2
+  itemOperationOnItemEffector: 5
   itemTiers:
-  - tierEffect: 2000
+  - tierEffect: 20000
     tierCost: 2000
-  - tierEffect: 5000
+  - tierEffect: 50000
     tierCost: 10000
-  - tierEffect: 8000
+  - tierEffect: 80000
     tierCost: 18000

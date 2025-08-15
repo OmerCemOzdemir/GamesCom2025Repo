@@ -451,8 +451,8 @@ public class PlayerControler : MonoBehaviour
             case Interaction.Wallet:
                 //Interaction Toggle Not needed
                 Debug.Log("Get Wallet");
-                GameManager.Instance.GetGameData().walletLevel++;
-                Debug.Log("Wallet LevelButton: " + GameManager.Instance.GetGameData().walletLevel);
+                //GameManager.Instance.GetGameData().walletLevel++;
+                //Debug.Log("Wallet LevelButton: " + GameManager.Instance.GetGameData().walletLevel);
                 currentInteractedGameObject.GetComponent<Wallet>().PickUpWallet();
                 break;
             case Interaction.Item:

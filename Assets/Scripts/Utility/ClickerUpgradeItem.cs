@@ -32,7 +32,8 @@ public enum Operations
     Divide,
     Add,
     Subtract,
-    Null
+    Null,
+    Exact
 }
 
 
@@ -83,8 +84,13 @@ public class ClickerUpgradeItemCustomInspector : Editor
         EditorGUILayout.PropertyField(itemTiers);
 
         ClickerUpgradeItem item = (ClickerUpgradeItem)target;
-
-        item.maxTier = item.itemTiers.Length;
+        if (item.itemTiers != null)
+        {
+            if (item.itemTiers.Length != 0)
+            {
+                item.maxTier = item.itemTiers.Length;
+            }
+        }
         EditorGUILayout.LabelField("Max Tier Size: " + item.maxTier);
 
 

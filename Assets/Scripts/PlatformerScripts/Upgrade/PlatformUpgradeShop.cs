@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,9 +13,6 @@ public class PlatformUpgradeShop : MonoBehaviour
 
     [SerializeField] private GameObject upgradeShopUI;
     [SerializeField] private GameObject buyButton;
-    [SerializeField] private TextMeshProUGUI titleInfoText;
-    [SerializeField] private TextMeshProUGUI infoText;
-    [SerializeField] private TextMeshProUGUI costInfoText;
     [SerializeField] private GameObject upgradeItemPrefab;
     [SerializeField] private Transform parentContext;
 
@@ -27,6 +23,7 @@ public class PlatformUpgradeShop : MonoBehaviour
 
     public int PlatformItemIndex { get => platformItemIndex; set => platformItemIndex = value; }
     public List<PlatformUpgradeItem> UpgradeItems { get => upgradeItems; set => upgradeItems = value; }
+    public PlatformItemSaveData[] UpgradeItemsData { get => upgradeItemsData; set => upgradeItemsData = value; }
 
     private MainHubUI mainHubUI;
 
@@ -144,16 +141,7 @@ public class PlatformUpgradeShop : MonoBehaviour
     public void UpdateShopTexts()
     {
         Debug.Log("UpdateShopTexts: " + platformItemIndex);
-        titleInfoText.text = "" + upgradeItems[platformItemIndex].itemName;
-        infoText.text = "" + upgradeItems[platformItemIndex].itemDescription;
-        if (upgradeItems[platformItemIndex].hasTier)
-        {
-            costInfoText.text = "" + upgradeItemsData[platformItemIndex].cost;
-        }
-        else
-        {
-            costInfoText.text = "" + upgradeItems[platformItemIndex].itemCost;
-        }
+       
 
         double money = GameManager.Instance.GetGameData().totalMoney;
         double cost = (double)upgradeItemsData[platformItemIndex].cost;
