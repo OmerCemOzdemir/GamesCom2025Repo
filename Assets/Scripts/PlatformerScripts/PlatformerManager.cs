@@ -27,8 +27,8 @@ public class PlatformerManager : MonoBehaviour
     public static event Action<Interaction> onInteract;
 
     [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1.5f, -10f); // default for Z is -10 to prevent 2D clipping issues
-    [SerializeField] private GameObject interactText;
-    [SerializeField] private GameObject requiredMoneyText;
+    [SerializeField] public GameObject interactText;
+    [SerializeField] public GameObject requiredMoneyText;
     [SerializeField] public float moneyRequiredMove = 10;
     [SerializeField] public float moneyRequiredSprint = 50;
     [SerializeField] public float moneyRequiredJump = 100;
@@ -185,7 +185,7 @@ public class PlatformerManager : MonoBehaviour
     }
     //moneySpentSprint
 
-    private void EnableInteractText(string txt)
+    public void EnableInteractText(string txt)
     {
         interactText.SetActive(true);
         requiredMoneyText.SetActive(true);
