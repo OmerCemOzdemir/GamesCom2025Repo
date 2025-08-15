@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: WalletCap
   m_EditorClassIdentifier: 
   itemName: Wallet Cap
-  itemDescription: Increase the maximum money that can be stored (Unlock through
-    exploration)
+  itemDescription: Increase the maximum money that can be stored\n <b><color="red"><size=80%>(UNLOCK
+    THROUGH EXPLORATION)</b></color>
   itemIcon:
   - {fileID: -6157151721061765284, guid: b2a62e75c8251564e8ae9c4e0256a051, type: 3}
   - {fileID: -1330621349993832296, guid: 81141ad03c21da344881fa03ccdb892c, type: 3}

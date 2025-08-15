@@ -951,7 +951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &581876782
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9391,7 +9391,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: THIS UPGRADE INCREASES THE AMOUNT OF MONEY YOU MAKE BY HIRING MORE INTERNS
+  m_text: Increase the maximum money that can be stored\n <b><color="red"><size=80%>(UNLOCK
+    THROUGH EXPLORATION)</b></color>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 791156bd136aa3b44b31a4ce832057b5, type: 2}
   m_sharedMaterial: {fileID: -7071118860608394476, guid: 791156bd136aa3b44b31a4ce832057b5, type: 2}
@@ -9418,13 +9419,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
+  m_fontSize: 29.6
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 30
-  m_fontStyle: 0
+  m_fontStyle: 32
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535

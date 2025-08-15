@@ -31,23 +31,23 @@ MonoBehaviour:
   itemEffector: 4
   itemOperationOnItemEffector: 3
   itemTiers:
-  - tierEffect: 0.2
+  - tierEffect: 0.4
+    tierCost: 500
+  - tierEffect: 0.4
     tierCost: 1000
-  - tierEffect: 0.2
-    tierCost: 200
-  - tierEffect: 0.2
-    tierCost: 2200
-  - tierEffect: 0.2
-    tierCost: 5400
-  - tierEffect: 0.2
+  - tierEffect: 0.4
+    tierCost: 2000
+  - tierEffect: 0.4
+    tierCost: 5000
+  - tierEffect: 0.4
     tierCost: 8000
-  - tierEffect: 0.2
+  - tierEffect: 0.4
     tierCost: 14000
-  - tierEffect: 0.2
+  - tierEffect: 0.4
     tierCost: 20000
-  - tierEffect: 0.2
+  - tierEffect: 0.4
     tierCost: 28000
-  - tierEffect: 0.2
+  - tierEffect: 0.4
     tierCost: 40000
-  - tierEffect: 0.2
+  - tierEffect: 0.4
     tierCost: 80000
