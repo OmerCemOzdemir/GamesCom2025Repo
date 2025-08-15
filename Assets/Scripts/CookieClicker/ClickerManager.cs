@@ -24,7 +24,7 @@ public class ClickerManager : MonoBehaviour
     [SerializeField] private float baseIdleMoneyIncrement = 1; //Default is 1
     [SerializeField] private float baseIdleMoneyMultiplier = 1; //Default is 1
     [Tooltip("Increase this to longer the elevatorSpeed of idle money")]
-    [SerializeField] private float baseIdleTime = 1;
+    [SerializeField] private float baseIdleTime = 5;
     [SerializeField] private float baseActiveTime = 1;
     [Space(10)]
 
