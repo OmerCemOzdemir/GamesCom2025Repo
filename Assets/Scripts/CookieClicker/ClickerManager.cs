@@ -151,7 +151,7 @@ public class ClickerManager : MonoBehaviour
         // profit increase formula: ((y-x)/x)*100
         //idleMoneyProfitPercentage = (((idleMoneyIncrement * idleMoneyMultiplier) - idleMoneyInitialProfit) / idleMoneyInitialProfit) * 100;
 
-        if (idleMoneyProfitRate > 0)
+        if (idleMoneyIncrement > AFKRateIntervals[0])
         {
             if (AFKBools[0])
             {
@@ -161,7 +161,7 @@ public class ClickerManager : MonoBehaviour
             }
         }
 
-        if (idleMoneyProfitRate >= AFKRateIntervals[1])
+        if (idleMoneyIncrement >= AFKRateIntervals[1])
         {
             if (AFKBools[1])
             {
@@ -171,7 +171,7 @@ public class ClickerManager : MonoBehaviour
             }
         }
 
-        if (idleMoneyProfitRate >= AFKRateIntervals[2])
+        if (idleMoneyIncrement >= AFKRateIntervals[2])
         {
             if (AFKBools[2])
             {
@@ -181,7 +181,7 @@ public class ClickerManager : MonoBehaviour
             }
         }
 
-        if (idleMoneyProfitRate >= AFKRateIntervals[3])
+        if (idleMoneyIncrement >= AFKRateIntervals[3])
         {
             if (AFKBools[3])
             {
