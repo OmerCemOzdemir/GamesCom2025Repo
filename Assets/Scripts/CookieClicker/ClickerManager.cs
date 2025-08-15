@@ -151,7 +151,7 @@ public class ClickerManager : MonoBehaviour
         // profit increase formula: ((y-x)/x)*100
         //idleMoneyProfitPercentage = (((idleMoneyIncrement * idleMoneyMultiplier) - idleMoneyInitialProfit) / idleMoneyInitialProfit) * 100;
 
-        if (idleMoneyProfitRate > 0 && idleMoneyProfitRate < AFKRateIntervals[0])
+        if (idleMoneyProfitRate > 0)
         {
             if (AFKBools[0])
             {
@@ -160,7 +160,8 @@ public class ClickerManager : MonoBehaviour
                 AFKBools[0] = false;
             }
         }
-        else if (idleMoneyProfitRate >= AFKRateIntervals[1] && idleMoneyProfitRate < AFKRateIntervals[2])
+
+        if (idleMoneyProfitRate >= AFKRateIntervals[1])
         {
             if (AFKBools[1])
             {
@@ -169,13 +170,24 @@ public class ClickerManager : MonoBehaviour
                 AFKBools[1] = false;
             }
         }
-        else if (idleMoneyProfitRate > AFKRateIntervals[2])
+
+        if (idleMoneyProfitRate >= AFKRateIntervals[2])
         {
             if (AFKBools[2])
             {
                 Debug.Log("The Profit rate: AFK_3");
                 PlayerAFKAnim(AFKAnimator3, AFKWalkClip3);
                 AFKBools[2] = false;
+            }
+        }
+
+        if (idleMoneyProfitRate >= AFKRateIntervals[3])
+        {
+            if (AFKBools[3])
+            {
+                Debug.Log("The Profit rate: AFK_3");
+                PlayerAFKAnim(AFKAnimator4, AFKWalkClip4);
+                AFKBools[3] = false;
             }
         }
 
@@ -203,7 +215,7 @@ public class ClickerManager : MonoBehaviour
     {
         //idleMoneyProfitRatePre = idleMoneyProfitRate;
         Debug.Log("Profit: " + idleMoneyProfitRate);
-        idleMoneyProfitRate = 0;
+        idleMoneyProfitRate = (idleMoneyIncrement * idleMoneyMultiplier) / idleTime;
     }
 
     private void IdleMoney()
@@ -229,7 +241,6 @@ public class ClickerManager : MonoBehaviour
     IEnumerator IdleClicker()
     {
         onIdleClick?.Invoke();
-        idleMoneyProfitRate += idleMoneyIncrement * idleMoneyMultiplier;
         AFKEffectManager.SpawnEffects();
         HandleAFKAnim();
         yield return new WaitForSeconds(idleTime);
@@ -364,15 +375,14 @@ public class ClickerManager : MonoBehaviour
                 if (itemsData[index].tier > 0) { enableIdleMoney = true; }
                 break;
             case ClickerItemEffetors.walletLevel:
-                //Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
-                GameManager.Instance.GetGameData().walletLevel = itemsData[index].tier; //(int)ImplementOperations(index, itemsData, upgradeItems, idleTime);
-                //Debug.Log("Wallet Level: " + GameManager.Instance.GetGameData().walletLevel);
-                CalculateWallet();
+                GameManager.Instance.GetGameData().maxTotalMoney = ImplementOperations(index, itemsData, upgradeItems, idleTime);
                 break;
             default:
                 break;
 
         }
+
+        SaveParameters();
     }
 
     private float ImplementOperations(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems, float fieldEffected)
@@ -393,6 +403,12 @@ public class ClickerManager : MonoBehaviour
                 case Operations.Divide:
                     fieldEffected /= upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
                     break;
+                case Operations.Exact:
+                    fieldEffected = upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
+                    break;
+                case Operations.Null:
+                    fieldEffected = 0;
+                    break;
                 default:
                     break;
             }
@@ -401,12 +417,27 @@ public class ClickerManager : MonoBehaviour
         return fieldEffected;
     }
 
-    private void UpdateUpgrades(ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems)
+    private void LoadParameters()
     {
-        for (int i = 0; i < itemsData.Length; i++)
-        {
-            ImplementUpgrades(i, itemsData, upgradeItems);
-        }
+        ClickerParametersData data = GameManager.Instance.GetGameData().clickerParameters;
+        activeMoneyIncrement = data.activeMoneyIncrement;
+        activeMoneyMultiplier = data.activeMoneyMultiplier;
+        idleMoneyIncrement = data.idleMoneyIncrement;
+        idleMoneyMultiplier = data.idleMoneyMultiplier;
+        idleTime = data.idleTime;
+        enableIdleMoney = data.enableIdleMoney;
+    }
+
+    private void SaveParameters()
+    {
+        ClickerParametersData data = new ClickerParametersData();
+        data.activeMoneyIncrement = activeMoneyIncrement;
+        data.activeMoneyMultiplier = activeMoneyMultiplier;
+        data.idleMoneyIncrement = idleMoneyIncrement;
+        data.idleMoneyMultiplier = idleMoneyMultiplier;
+        data.idleTime = idleTime;
+        data.enableIdleMoney = enableIdleMoney;
+        GameManager.Instance.GetGameData().clickerParameters = data;
     }
 
     private void InitilizeScriptableObjects()
@@ -476,67 +507,26 @@ public class ClickerManager : MonoBehaviour
         idleTime = baseIdleTime;
     }
 
-    private void ResetFields(ClickerItemEffetors field)
-    {
-        switch (field)
-        {
-            case ClickerItemEffetors.baseActiveMoneyIncrement:
-                activeMoneyIncrement = baseActiveMoneyIncrement;
-
-                break;
-            case ClickerItemEffetors.baseActiveMoneyMultiplier:
-                activeMoneyMultiplier = baseActiveMoneyMultiplier;
-
-                break;
-            case ClickerItemEffetors.baseIdleMoneyMultiplier:
-                idleMoneyIncrement = baseIdleMoneyIncrement;
-
-                break;
-            case ClickerItemEffetors.baseIdleMoneyIncrement:
-                idleMoneyMultiplier = baseIdleMoneyMultiplier;
-
-                break;
-            case ClickerItemEffetors.baseIdleTime:
-                idleTime = baseIdleTime;
-
-                break;
-            default:
-                break;
-
-        }
-
-    }
-
-    public void CalculateWallet()
-    {
-        //GameManager.Instance.GetGameData().walletLevel = walletLevel;
-        int walletLevel = GameManager.Instance.GetGameData().walletLevel;
-        float maxTotalMoney = 10000;
-        for (int i = 0; i < walletLevel; i++)
-        {
-            maxTotalMoney *= 10;
-        }
-        //Debug.Log("Wallet Level: " + walletLevel);
-        //Debug.Log("Max Money: " + maxTotalMoney);
-        GameManager.Instance.GetGameData().maxTotalMoney = maxTotalMoney;
-
-    }
-
     public void SetUpData()
     {
         GameManager.Instance.GetGameData();
-
-        //UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems);
-
-        //Debug.Log("max Money: " + walletLevel);
-        ResetFields();
-        onPlayMusic?.Invoke(Music.Clicker);
-
-        UpdateUpgrades(GameManager.Instance.GetGameData().clickerItems, upgradeClickerItems);
-        CalculateWallet();
-
-        //onActiveClick?.Invoke();
+        if (GameManager.Instance.GetGameData().clickerParameterNewGame)
+        {
+            ResetFields();
+            SaveParameters();
+            GameManager.Instance.GetGameData().clickerParameterNewGame = false;
+        }
+        else
+        {
+            LoadParameters();
+        }
         FindAnyObjectByType<ClickerUI>().UpdateText();
+
+        if (enableIdleMoney)
+        {
+            HandleAFKAnim();
+        }
+
 
         PlatformItemSaveData[] platformItemData = GameManager.Instance.GetGameData().platformItems;
         for (int i = 0; i < platformItemData.Length; i++)
@@ -561,7 +551,6 @@ public class ClickerManager : MonoBehaviour
                     break;
             }
         }
-
     }
 
     public string PrintFields()

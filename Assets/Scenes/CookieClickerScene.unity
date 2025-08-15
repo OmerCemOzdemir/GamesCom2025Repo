@@ -2739,6 +2739,7 @@ MonoBehaviour:
   AFK_1_effects: {fileID: 1882363937}
   AFK_2_effects: {fileID: 2080744378}
   AFK_3_effects: {fileID: 1900256738}
+  AFK_4_effects: {fileID: 842386485}
 --- !u!1 &1245309444
 GameObject:
   m_ObjectHideFlags: 0
@@ -9179,9 +9180,10 @@ MonoBehaviour:
   effects: {fileID: 445194807}
   AFKEffectManager: {fileID: 1199789636}
   AFKRateIntervals:
-  - 50
-  - 100
-  - 150
+  - 0.2
+  - 2
+  - 7
+  - 10
 --- !u!4 &1845232325
 Transform:
   m_ObjectHideFlags: 0
@@ -9697,7 +9699,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 750, y: -394}
+  m_AnchoredPosition: {x: 737, y: 393.63}
   m_SizeDelta: {x: 329.32, y: 193.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1987773913

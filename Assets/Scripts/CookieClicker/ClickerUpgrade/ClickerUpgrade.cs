@@ -162,8 +162,7 @@ public class ClickerUpgrade : MonoBehaviour
             {
                 upgradeItemInstances[j].GetComponent<Image>().color = new Color(0, 1, 0, 1);
                 upgradeItemInstances[j].GetComponent<Button>().interactable = false;
-                upgradeItemInstances[j].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "max";
-
+                upgradeItemInstances[j].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "Max";
             }
             //Debug.Log(" after currentTier: " + currentTier);
 
@@ -181,10 +180,10 @@ public class ClickerUpgrade : MonoBehaviour
         int maxTier = upgradeItems[clickerIndex].maxTier;
         int currentTier = itemsData[clickerIndex].tier;
         currentTier++;
-        Debug.Log("upgradeItemsData[clickerIndex].tier: " + itemsData[clickerIndex].tier);
-        Debug.Log("currentTier: " + currentTier);
+        //Debug.Log("upgradeItemsData[clickerIndex].tier: " + itemsData[clickerIndex].tier);
+        //Debug.Log("currentTier: " + currentTier);
         bool maxTierReached = maxTier <= currentTier;
-        Debug.Log("maxTierReached: " + maxTierReached);
+        //Debug.Log("maxTierReached: " + maxTierReached);
         if (calcMoney <= 0 || maxTierReached)
         {
             Debug.Log("Not Enough Money Or Already fully Upgraded");
@@ -210,10 +209,10 @@ public class ClickerUpgrade : MonoBehaviour
     private void SetUpData()
     {
         //Debug.Log("New Game: " + GameManager.Instance.GetGameData().newGame);
-        if (GameManager.Instance.GetGameData().clickerNewGame)
+        if (GameManager.Instance.GetGameData().clickerUpgradeNewGame)
         {
             itemsData = new ClickerItemSaveData[upgradeItems.Count];
-            Debug.Log("New Game: " + GameManager.Instance.GetGameData().clickerNewGame);
+            Debug.Log("New Game: " + GameManager.Instance.GetGameData().clickerUpgradeNewGame);
 
             for (int i = 0; i < itemsData.Length; i++)
             {
@@ -228,7 +227,7 @@ public class ClickerUpgrade : MonoBehaviour
 
             GameManager.Instance.GetGameData().clickerItems = itemsData;
             GameManager.Instance.SaveGame();
-            GameManager.Instance.GetGameData().clickerNewGame = false;
+            GameManager.Instance.GetGameData().clickerUpgradeNewGame = false;
         }
         else
         {

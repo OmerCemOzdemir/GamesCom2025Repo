@@ -815,9 +815,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 4
+  specificTargetToHide: {fileID: 0}
+  uiGraphicToHide: {fileID: 0}
   lineSettings:
-  - transition: 1
-    duration: 0.5
+    transition: 1
+    duration: 1.5
   autoStart: 1
 --- !u!114 &251244206
 MonoBehaviour:
@@ -968,11 +973,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 4
+  specificTargetToHide: {fileID: 0}
+  uiGraphicToHide: {fileID: 0}
   lineSettings:
-  - transition: 1
-    duration: 0.5
-  - transition: 1
-    duration: 0.5
+    transition: 1
+    duration: 1.5
   autoStart: 1
 --- !u!114 &282443217
 MonoBehaviour:
@@ -1955,9 +1963,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 4
+  specificTargetToHide: {fileID: 0}
+  uiGraphicToHide: {fileID: 0}
   lineSettings:
-  - transition: 1
-    duration: 0.5
+    transition: 1
+    duration: 1.5
   autoStart: 1
 --- !u!114 &555213616
 MonoBehaviour:
@@ -2900,11 +2913,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 4
+  specificTargetToHide: {fileID: 0}
+  uiGraphicToHide: {fileID: 0}
   lineSettings:
-  - transition: 1
-    duration: 0.5
-  - transition: 1
-    duration: 0.5
+    transition: 1
+    duration: 1.5
   autoStart: 1
 --- !u!114 &672650719
 MonoBehaviour:
@@ -3625,11 +3641,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 4
+  specificTargetToHide: {fileID: 0}
+  uiGraphicToHide: {fileID: 0}
   lineSettings:
-  - transition: 1
-    duration: 0.5
-  - transition: 1
-    duration: 0.5
+    transition: 1
+    duration: 1.5
   autoStart: 1
 --- !u!114 &802942316
 MonoBehaviour:
@@ -4542,11 +4561,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 4
+  specificTargetToHide: {fileID: 0}
+  uiGraphicToHide: {fileID: 0}
   lineSettings:
-  - transition: 1
-    duration: 0.5
-  - transition: 1
-    duration: 0.5
+    transition: 1
+    duration: 1.5
   autoStart: 1
 --- !u!114 &1031319232
 MonoBehaviour:
@@ -4731,11 +4753,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 4
+  specificTargetToHide: {fileID: 0}
+  uiGraphicToHide: {fileID: 0}
   lineSettings:
-  - transition: 1
-    duration: 0.5
-  - transition: 1
-    duration: 0.5
+    transition: 1
+    duration: 1.5
   autoStart: 1
 --- !u!114 &1153175537
 MonoBehaviour:
@@ -5285,11 +5310,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 4
+  specificTargetToHide: {fileID: 0}
+  uiGraphicToHide: {fileID: 0}
   lineSettings:
-  - transition: 1
-    duration: 0.5
-  - transition: 1
-    duration: 0.5
+    transition: 1
+    duration: 1.5
   autoStart: 1
 --- !u!114 &1241822278
 MonoBehaviour:
@@ -17384,6 +17412,7 @@ MonoBehaviour:
   speedInterval: 10
   effects: {fileID: 445194807}
   AFKEffectManager: {fileID: 1199789636}
+  AFKRateIntervals: []
 --- !u!4 &1845232325
 Transform:
   m_ObjectHideFlags: 0

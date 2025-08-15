@@ -1,28 +1,16 @@
 fileFormatVersion: 2
-guid: 4beb6fc3a27d19344ae233af1cf7b98a
+guid: 173d74b754098274baca68e36abe390e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3145076803837887694
-    second: GameUI_Export6_0
+      213: 7280416759722215411
+    second: ClickerSceneAFK_5_Discuss2_0
   - first:
-      213: 526478260856211161
-    second: GameUI_Export6_1
+      213: -4549443964636341073
+    second: ClickerSceneAFK_5_Discuss2_1
   - first:
-      213: -3680154909376935597
-    second: GameUI_Export6_2
-  - first:
-      213: -7525021450326369292
-    second: GameUI_Export6_3
-  - first:
-      213: 1981089397748946794
-    second: GameUI_Export6_4
-  - first:
-      213: 6683960678846461250
-    second: GameUI_Export6_5
-  - first:
-      213: -4658275390075499127
-    second: GameUI_Export6_6
+      213: -2038248392708056609
+    second: ClickerSceneAFK_5_Discuss2_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -64,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -131,155 +119,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GameUI_Export6_0
+      name: ClickerSceneAFK_5_Discuss2_0
       rect:
         serializedVersion: 2
-        x: 14
-        y: 364
-        width: 267
-        height: 67
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 23bfbeb6f417a54d0800000000000000
-      internalID: -3145076803837887694
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GameUI_Export6_1
-      rect:
-        serializedVersion: 2
-        x: 399
-        y: 289
-        width: 82
-        height: 82
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9d6cc48503d6e4700800000000000000
-      internalID: 526478260856211161
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GameUI_Export6_2
-      rect:
-        serializedVersion: 2
-        x: 14
-        y: 279
-        width: 267
-        height: 67
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3598d24bb967decc0800000000000000
-      internalID: -3680154909376935597
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GameUI_Export6_3
-      rect:
-        serializedVersion: 2
-        x: 559
-        y: 289
-        width: 82
-        height: 82
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4fb1a163cd0c19790800000000000000
-      internalID: -7525021450326369292
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GameUI_Export6_4
-      rect:
-        serializedVersion: 2
-        x: 14
+        x: 624
         y: 194
-        width: 202
-        height: 67
+        width: 92
+        height: 72
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a675e1d9f4e3e7b10800000000000000
-      internalID: 1981089397748946794
+      spriteID: 3f70b0c387c390560800000000000000
+      internalID: 7280416759722215411
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GameUI_Export6_5
+      name: ClickerSceneAFK_5_Discuss2_1
       rect:
         serializedVersion: 2
-        x: 399
-        y: 129
-        width: 82
-        height: 82
+        x: 719
+        y: 79
+        width: 47
+        height: 132
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 245725303d232cc50800000000000000
-      internalID: 6683960678846461250
+      spriteID: fac5e4271d02dd0c0800000000000000
+      internalID: -4549443964636341073
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GameUI_Export6_6
+      name: ClickerSceneAFK_5_Discuss2_2
       rect:
         serializedVersion: 2
-        x: 14
-        y: 114
-        width: 202
-        height: 67
+        x: 639
+        y: 19
+        width: 42
+        height: 132
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 98d0b9c963b7a5fb0800000000000000
-      internalID: -4658275390075499127
+      spriteID: fd910acc2efa6b3e0800000000000000
+      internalID: -2038248392708056609
       vertices: []
       indices: 
       edges: []
@@ -288,7 +188,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: e3b59a7fb2953584cbe11f9ae5ff5e99
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -298,13 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      GameUI_Export6_0: -3145076803837887694
-      GameUI_Export6_1: 526478260856211161
-      GameUI_Export6_2: -3680154909376935597
-      GameUI_Export6_3: -7525021450326369292
-      GameUI_Export6_4: 1981089397748946794
-      GameUI_Export6_5: 6683960678846461250
-      GameUI_Export6_6: -4658275390075499127
+      ClickerSceneAFK_5_Discuss2_0: 7280416759722215411
+      ClickerSceneAFK_5_Discuss2_1: -4549443964636341073
+      ClickerSceneAFK_5_Discuss2_2: -2038248392708056609
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -24,6 +24,7 @@ public class ClickerDebug : MonoBehaviour
 
     private void Update()
     {
+        UpdateDebugText();
         if (Input.GetKeyDown(KeyCode.A))
         {
             if (toggle)
@@ -42,7 +43,7 @@ public class ClickerDebug : MonoBehaviour
     public void OpenDebugPanel()
     {
         debugPanel.SetActive(true);
-        UpdateDebugText();
+       
     }
 
     public void CloseDebugPanel()

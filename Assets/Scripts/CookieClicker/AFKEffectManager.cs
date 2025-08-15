@@ -5,6 +5,7 @@ public class AFKEffectManager : MonoBehaviour
     [SerializeField] private ClickerEffects AFK_1_effects;
     [SerializeField] private ClickerEffects AFK_2_effects;
     [SerializeField] private ClickerEffects AFK_3_effects;
+    [SerializeField] private ClickerEffects AFK_4_effects;
 
     int index = 0;
 
@@ -20,6 +21,9 @@ public class AFKEffectManager : MonoBehaviour
                 break;
             case 2:
                 AFK_3_effects.gameObject.SetActive(true);
+                break;
+            case 3:
+                AFK_4_effects.gameObject.SetActive(true);
                 break;
         }
 
