@@ -19512,7 +19512,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerDialogueBox: {fileID: 360906339}
   playerTutorialText: {fileID: 620378478}
-  firstEnterLine: I need to go to the bus to start exploring the city
+  firstEnterLine: 'Time for a fresh start.
+
+    I need to find the BUS.'
   mainHubBuildIndex: 2
 --- !u!4 &1697402243
 Transform:

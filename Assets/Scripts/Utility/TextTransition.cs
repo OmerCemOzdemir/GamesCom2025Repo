@@ -29,6 +29,7 @@ public class TextTransition : MonoBehaviour
     private string[] dialogueLines;
     private Coroutine routine;
     public System.Action OnCutsceneComplete;
+    private PlayerControler playerController;
 
     private void Awake()
     {
@@ -36,6 +37,8 @@ public class TextTransition : MonoBehaviour
         dialogueLines = textComponent.text.Split(new[] { '\n' }, System.StringSplitOptions.None);
         textComponent.text = "";
         textComponent.alpha = 1f;
+
+        playerController = FindFirstObjectByType<PlayerControler>();
     }
 
     private void Start()
@@ -52,6 +55,12 @@ public class TextTransition : MonoBehaviour
 
     private IEnumerator PlayLines()
     {
+        if (playerController != null)
+        {
+            Debug.Log("Dialogue started. No movement allowed");
+            playerController.DisableInput();
+        }
+
         for (int i = 0; i < dialogueLines.Length; i++)
         {
             string line = dialogueLines[i];
@@ -77,7 +86,13 @@ public class TextTransition : MonoBehaviour
 
             textComponent.text = "";
             textComponent.alpha = 1f; // reset visibility if fade was used
-        
+
+        }
+
+        if (playerController != null)
+        {
+            playerController.EnableInput();
+            Debug.Log("Dialogue ended. Movement enabled");
         }
 
         OnCutsceneComplete?.Invoke();

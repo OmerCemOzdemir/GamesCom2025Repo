@@ -1023,6 +1023,7 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Move.Disable();
         playerInputAction.PlayerPlatform.Jump.Disable();
         playerInputAction.PlayerPlatform.Interact.Disable();
+        playerInputAction.PlayerPlatform.Sprint.Disable();
     }
 
     //This function is purely for debug purposes. Is not yet used.
@@ -1031,6 +1032,7 @@ public class PlayerControler : MonoBehaviour
         playerInputAction.PlayerPlatform.Move.Enable();
         playerInputAction.PlayerPlatform.Jump.Enable();
         playerInputAction.PlayerPlatform.Interact.Enable();
+        if (enableSprint) playerInputAction.PlayerPlatform.Sprint.Enable();
     }
 
 
