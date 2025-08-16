@@ -11,6 +11,7 @@ public class TextTransition : MonoBehaviour
         public TransitionType transition = TransitionType.Typewriter;
         public float duration = 1.5f; // Typewriter letter delay or fade duration
     }
+
     [Header("Progress Dialogue")]
     [SerializeField] private bool requireInput = true; // If true, require input to continue. Otherwise, autostart.
     [SerializeField] private KeyCode advanceKey = KeyCode.Z;
@@ -29,6 +30,10 @@ public class TextTransition : MonoBehaviour
     private string[] dialogueLines;
     private Coroutine routine;
     public System.Action OnCutsceneComplete;
+    private PlayerControler playerController;
+    private PlatformerManager platformerManager;
+    private string originalMoneyText = "";
+    private string originalInteractText = "";
 
     private void Awake()
     {
@@ -36,6 +41,9 @@ public class TextTransition : MonoBehaviour
         dialogueLines = textComponent.text.Split(new[] { '\n' }, System.StringSplitOptions.None);
         textComponent.text = "";
         textComponent.alpha = 1f;
+
+        playerController = FindFirstObjectByType<PlayerControler>();
+        platformerManager = FindFirstObjectByType<PlatformerManager>();
     }
 
     private void Start()
@@ -52,6 +60,22 @@ public class TextTransition : MonoBehaviour
 
     private IEnumerator PlayLines()
     {
+        if (playerController != null)
+        {
+            //Debug.Log("Dialogue started. No movement allowed");
+            playerController.DisableInput();
+        }
+
+        if (platformerManager != null)
+        {
+            if (platformerManager.requiredMoneyText != null)
+            {
+                var tmp = platformerManager.requiredMoneyText.GetComponent<TextMeshProUGUI>();
+                if (tmp != null) originalMoneyText = tmp.text ?? "";
+            }
+            platformerManager.DisableInteractText();
+        }
+
         for (int i = 0; i < dialogueLines.Length; i++)
         {
             string line = dialogueLines[i];
@@ -77,11 +101,24 @@ public class TextTransition : MonoBehaviour
 
             textComponent.text = "";
             textComponent.alpha = 1f; // reset visibility if fade was used
-        
+
+        }
+
+        if (playerController != null)
+        {
+            playerController.EnableInput();
+            //Debug.Log("Dialogue ended. Movement enabled");
+        }
+
+        if (platformerManager != null)
+        {
+            platformerManager.EnableInteractText(originalMoneyText);
+            Canvas.ForceUpdateCanvases();
         }
 
         OnCutsceneComplete?.Invoke();
         ApplyHideBehavior();
+
     }
 
     private IEnumerator ShowTypewriter(string line, float letterDelay)

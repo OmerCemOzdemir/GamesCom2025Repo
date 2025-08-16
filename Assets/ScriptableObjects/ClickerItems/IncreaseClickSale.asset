@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IncreaseClickSale
   m_EditorClassIdentifier: 
   itemName: Improved Recipe
-  itemDescription: Increase sale per click
+  itemDescription: Increase the amount of money earned per click.
   itemIcon:
   - {fileID: -2264833514754738103, guid: 7b68b7d8be7a1b349b57a121bbfa8bf1, type: 3}
   - {fileID: -2264833514754738103, guid: 7b68b7d8be7a1b349b57a121bbfa8bf1, type: 3}
@@ -25,7 +25,7 @@ MonoBehaviour:
   itemEffector: 0
   itemOperationOnItemEffector: 2
   itemTiers:
-  - tierEffect: 10
+  - tierEffect: 1
     tierCost: 100
   - tierEffect: 1
     tierCost: 200

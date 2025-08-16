@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98c461c3c92a14f45845bb4abff5c9e4, type: 3}
-  m_Name: JumpHeight
+  m_Name: BundleOfMoney
   m_EditorClassIdentifier: 
-  itemName: Jumping Boots
-  itemDescription: Increase Jump Height
-  itemIcon: {fileID: -2516195779808049870, guid: 0204e5e9dcc62fb4eb88f5eeccb28978, type: 3}
-  itemCost: 500
-  itemType: 1
+  itemName: BundleOfMoney
+  itemDescription: Just a bag of money
+  itemIcon: {fileID: 0}
+  itemCost: 0
+  itemType: 0
   hasItemEffectOnMoney: 1
-  hasItemEffectOnMovement: 1
+  hasItemEffectOnMovement: 0
   itemEffectOnMoney:
-    value: 100
+    value: 1000
     operations: 2
-    moneySpent: 2
+    moneySpent: 0
   itemEffectOnMovement:
-    value: 2
-    operations: 2
-    playerMovement: 2
-  itemEffectSpecial: 0
+    value: 0
+    operations: 0
+    playerMovement: 0
+  itemEffectSpecial: 
   hasTier: 0
   effectTiersPercentage: []
   costTiers: []

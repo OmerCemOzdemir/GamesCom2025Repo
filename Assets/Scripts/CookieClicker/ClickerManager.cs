@@ -24,7 +24,7 @@ public class ClickerManager : MonoBehaviour
     [SerializeField] private float baseIdleMoneyIncrement = 1; //Default is 1
     [SerializeField] private float baseIdleMoneyMultiplier = 1; //Default is 1
     [Tooltip("Increase this to longer the elevatorSpeed of idle money")]
-    [SerializeField] private float baseIdleTime = 1;
+    [SerializeField] private float baseIdleTime = 5;
     [SerializeField] private float baseActiveTime = 1;
     [Space(10)]
 
@@ -52,7 +52,7 @@ public class ClickerManager : MonoBehaviour
     private bool[] AFKBools = { true, true, true, true };
 
 
-    private float activeMoneyIncrement;
+    public float activeMoneyIncrement;
     private float activeMoneyMultiplier;
     private float idleMoneyIncrement;
     private float idleMoneyMultiplier;
@@ -151,17 +151,17 @@ public class ClickerManager : MonoBehaviour
         // profit increase formula: ((y-x)/x)*100
         //idleMoneyProfitPercentage = (((idleMoneyIncrement * idleMoneyMultiplier) - idleMoneyInitialProfit) / idleMoneyInitialProfit) * 100;
 
-        if (idleMoneyIncrement > AFKRateIntervals[0])
+        if (idleTime < AFKRateIntervals[0])
         {
             if (AFKBools[0])
             {
-                Debug.Log("The Profit rate: AFK_1");
+                Debug.Log($"Idle Rate: {idleMoneyIncrement}");
                 PlayerAFKAnim(AFKAnimator1, AFKWalkClip1);
                 AFKBools[0] = false;
             }
         }
 
-        if (idleMoneyIncrement >= AFKRateIntervals[1])
+        if (idleTime < AFKRateIntervals[1])
         {
             if (AFKBools[1])
             {
@@ -171,7 +171,7 @@ public class ClickerManager : MonoBehaviour
             }
         }
 
-        if (idleMoneyIncrement >= AFKRateIntervals[2])
+        if (idleTime < AFKRateIntervals[2])
         {
             if (AFKBools[2])
             {
@@ -181,7 +181,7 @@ public class ClickerManager : MonoBehaviour
             }
         }
 
-        if (idleMoneyIncrement >= AFKRateIntervals[3])
+        if (idleTime < AFKRateIntervals[3])
         {
             if (AFKBools[3])
             {
@@ -383,6 +383,13 @@ public class ClickerManager : MonoBehaviour
         }
 
         SaveParameters();
+    }
+
+    public void ImplementTutorialActiveIncrement(float delta)
+    {
+        activeMoneyIncrement += delta;  // change runtime value
+        SaveParameters();
+        //FindAnyObjectByType<ClickerUI>()?.UpdateText();
     }
 
     private float ImplementOperations(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems, float fieldEffected)

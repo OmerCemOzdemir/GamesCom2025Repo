@@ -13,7 +13,7 @@ public class GameData
     public bool clickerTutorialPlayed = false;
     public bool PlatformerTutorialPlayed = false;
     public double totalMoney;
-    public double maxTotalMoney = 10000;
+    public double maxTotalMoney = 4000;
     public LevelSaveData[] levelData;
 
     //Data For only Platforming Game:

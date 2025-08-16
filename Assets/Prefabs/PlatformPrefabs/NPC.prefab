@@ -32,10 +32,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8679749398852678316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.000014901}
-  m_SizeDelta: {x: 10, y: 0.71583}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.045599937, y: 0.0072}
+  m_SizeDelta: {x: -0.523, y: -0.2442}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2617101289870266390
 CanvasRenderer:
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: NPC NAME
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
   m_sharedMaterial: {fileID: 8676620777337174328, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
@@ -92,13 +92,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.7
-  m_fontSizeBase: 0.7
+  m_fontSize: 0.5
+  m_fontSizeBase: 0.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 32
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -855298285791758126, guid: ba672b0b5192017409725edaced5dc70, type: 3}
+  m_Sprite: {fileID: 2712072411779436141, guid: 3f875687ad0ce0347b9ffc48af317922, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 363452910279172680}
   - component: {fileID: 8513634344132602843}
   - component: {fileID: 8156811468331936604}
+  - component: {fileID: 5162917204101578905}
   m_Layer: 5
   m_Name: Dialog
   m_TagString: Untagged
@@ -246,8 +247,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000061989, y: 0}
-  m_SizeDelta: {x: 10, y: 1.254}
+  m_AnchoredPosition: {x: 0.0022, y: 0.0208}
+  m_SizeDelta: {x: 5.7048, y: 0.844}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8513634344132602843
 CanvasRenderer:
@@ -277,7 +278,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: NPC Desc
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
   m_sharedMaterial: {fileID: 8676620777337174328, guid: 1dbc340d773eb91418c3da0ac46f8151, type: 2}
@@ -310,7 +311,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 32
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -348,6 +349,27 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5162917204101578905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760043351283973972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a677e1798fb7bb34b9a3fafcfc791022, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requireInput: 1
+  advanceKey: 122
+  hideMode: 0
+  specificTargetToHide: {fileID: 7418834023808039774}
+  uiGraphicToHide: {fileID: 0}
+  lineSettings:
+    transition: 1
+    duration: 0.8
+  autoStart: 1
 --- !u!1 &2183740430022263108
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,7 +588,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -855298285791758126, guid: ba672b0b5192017409725edaced5dc70, type: 3}
+  m_Sprite: {fileID: 2333387139188573278, guid: 3f875687ad0ce0347b9ffc48af317922, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -613,8 +635,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 10, y: 2}
+  m_AnchoredPosition: {x: -0.5, y: 2.11}
+  m_SizeDelta: {x: 6.3573, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2528362063069181649
 Canvas:
