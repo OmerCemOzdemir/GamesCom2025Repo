@@ -45,3 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointPrefab: {fileID: 769209112406103023, guid: 3795bb1d2d4bf744e83ac691ffc921d8, type: 3}
+  levelName:
+  - Level1_Main
+  - Level1_Test
+  - PlatformScene
+  levelIndex: 030000000400000005000000

@@ -11,7 +11,9 @@ public class CheckpointManager : MonoBehaviour
     private Vector3[] checkpointPositions;
     //public static event Action<Vector3[]> onCheckpointLoad;
     private List<string> levelPaths = new List<string>();
-    private string[] levelName;
+    [SerializeField] private string[] levelName;
+    [SerializeField] private int[] levelIndex;
+
 
 
     private void Awake()
@@ -88,28 +90,6 @@ public class CheckpointManager : MonoBehaviour
 
     private void InitilizeLevelData()
     {
-        int lenght = SceneManager.sceneCountInBuildSettings;
-        //Debug.Log("Total Scene Count " + lenght);
-        string[] files;
-        files = Directory.GetFiles("Assets/Scenes/PlatformScenes");
-
-        for (int i = 0; i < files.Length; i++)
-        {
-            if (!files[i].EndsWith(".meta"))
-            {
-                levelPaths.Add(files[i].Replace('\\', '/'));
-                //Debug.Log("The path: " + files[i]);
-            }
-        }
-
-        levelName = new string[levelPaths.Count];
-
-        for (int i = 0; i < levelName.Length; i++)
-        {
-            levelName[i] = levelPaths[i].Replace("Assets/Scenes/PlatformScenes/", "");
-            levelName[i] = levelName[i].Replace(".unity", "");
-        }
-        //SceneUtility.GetBuildIndexByScenePath(levelPaths[levelIndex])
 
         LevelSaveData[] levelSaveData = new LevelSaveData[levelName.Length];
 
@@ -120,7 +100,8 @@ public class CheckpointManager : MonoBehaviour
             levelSaveData[i].levelName = levelName[i];
             if (i == 0) { levelSaveData[0].firstLevel = true; }
             levelSaveData[i].unlock = false;
-            levelSaveData[i].levelIndex = SceneUtility.GetBuildIndexByScenePath(levelPaths[i]);
+            levelSaveData[i].levelIndex = levelIndex[i];
+                //SceneUtility.GetBuildIndexByScenePath(levelPaths[i]);
 
         }
 
@@ -178,6 +159,31 @@ public class CustomCheckpointManagerInspector : Editor
 #endif
 
 /*
+ *         int lenght = SceneManager.sceneCountInBuildSettings;
+        //Debug.Log("Total Scene Count " + lenght);
+        string[] files;
+        files = Directory.GetFiles("Assets/Scenes/PlatformScenes");
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                levelPaths.Add(files[i].Replace('\\', '/'));
+                //Debug.Log("The path: " + files[i]);
+            }
+        }
+
+        levelName = new string[levelPaths.Count];
+
+        for (int i = 0; i < levelName.Length; i++)
+        {
+            levelName[i] = levelPaths[i].Replace("Assets/Scenes/PlatformScenes/", "");
+            levelName[i] = levelName[i].Replace(".unity", "");
+        }
+        //SceneUtility.GetBuildIndexByScenePath(levelPaths[levelIndex])
+
+ * 
+ * 
          try
         {
             onCheckpointLoad?.Invoke(checkpointPositions);

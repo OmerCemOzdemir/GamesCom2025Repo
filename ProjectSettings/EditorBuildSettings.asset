@@ -31,7 +31,7 @@ EditorBuildSettings:
     guid: 82fbbd796e7016842967ecd9746fbf78
   - enabled: 1
     path: Assets/Scenes/Tutorial Scenes/ClickerTutorialScene.unity
-    guid: ac3013917e3b94c4da6005d73eba85c9
+    guid: dc0ec429b0a58744ea615de15e516641
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

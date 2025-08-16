@@ -139,6 +139,12 @@ public class ClickerManager : MonoBehaviour
 
         }
 
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GameManager.Instance.GetGameData().totalMoney += 40;
+        }
+
     }
 
     #endregion
@@ -478,6 +484,12 @@ public class ClickerManager : MonoBehaviour
         idleMoneyIncrement = baseIdleMoneyIncrement;
         idleMoneyMultiplier = baseIdleMoneyMultiplier;
         idleTime = baseIdleTime;
+    }
+
+    public void TutorialUpgrade()
+    {
+        activeMoneyIncrement += 100;
+        Debug.Log("active money: " + activeMoneyIncrement);
     }
 
     public void SetUpData()
