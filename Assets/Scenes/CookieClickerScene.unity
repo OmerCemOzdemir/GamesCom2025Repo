@@ -2692,7 +2692,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeItemPrefab: {fileID: 2923915326820301446, guid: 38bab6e189f5804429c549423a890cfc, type: 3}
   parentContext: {fileID: 1703692387}
-  upgradeItems: []
+  upgradeItems:
+  - {fileID: 11400000, guid: 76711f44c28c9c4429d7546af247f54d, type: 2}
+  - {fileID: 11400000, guid: 5f22b93cf861b444594d39218ee12796, type: 2}
+  - {fileID: 11400000, guid: 2c2df5fc861c98d448467a12b543d68d, type: 2}
+  - {fileID: 11400000, guid: cc3fc08a8bc69e64999e1970301f3f54, type: 2}
+  - {fileID: 11400000, guid: 59b70b0a86aee9640af8dd8b74499c11, type: 2}
 --- !u!114 &1199789634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9160,6 +9165,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb62fe64997e0fb4aa6e45853d896153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeClickerItems:
+  - {fileID: 11400000, guid: 76711f44c28c9c4429d7546af247f54d, type: 2}
+  - {fileID: 11400000, guid: 5f22b93cf861b444594d39218ee12796, type: 2}
+  - {fileID: 11400000, guid: 2c2df5fc861c98d448467a12b543d68d, type: 2}
+  - {fileID: 11400000, guid: cc3fc08a8bc69e64999e1970301f3f54, type: 2}
+  - {fileID: 11400000, guid: 59b70b0a86aee9640af8dd8b74499c11, type: 2}
+  upgradePlatformItems:
+  - {fileID: 11400000, guid: 1108764c9a4121848b4d04d950fe6f53, type: 2}
+  - {fileID: 11400000, guid: 0c25ebd124b4bef4aa128c4e94271150, type: 2}
+  - {fileID: 11400000, guid: 727375429c3ae3f4ba99a33f82771a19, type: 2}
   baseActiveMoneyIncrement: 1
   baseActiveMoneyMultiplier: 1
   baseIdleMoneyIncrement: 1

@@ -15,7 +15,7 @@ public class ClickerUpgrade : MonoBehaviour
     
     private ClickerItemSaveData[] itemsData = new ClickerItemSaveData[0];
     //private UpgradeItem[] upgradeItems;
-    [HideInInspector] public List<ClickerUpgradeItem> upgradeItems = new List<ClickerUpgradeItem>();
+    [SerializeField] public List<ClickerUpgradeItem> upgradeItems = new List<ClickerUpgradeItem>();
     private GameObject[] upgradeItemInstances;
     private int clickerIndex = 0;
     //private int buttonPosY = -110;
@@ -34,7 +34,7 @@ public class ClickerUpgrade : MonoBehaviour
 
     private void Awake()
     {
-        InitilizeScriptableObjects();
+        //InitilizeScriptableObjects();
         SetUpData();
         CreateUpgradeButtons();
 
@@ -43,28 +43,6 @@ public class ClickerUpgrade : MonoBehaviour
     private void FixedUpdate()
     {
         UpdateUpgradeButtons();
-    }
-
-    private void InitilizeScriptableObjects()
-    {
-        //Assets/ScriptableObjects/ClickerItems
-        string[] files;
-        files = Directory.GetFiles("Assets/ScriptableObjects/ClickerItems");
-        for (int i = 0; i < files.Length; i++)
-        {
-            if (!files[i].EndsWith(".meta"))
-            {
-                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<ClickerUpgradeItem>(files[i]));
-                //Debug.Log("Test: " + files[i]);
-            }
-
-        }
-
-        foreach (var item in upgradeItems)
-        {
-            Debug.Log("Test: " + item.name);
-        }
-
     }
 
     private void CreateUpgradeButtons()
@@ -253,6 +231,30 @@ public class ClickerUpgrade : MonoBehaviour
 
 
 /*
+ *     private void InitilizeScriptableObjects()
+    {
+        //Assets/ScriptableObjects/ClickerItems
+        string[] files;
+        files = Directory.GetFiles("Assets/ScriptableObjects/ClickerItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<ClickerUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
+
+        foreach (var item in upgradeItems)
+        {
+            Debug.Log("Test: " + item.name);
+        }
+
+    }
+
+ * 
+ * 
              if (items[clickerIndex].tier == 0)
             {
                 newCostMultiplier[clickerIndex] = (float)Math.Pow(cost, baseCostMultiplier);

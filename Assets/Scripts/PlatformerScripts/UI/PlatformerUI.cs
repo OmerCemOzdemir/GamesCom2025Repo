@@ -26,12 +26,12 @@ public class PlatformerUI : MonoBehaviour
     private GameObject[] itemIconArr;
     [Space(10)]
 
-    private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
+    [SerializeField] private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
 
 
     private void Awake()
     {
-        InitilizeScriptableObjects();
+        //InitilizeScriptableObjects();
         UpdateMoneyText(0);
         UpdateItemIcons();
     }
@@ -58,28 +58,6 @@ public class PlatformerUI : MonoBehaviour
         moneyText.text = "$" + GameManager.Instance.GetGameData().totalMoney;
     }
 
-
-    private void InitilizeScriptableObjects()
-    {
-        //Assets/ScriptableObjects/PlatformItems
-        string[] files;
-        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
-        for (int i = 0; i < files.Length; i++)
-        {
-            if (!files[i].EndsWith(".meta"))
-            {
-                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
-                //Debug.Log("Test: " + files[i]);
-            }
-
-        }
-
-        foreach (var item in upgradeItems)
-        {
-            //Debug.Log("Test: " + item.name);
-        }
-
-    }
 
     private void UpdateItemIcons()
     {
@@ -191,6 +169,28 @@ public class PlatformerUI : MonoBehaviour
 
 /*
  
+    private void InitilizeScriptableObjects()
+    {
+        //Assets/ScriptableObjects/PlatformItems
+        string[] files;
+        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
+
+        foreach (var item in upgradeItems)
+        {
+            //Debug.Log("Test: " + item.name);
+        }
+
+    }
+
 
     public void CloseShop()
     {

@@ -17,7 +17,7 @@ public class PlatformUpgradeShop : MonoBehaviour
     [SerializeField] private Transform parentContext;
 
     private PlatformItemSaveData[] upgradeItemsData;
-    private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
+    [SerializeField] private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
     private GameObject[] upgradeItemInstances;
     private int platformItemIndex = 0;
 
@@ -42,7 +42,7 @@ public class PlatformUpgradeShop : MonoBehaviour
     private void Awake()
     {
         mainHubUI = GetComponent<MainHubUI>();
-        InitilizeScriptableObjects();
+        //InitilizeScriptableObjects();
 
     }
 
@@ -53,27 +53,6 @@ public class PlatformUpgradeShop : MonoBehaviour
         CreateUpgradeButtons();
     }
 
-    private void InitilizeScriptableObjects()
-    {
-        //Assets/ScriptableObjects/PlatformItems
-        string[] files;
-        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
-        for (int i = 0; i < files.Length; i++)
-        {
-            if (!files[i].EndsWith(".meta"))
-            {
-                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
-                //Debug.Log("Test: " + files[i]);
-            }
-
-        }
-
-        foreach (var item in upgradeItems)
-        {
-            //Debug.Log("Test: " + item.name);
-        }
-
-    }
 
     private void SetUpData()
     {
@@ -320,7 +299,28 @@ public class PlatformUpgradeShop : MonoBehaviour
 
 
 /*
- * 
+ *     private void InitilizeScriptableObjects()
+    {
+        //Assets/ScriptableObjects/PlatformItems
+        string[] files;
+        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
+
+        foreach (var item in upgradeItems)
+        {
+            //Debug.Log("Test: " + item.name);
+        }
+
+    }
+
 
         PlatformItemType type = upgradeItems[platformItemIndex].itemType;
         switch (type)
