@@ -47,75 +47,60 @@ public class ClickerUpgrade : MonoBehaviour
 
     private void InitilizeScriptableObjects()
     {
-        //Assets/ScriptableObjects/ClickerItems
-        string[] files;
-        files = Directory.GetFiles("Assets/ScriptableObjects/ClickerItems");
-        for (int i = 0; i < files.Length; i++)
+        // Get upgrades from UpgradeManager
+        if (UpgradeManager.Instance != null)
         {
-            if (!files[i].EndsWith(".meta"))
-            {
-                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<ClickerUpgradeItem>(files[i]));
-                //Debug.Log("Test: " + files[i]);
-            }
-
+            upgradeItems = new List<ClickerUpgradeItem>(
+                UpgradeManager.Instance.GetClickerItems()
+            );
         }
 
-        foreach (var item in upgradeItems)
+        else
         {
-            Debug.Log("Test: " + item.name);
+            // fallback if UpgradeManager is missing
+            upgradeItems = new List<ClickerUpgradeItem>(
+                Resources.LoadAll<ClickerUpgradeItem>("ClickerItems")
+            );
         }
 
     }
 
     private void CreateUpgradeButtons()
     {
-        upgradeItemInstances = new GameObject[upgradeItems.Count];
+        int count = Mathf.Min(upgradeItems.Count, itemsData.Length);
+        upgradeItemInstances = new GameObject[count];
 
-        float cost;
         double money = GameManager.Instance.GetGameData().totalMoney;
-        for (int i = 0; i < upgradeItemInstances.Length; i++)
+
+        for (int i = 0; i < count; i++)
         {
-            upgradeItemInstances[i] = Instantiate(upgradeItemPrefab, parentContext.position, Quaternion.identity);
-            upgradeItemInstances[i].gameObject.name = "" + i;
-            upgradeItemInstances[i].transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = upgradeItems[i].itemName;
-            upgradeItemInstances[i].transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = upgradeItems[i].itemDescription;
-            upgradeItemInstances[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
-            upgradeItemInstances[i].transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "" + itemsData[i].tier;
-            upgradeItemInstances[i].transform.GetChild(4).gameObject.GetComponent<Image>().sprite = upgradeItems[i].itemIcon[0];
+            var go = Instantiate(upgradeItemPrefab, parentContext.position, Quaternion.identity);
+            go.name = i.ToString();
+            go.transform.SetParent(parentContext, false);
 
-            cost = itemsData[i].cost;
-            double calcMoney = money - cost;
-            if (calcMoney <= 0)
-            {
-                upgradeItemInstances[i].GetComponent<Button>().interactable = false;
-                upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
-            }
-            else
-            {
-                upgradeItemInstances[i].GetComponent<Button>().interactable = true;
-                upgradeItemInstances[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
-            }
+            go.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = upgradeItems[i].itemName;
+            go.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = upgradeItems[i].itemDescription;
+            go.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "$" + itemsData[i].cost;
+            go.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "" + itemsData[i].tier;
 
-            upgradeItemInstances[i].transform.SetParent(parentContext, false);
-            //Debug.Log("buttonPosY: " + buttonPosY + "position; " + upgradeItemInstances[i].transform.localPosition);
-            //upgradeItemInstances[i].transform.localPosition += new Vector3(0, buttonPosY, 0);
-            //buttonPosY -= 100;
-            upgradeItemInstances[i].GetComponent<RectTransform>().localScale = Vector3.one;
+            int safeTier = Mathf.Clamp(itemsData[i].tier, 0, upgradeItems[i].itemIcon.Length - 1);
+            go.transform.GetChild(4).GetComponent<Image>().sprite = upgradeItems[i].itemIcon[safeTier];
 
+            bool afford = money - itemsData[i].cost > 0;
+            var btn = go.GetComponent<Button>();
+            var img = go.GetComponent<Image>();
+            btn.interactable = afford && itemsData[i].unlock;
+            img.color = itemsData[i].unlock ? (afford ? Color.white : new Color(1,1,1,0.5f))
+                                            : new Color(1,0,0,0.5f);
+
+            upgradeItemInstances[i] = go;
         }
 
-        float newRectHeight = (upgradeItemInstances[0].GetComponent<RectTransform>().rect.height * upgradeItemInstances.Length) + 50;
-        float newRectWidth = parentContext.gameObject.GetComponent<RectTransform>().rect.width;
-        parentContext.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(newRectWidth, newRectHeight);
-
-
-        for (int j = 0; j < upgradeItemInstances.Length; j++)
+        if (count > 0)
         {
-            if (!itemsData[j].unlock)
-            {
-                upgradeItemInstances[j].GetComponent<Button>().interactable = false;
-                upgradeItemInstances[j].GetComponent<Image>().color = new Color(1, 0, 0, 0.5f);
-            }
+            float h = upgradeItemInstances[0].GetComponent<RectTransform>().rect.height * count + 50f;
+            float w = parentContext.GetComponent<RectTransform>().rect.width;
+            parentContext.GetComponent<RectTransform>().sizeDelta = new Vector2(w, h);
         }
 
     }
@@ -208,33 +193,30 @@ public class ClickerUpgrade : MonoBehaviour
 
     private void SetUpData()
     {
-        //Debug.Log("New Game: " + GameManager.Instance.GetGameData().newGame);
-        if (GameManager.Instance.GetGameData().clickerUpgradeNewGame)
-        {
-            itemsData = new ClickerItemSaveData[upgradeItems.Count];
-            Debug.Log("New Game: " + GameManager.Instance.GetGameData().clickerUpgradeNewGame);
+        var gameData = GameManager.Instance.GetGameData();
 
+        if (gameData.clickerUpgradeNewGame || gameData.clickerItems == null || gameData.clickerItems.Length != upgradeItems.Count)
+        {
+            // (Re)build save to match the current catalog
+            itemsData = new ClickerItemSaveData[upgradeItems.Count];
             for (int i = 0; i < itemsData.Length; i++)
             {
-                //Debug.Log("upgradeItemsData: " + i + ": " + upgradeItems[i].itemTiers[0].tierCost);
-                itemsData[i] = new ClickerItemSaveData();
-                itemsData[i].ID = upgradeItems[i].name;
-                itemsData[i].cost = upgradeItems[i].itemTiers[0].tierCost;
-                itemsData[i].tier = 0;
-                itemsData[i].unlock = upgradeItems[i].itemUnlocked;
+                itemsData[i] = new ClickerItemSaveData
+                {
+                    ID     = upgradeItems[i].name,
+                    cost   = upgradeItems[i].itemTiers[0].tierCost,
+                    tier   = 0,
+                    unlock = upgradeItems[i].itemUnlocked
+                };
             }
-            //PrintArr(items);
-
-            GameManager.Instance.GetGameData().clickerItems = itemsData;
+            gameData.clickerItems = itemsData;
+            gameData.clickerUpgradeNewGame = false;
             GameManager.Instance.SaveGame();
-            GameManager.Instance.GetGameData().clickerUpgradeNewGame = false;
         }
         else
         {
-            itemsData = GameManager.Instance.GetGameData().clickerItems;
-            //PrintArr(itemsData);
+            itemsData = gameData.clickerItems;
         }
-
     }
 
     private void PrintArr(ClickerItemSaveData[] arr)

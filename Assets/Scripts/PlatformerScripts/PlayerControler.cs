@@ -754,24 +754,10 @@ public class PlayerControler : MonoBehaviour
 
     private void InitilizeScriptableObjects()
     {
-        //Assets/ScriptableObjects/PlatformItems
-        string[] files;
-        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
-        for (int i = 0; i < files.Length; i++)
-        {
-            if (!files[i].EndsWith(".meta"))
-            {
-                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
-                //Debug.Log("Test: " + files[i]);
-            }
-
-        }
-
-        foreach (var item in upgradeItems)
-        {
-            // Debug.Log("Test: " + item.name);
-        }
-
+        if (UpgradeManager.Instance != null)
+            upgradeItems = new List<PlatformUpgradeItem>(UpgradeManager.Instance.GetPlatformItems());
+        else
+            upgradeItems = new List<PlatformUpgradeItem>(Resources.LoadAll<PlatformUpgradeItem>("PlatformItems"));
     }
 
     private void SetUpUpgrades()

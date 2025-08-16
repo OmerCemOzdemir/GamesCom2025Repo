@@ -8571,6 +8571,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568634515}
   m_CullTransparentMesh: 1
+--- !u!1 &1644698363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1644698365}
+  - component: {fileID: 1644698364}
+  m_Layer: 0
+  m_Name: UpgradeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1644698364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644698363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704c77a0b2bdccd419accdb663b60262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickerItems:
+  - {fileID: 11400000, guid: 5f22b93cf861b444594d39218ee12796, type: 2}
+  - {fileID: 11400000, guid: 2c2df5fc861c98d448467a12b543d68d, type: 2}
+  - {fileID: 11400000, guid: cc3fc08a8bc69e64999e1970301f3f54, type: 2}
+  - {fileID: 11400000, guid: 59b70b0a86aee9640af8dd8b74499c11, type: 2}
+  platformItems:
+  - {fileID: 11400000, guid: 1108764c9a4121848b4d04d950fe6f53, type: 2}
+  - {fileID: 11400000, guid: 0c25ebd124b4bef4aa128c4e94271150, type: 2}
+  - {fileID: 11400000, guid: 727375429c3ae3f4ba99a33f82771a19, type: 2}
+--- !u!4 &1644698365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644698363}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 132, y: 9, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1703692386
 GameObject:
   m_ObjectHideFlags: 0
@@ -10303,3 +10356,4 @@ SceneRoots:
   - {fileID: 639431890}
   - {fileID: 1845232325}
   - {fileID: 2028317685}
+  - {fileID: 1644698365}

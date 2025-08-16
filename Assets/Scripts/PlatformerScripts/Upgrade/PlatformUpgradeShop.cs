@@ -55,22 +55,19 @@ public class PlatformUpgradeShop : MonoBehaviour
 
     private void InitilizeScriptableObjects()
     {
-        //Assets/ScriptableObjects/PlatformItems
-        string[] files;
-        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
-        for (int i = 0; i < files.Length; i++)
+        if (UpgradeManager.Instance != null)
         {
-            if (!files[i].EndsWith(".meta"))
-            {
-                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
-                //Debug.Log("Test: " + files[i]);
-            }
-
+            upgradeItems = new List<PlatformUpgradeItem>(
+                UpgradeManager.Instance.GetPlatformItems()
+            );
         }
-
-        foreach (var item in upgradeItems)
+        
+        else
         {
-            //Debug.Log("Test: " + item.name);
+            // fallback if UpgradeManager is missing
+            upgradeItems = new List<PlatformUpgradeItem>(
+                Resources.LoadAll<PlatformUpgradeItem>("PlatformItems")
+            );
         }
 
     }
