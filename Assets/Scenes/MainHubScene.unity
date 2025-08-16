@@ -1077,7 +1077,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 399317892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.0002539754, y: 0}
+  m_AnchorMin: {x: 0.00024431944, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -17236,7 +17236,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 392983275}
   m_Direction: 0
   m_Value: 1.0016273
-  m_Size: 0.999746
+  m_Size: 0.9997557
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -17601,14 +17601,14 @@ MonoBehaviour:
   levelButtonParent: {fileID: 898910453}
   levelButtonPrefab: {fileID: 8374721310444727148, guid: b1e08798ce06e394cb0ab17443393c04, type: 3}
   busPanel: {fileID: 1354098811}
-  moneyRequired: {fileID: 1197981478}
+  moneyRequired: {fileID: 1076546218}
   levelTitle: {fileID: 958002238}
   levelsPanel: {fileID: 732357771}
   checkpointsPanel: {fileID: 1932375483}
   travelButton: {fileID: 1779884598}
   firstLevelButton: {fileID: 399118419}
   baseTravelCostLevel: 100
-  baseTravelCostCheckpoint: 10
+  baseTravelCostCheckpoint: 100
   firstLevel: 1
 --- !u!114 &1134369857
 MonoBehaviour:
