@@ -104,10 +104,11 @@ public class CheckpointManager : MonoBehaviour
         for (int i = 0; i < levelSaveData.Length; i++)
         {
             levelSaveData[i] = new LevelSaveData();
-            levelSaveData[i].levelName  = levels[i].sceneName;
+            levelSaveData[i].levelName = levels[i].sceneName;
             levelSaveData[i].levelIndex = levels[i].sceneIndex;
-            levelSaveData[i].unlock     = false;
-            levelSaveData[i].firstLevel = levels[i].firstLevel && (i == 0);
+            levelSaveData[i].firstLevel = i == 0 || levels[i].firstLevel;
+            
+            levelSaveData[i].unlock = i == 0 || levels[i].firstLevel; // force unlock first level
         }
         GameManager.Instance.GetGameData().levelData = levelSaveData;
         GameManager.Instance.SaveGame();

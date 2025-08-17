@@ -110,8 +110,30 @@ public class BusUI : MonoBehaviour
 
     #region UI
 
+    private void RemakeCheckpointPositions()
+    {
+        var levelData = GameManager.Instance.GetGameData().levelData;
+        if (levelData == null || levelData.Length == 0) return;
+
+        Vector3[][] checkpointsPos = new Vector3[levelData.Length][];
+        for (int i = 0; i < levelData.Length; i++)
+        {
+            // Build if the arrays exist; no need to require level unlock here
+            if (levelData[i].checkpointX != null)
+            {
+                checkpointsPos[i] = new Vector3[levelData[i].checkpointX.Length];
+                for (int j = 0; j < levelData[i].checkpointX.Length; j++)
+                    checkpointsPos[i][j] = new Vector3(
+                        levelData[i].checkpointX[j],
+                        levelData[i].checkpointY[j],
+                        levelData[i].checkpointZ[j]);
+            }
+        }
+        checpointPositions = checkpointsPos;
+    }
     private void OpenBus()
     {
+        RemakeCheckpointPositions();
         busPanel.SetActive(true);
         OpenLevelsPanel();
         CloseCheckpointsPanel(); // hide checkpoints by default, open if any are unlocked
@@ -152,6 +174,14 @@ public class BusUI : MonoBehaviour
     #region ButtonSetup
     private void SetupCheckpoints(Vector3[][] checkpointsPos, LevelSaveData[] levelData)
     {
+        if (checkpointsPos == null || levelIndex >= checkpointsPos.Length || checkpointsPos[levelIndex] == null)
+        {
+            firstLevelButton.SetActive(true);
+            travelButton.SetActive(false);
+            Debug.Log("No checkpoints found.");
+            return;
+        }
+
         checkpointButtons = new Button[checkpointsPos[levelIndex].Length];
         for (int i = 0; i < checkpointButtons.Length; i++)
         {
@@ -196,24 +226,29 @@ public class BusUI : MonoBehaviour
             levelButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().gameObject.name = "" + i;
             levelButtons[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "" + (i + 1);
 
-            int idx = i; // <<< capture
+            int idx = i;
             levelButtons[i].onClick.AddListener(() =>
             {
-                levelIndex = idx; // <<< record selection
+                levelIndex = idx;
                 UpdateTexts(baseTravelCostLevel * (levelIndex + 1));
-                // After selecting a level, decide which panel to show:
+
                 var data = GameManager.Instance.GetGameData().levelData;
+
+                // Always switch to the Checkpoints page for “travel”
+                OpenCheckpointsPanel();
+
                 if (HasAnyUnlockedCheckpoint(data[levelIndex]))
                 {
-                    OpenCheckpointsPanel();
-                    UpdateCheckpoints(); // build checkpoint buttons for this level
+                    // Show Travel + build the checkpoint buttons
+                    firstLevelButton.SetActive(false);
+                    travelButton.SetActive(true);
+                    UpdateCheckpoints();  // builds buttons for this level
                 }
                 else
                 {
-                    CloseCheckpointsPanel();     // no checkpoints → start-level flow
-                    OpenLevelsPanel();
-                    firstLevelButton.SetActive(false); // not the “first ever” button
-                    travelButton.SetActive(true);      // show regular Start Level travel
+                    // show StartEmptyLevel if no checkpoints
+                    firstLevelButton.SetActive(true);
+                    travelButton.SetActive(false);
                 }
             });
             // Debug.Log(levelData[i].levelName + " " + GameManager.Instance.GetGameData().levelData[i].unlock);
