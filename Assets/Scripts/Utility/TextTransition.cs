@@ -21,6 +21,7 @@ public class TextTransition : MonoBehaviour
     [SerializeField] private GameObject specificTargetToHide; // disables specific GameObject; use if all elements need to be disabled
     [SerializeField] private Graphic uiGraphicToHide; // target only a Raw image or Sprite Renderer
 
+
     // Choose which transition per line
     public DialogueSettings lineSettings = new DialogueSettings();
 
@@ -51,6 +52,7 @@ public class TextTransition : MonoBehaviour
         if (autoStart && dialogueLines != null && dialogueLines.Length > 0 && !string.IsNullOrEmpty(string.Join("", dialogueLines)))
             PlayCutscene();
     }
+
 
     public void PlayCutscene()
     {
@@ -123,6 +125,7 @@ public class TextTransition : MonoBehaviour
 
     private IEnumerator ShowTypewriter(string line, float letterDelay)
     {
+
         textComponent.text = "";
         int charCount = line.Length;
         float interval = (charCount > 0) ? letterDelay / charCount : 0.01f;
@@ -193,7 +196,7 @@ public class TextTransition : MonoBehaviour
 
                 // If no element, disable parent
                 if (transform.parent != null)
-                { 
+                {
                     transform.parent.gameObject.SetActive(false);
                 }
                 return;
@@ -222,7 +225,7 @@ public class TextTransition : MonoBehaviour
         Typewriter,
         Fade
     }
-    
+
     public enum HideMode
     {
         None,

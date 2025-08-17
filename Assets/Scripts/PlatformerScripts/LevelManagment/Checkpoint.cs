@@ -14,6 +14,8 @@ public class Checkpoint : MonoBehaviour
     private void EnableCheckpoint()
     {
         LevelSaveData[] levelSaveData = GameManager.Instance.GetGameData().levelData;
+        Debug.Log("Level Name: " + levelSaveData[0].levelName);
+
         int index = 0;
         for (int i = 0; i < levelSaveData.Length; i++)
         {

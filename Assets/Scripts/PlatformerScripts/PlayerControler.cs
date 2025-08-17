@@ -1043,13 +1043,13 @@ public class PlayerControler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             // PrintArray();
-            onPlayerDebug?.Invoke(PrintFields());
+            //onPlayerDebug?.Invoke(PrintFields());
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
             // PrintArray();
-            GameManager.Instance.NextLevel(SceneManager.GetActiveScene().buildIndex);
+            //GameManager.Instance.NextLevel(SceneManager.GetActiveScene().buildIndex);
         }
     }
 

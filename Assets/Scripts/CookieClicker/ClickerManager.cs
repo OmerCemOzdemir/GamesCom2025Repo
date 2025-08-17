@@ -542,7 +542,7 @@ public class ClickerManager : MonoBehaviour
     + " idleMoneyMultiplier: " + idleMoneyMultiplier + "\n"
     + " idleTime: " + idleTime + "\n"
     + " idle profit rate: " + idleMoneyProfitRate + "\n";
-        Debug.Log(text);
+        //Debug.Log(text);
 
         return text;
     }

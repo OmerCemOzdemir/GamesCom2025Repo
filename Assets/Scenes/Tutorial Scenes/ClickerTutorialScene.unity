@@ -817,6 +817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
+  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -871,8 +872,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 58
-  m_fontSizeBase: 58
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -975,6 +976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
+  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -1032,8 +1034,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1965,6 +1967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
+  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -2019,8 +2022,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2915,6 +2918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
+  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -2971,8 +2975,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 58
-  m_fontSizeBase: 58
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3643,6 +3647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
+  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -3699,8 +3704,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4563,6 +4568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
+  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -4619,8 +4625,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4755,6 +4761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
+  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -4811,8 +4818,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5313,6 +5320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
+  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -5340,7 +5348,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Well done! You have earned $1000.
+  m_text: 'Well done! You have earned $200.
 
     It''s time to start your journey.'
   m_isRightToLeft: 0
@@ -5351,7 +5359,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278910720
+    rgba: 4278190080
   m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -5369,8 +5377,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 58
-  m_fontSizeBase: 58
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

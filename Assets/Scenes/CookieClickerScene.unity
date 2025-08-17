@@ -9234,9 +9234,9 @@ MonoBehaviour:
   AFKEffectManager: {fileID: 1199789636}
   AFKRateIntervals:
   - 5
-  - 4.8
   - 4.6
-  - 4.4
+  - 3.8
+  - 3.7
   activeMoneyIncrement: 0
 --- !u!4 &1845232325
 Transform:

@@ -174,13 +174,6 @@ public class BusUI : MonoBehaviour
     #region ButtonSetup
     private void SetupCheckpoints(Vector3[][] checkpointsPos, LevelSaveData[] levelData)
     {
-        if (checkpointsPos == null || levelIndex >= checkpointsPos.Length || checkpointsPos[levelIndex] == null)
-        {
-            firstLevelButton.SetActive(true);
-            travelButton.SetActive(false);
-            Debug.Log("No checkpoints found.");
-            return;
-        }
 
         checkpointButtons = new Button[checkpointsPos[levelIndex].Length];
         for (int i = 0; i < checkpointButtons.Length; i++)
@@ -384,7 +377,18 @@ public class BusUI : MonoBehaviour
 
 }
 
-/*            //Debug.Log("Selected Scene Index: " + SceneUtility.GetBuildIndexByScenePath(levelNames[levelIndex]));
+/*           
+ *                   if (checkpointsPos == null || levelIndex >= checkpointsPos.Length || checkpointsPos[levelIndex] == null)
+        {
+            firstLevelButton.SetActive(true);
+            travelButton.SetActive(false);
+            Debug.Log("No checkpoints found.");
+            return;
+        }
+ *           
+ *           
+ *           
+ *           //Debug.Log("Selected Scene Index: " + SceneUtility.GetBuildIndexByScenePath(levelNames[levelIndex]));
             //Assets/Scenes/PlatformScenes/PlatformScene.unity
             //Assets/Scenes/PlatformScenes\PlatformScene.unity
             //Debug.Log("Selected Scene: " + levelNames[levelIndex]);

@@ -6,4 +6,5 @@ public class SceneInfo
 {
     public string name;
     public Sprite icon;
+    public int index;
 }

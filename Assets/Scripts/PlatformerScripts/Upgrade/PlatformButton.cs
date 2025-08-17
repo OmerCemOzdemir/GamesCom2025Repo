@@ -7,6 +7,8 @@ public class PlatformButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public static event Action<PlatformUpgradeItem, PlatformItemSaveData, bool> onMouseOverUpgradePlatform;
     int index;
 
+
+
     public void GetClickIndex()
     {
         index = int.Parse(transform.name);
@@ -17,12 +19,16 @@ public class PlatformButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        index = int.Parse(transform.name);
+
         onMouseOverUpgradePlatform?.Invoke(transform.root.GetComponent<PlatformUpgradeShop>().UpgradeItems[index],
             transform.root.GetComponent<PlatformUpgradeShop>().UpgradeItemsData[index], true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        index = int.Parse(transform.name);
+
         onMouseOverUpgradePlatform?.Invoke(transform.root.GetComponent<PlatformUpgradeShop>().UpgradeItems[index],
             transform.root.GetComponent<PlatformUpgradeShop>().UpgradeItemsData[index], false);
 

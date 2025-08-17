@@ -1002,10 +1002,10 @@ RectTransform:
   - {fileID: 1197981477}
   m_Father: {fileID: 1134369855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 594.9557, y: 474.67755}
-  m_SizeDelta: {x: -1189.9099, y: -949.36}
+  m_AnchoredPosition: {x: -365.0443, y: -65.32245}
+  m_SizeDelta: {x: 730.0901, y: 130.64001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &384071462
 MonoBehaviour:
@@ -17592,10 +17592,13 @@ MonoBehaviour:
   levelInfos:
   - name: City Level
     icon: {fileID: -855298285791758126, guid: 134d08cb172c1a147b37caddd6ddc8d7, type: 3}
+    index: 0
   - name: Test Level
     icon: {fileID: -855298285791758126, guid: 97a1e8e0b4287ce48a51fd71c0e782e7, type: 3}
+    index: 0
   - name: Platform Test Level
     icon: {fileID: -855298285791758126, guid: 39c00ac33732b424b80c342673400183, type: 3}
+    index: 0
   checkpointButtonParent: {fileID: 2091642820}
   checkpointButtonPrefab: {fileID: 3398107924501334203, guid: 8beb3ecf0006ec04a9ac566f70ab3b0e, type: 3}
   levelButtonParent: {fileID: 898910453}
