@@ -63,7 +63,7 @@ public class PlayerControler : MonoBehaviour
     private Animator playerAnimator;
     private Interaction interaction = Interaction.Empty; //Default is Ladder
     private PlatformerManager platformerManager;
-    private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
+    [SerializeField] private List<PlatformUpgradeItem> upgradeItems = new List<PlatformUpgradeItem>();
 
     private Vector2 flipSpriteVector;
     //private float flipTimer = 5;
@@ -94,7 +94,7 @@ public class PlayerControler : MonoBehaviour
         playerInputAction = new InputSystem();
 
         SetUpData();
-        InitilizeScriptableObjects();
+        //InitilizeScriptableObjects();
         SetUpUpgrades();
     }
 
@@ -1103,7 +1103,28 @@ public enum PlayerMovement
 
 /*
  * 
- * 
+ *     private void InitilizeScriptableObjects()
+    {
+        //Assets/ScriptableObjects/PlatformItems
+        string[] files;
+        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradeItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
+
+        foreach (var item in upgradeItems)
+        {
+            // Debug.Log("Test: " + item.name);
+        }
+
+    }
+
  *         if (SceneManager.GetActiveScene().name == "MainHubScene")
         {
             onPlayMusic?.Invoke(Music.MainMenu);

@@ -11,9 +11,7 @@ public class ClickerManager : MonoBehaviour
     public static event Action onActiveClick;
     public static event Action onIdleClick;
     public static event Action<SFX> onPlaySFX;
-    public static event Action<Music> onPlayMusic;
-
-    
+    public static event Action<Music> onPlayMusic;    
 
     [Header("Parameters")]
     [SerializeField] private float baseActiveMoneyIncrement = 1; //Default is 1
@@ -139,6 +137,12 @@ public class ClickerManager : MonoBehaviour
             //clickSpeed = 1000;
             clickAnimTimer = 0;
 
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GameManager.Instance.GetGameData().totalMoney += 40;
         }
 
     }
@@ -488,6 +492,12 @@ public class ClickerManager : MonoBehaviour
         idleTime = baseIdleTime;
     }
 
+    public void TutorialUpgrade()
+    {
+        activeMoneyIncrement += 100;
+        Debug.Log("active money: " + activeMoneyIncrement);
+    }
+
     public void SetUpData()
     {
         GameManager.Instance.GetGameData();
@@ -551,6 +561,33 @@ public class ClickerManager : MonoBehaviour
 
 
 /*
+    private void InitilizeScriptableObjects()
+    {
+        //Assets/ScriptableObjects/ClickerItems
+        string[] files;
+        files = Directory.GetFiles("Assets/ScriptableObjects/ClickerItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradeClickerItems.Add(AssetDatabase.LoadAssetAtPath<ClickerUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
+
+        files = Directory.GetFiles("Assets/ScriptableObjects/PlatformItems");
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                upgradePlatformItems.Add(AssetDatabase.LoadAssetAtPath<PlatformUpgradeItem>(files[i]));
+                //Debug.Log("Test: " + files[i]);
+            }
+
+        }
+
+    }
 
 
         ClickerItemSaveData[] clickerItemSaveData = GameManager.Instance.GetGameData().clickerItems;

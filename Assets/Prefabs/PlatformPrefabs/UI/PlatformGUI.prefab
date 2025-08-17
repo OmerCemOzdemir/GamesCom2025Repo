@@ -2081,6 +2081,10 @@ MonoBehaviour:
   NPCImage: {fileID: 5469810524418174756}
   NPCName: {fileID: 9139914530274971063}
   NPCDialog: {fileID: 3520035206246949896}
+  upgradeItems:
+  - {fileID: 11400000, guid: 1108764c9a4121848b4d04d950fe6f53, type: 2}
+  - {fileID: 11400000, guid: 0c25ebd124b4bef4aa128c4e94271150, type: 2}
+  - {fileID: 11400000, guid: 727375429c3ae3f4ba99a33f82771a19, type: 2}
 --- !u!114 &1240981160032159175
 MonoBehaviour:
   m_ObjectHideFlags: 0
