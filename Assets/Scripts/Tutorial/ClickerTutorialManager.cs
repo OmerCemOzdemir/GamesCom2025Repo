@@ -1,8 +1,5 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ClickerTutorialManager : MonoBehaviour
@@ -95,7 +92,7 @@ public class ClickerTutorialManager : MonoBehaviour
     {
         double money = GameManager.Instance.GetGameData().totalMoney;
 
-        if (Input.GetKeyDown(KeyCode.Z) && CanAdvanceStep())
+        if (Input.GetKeyDown(KeyCode.X) && CanAdvanceStep())
         {
             GoToNextStep();
         }
