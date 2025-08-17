@@ -8,17 +8,24 @@ using UnityEngine.SceneManagement;
 public class CheckpointManager : MonoBehaviour
 {
     [SerializeField] private GameObject checkpointPrefab;
+    [SerializeField] private LevelEntry[] levels;
     private Vector3[] checkpointPositions;
     //public static event Action<Vector3[]> onCheckpointLoad;
     private List<string> levelPaths = new List<string>();
     private string[] levelName;
 
+    [System.Serializable]
+    public struct LevelEntry {
+        public string sceneName;   // must match the Scene name in Build Settings
+        public int sceneIndex;     // build index from Build Settings
+        public bool firstLevel;    // true only for the very first level
+    }
+    
 
     private void Awake()
     {
         InitializeCheckpoints();
         InitilizeSaveData();
-
     }
 
     private void InitializeCheckpoints()
@@ -88,43 +95,20 @@ public class CheckpointManager : MonoBehaviour
 
     private void InitilizeLevelData()
     {
-        int lenght = SceneManager.sceneCountInBuildSettings;
-        //Debug.Log("Total Scene Count " + lenght);
-        string[] files;
-        files = Directory.GetFiles("Assets/Scenes/PlatformScenes");
+        var data = GameManager.Instance.GetGameData().levelData;
+        
+        if (data != null && data.Length > 0)
+            return;
 
-        for (int i = 0; i < files.Length; i++)
-        {
-            if (!files[i].EndsWith(".meta"))
-            {
-                levelPaths.Add(files[i].Replace('\\', '/'));
-                //Debug.Log("The path: " + files[i]);
-            }
-        }
-
-        levelName = new string[levelPaths.Count];
-
-        for (int i = 0; i < levelName.Length; i++)
-        {
-            levelName[i] = levelPaths[i].Replace("Assets/Scenes/PlatformScenes/", "");
-            levelName[i] = levelName[i].Replace(".unity", "");
-        }
-        //SceneUtility.GetBuildIndexByScenePath(levelPaths[levelIndex])
-
-        LevelSaveData[] levelSaveData = new LevelSaveData[levelName.Length];
-
+        LevelSaveData[] levelSaveData = new LevelSaveData[levels.Length];
         for (int i = 0; i < levelSaveData.Length; i++)
         {
-            Debug.Log("Save Level Data" + i);
             levelSaveData[i] = new LevelSaveData();
-            levelSaveData[i].levelName = levelName[i];
-            if (i == 0) { levelSaveData[0].firstLevel = true; }
-            levelSaveData[i].unlock = false;
-            levelSaveData[i].levelIndex = SceneUtility.GetBuildIndexByScenePath(levelPaths[i]);
-
+            levelSaveData[i].levelName  = levels[i].sceneName;
+            levelSaveData[i].levelIndex = levels[i].sceneIndex;
+            levelSaveData[i].unlock     = false;
+            levelSaveData[i].firstLevel = levels[i].firstLevel && (i == 0);
         }
-
-        //levelSaveData[0].unlock = true; 
         GameManager.Instance.GetGameData().levelData = levelSaveData;
         GameManager.Instance.SaveGame();
     }

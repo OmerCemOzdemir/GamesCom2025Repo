@@ -1138,7 +1138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &399118420
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2533,7 +2533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &732357772
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18132,6 +18132,7 @@ RectTransform:
   - {fileID: 786290692}
   - {fileID: 732357772}
   - {fileID: 1932375484}
+  - {fileID: 1779884599}
   - {fileID: 1492679898}
   - {fileID: 1076546217}
   m_Father: {fileID: 1134369855}
@@ -19220,7 +19221,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1697402242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19419,11 +19420,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1795784438}
-  m_Father: {fileID: 1932375484}
+  m_Father: {fileID: 1354098812}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 416, y: -252.44}
+  m_AnchoredPosition: {x: 416, y: -244.59827}
   m_SizeDelta: {x: 353.5, y: 127.62}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1779884600
@@ -20119,7 +20120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1932375484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20136,7 +20137,6 @@ RectTransform:
   - {fileID: 2091642820}
   - {fileID: 451516985}
   - {fileID: 399118420}
-  - {fileID: 1779884599}
   m_Father: {fileID: 1354098812}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -20784,6 +20784,34 @@ PrefabInstance:
     - target: {fileID: 1887127079227002836, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
       propertyPath: m_Name
       value: CheckpointManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3613637223797303314, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
+      propertyPath: levels.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3613637223797303314, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
+      propertyPath: levels.Array.data[0].sceneName
+      value: Outer City
+      objectReference: {fileID: 0}
+    - target: {fileID: 3613637223797303314, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
+      propertyPath: levels.Array.data[1].sceneName
+      value: Business District
+      objectReference: {fileID: 0}
+    - target: {fileID: 3613637223797303314, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
+      propertyPath: levels.Array.data[0].firstLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3613637223797303314, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
+      propertyPath: levels.Array.data[0].sceneIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3613637223797303314, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
+      propertyPath: levels.Array.data[1].firstLevel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3613637223797303314, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
+      propertyPath: levels.Array.data[1].sceneIndex
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8979411026450226285, guid: c9524d982f1aae14ba8175d951a8b93f, type: 3}
       propertyPath: m_LocalPosition.x
