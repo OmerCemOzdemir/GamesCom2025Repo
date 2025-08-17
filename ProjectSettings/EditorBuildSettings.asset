@@ -6,8 +6,32 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/MainMenuScene.unity
+    guid: 9f72076c2852eef49b7bb5a39d07465f
+  - enabled: 1
+    path: Assets/Scenes/CookieClickerScene.unity
+    guid: 69a33db2b19e4e2468a2400c10101388
+  - enabled: 1
+    path: Assets/Scenes/MainHubScene.unity
+    guid: 8a563212cd4ff7348a303a9ebe03da84
+  - enabled: 1
+    path: Assets/Scenes/PlatformScenes/Level1_Main.unity
+    guid: 371de0c2766ef5c409268bf5fd1edfbc
+  - enabled: 1
+    path: Assets/Scenes/PlatformScenes/Level1_Test.unity
+    guid: a6b4584df2d5309409249f927b02a0b8
+  - enabled: 1
+    path: Assets/Scenes/PlatformScenes/PlatformScene.unity
+    guid: 7d5cca5414fce674ba73c10b868f85e0
+  - enabled: 1
+    path: Assets/Scenes/EndScene.unity
+    guid: d8fcd72675c572a4f9c088d30f1fb78b
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/IntroCutscene.unity
+    guid: 82fbbd796e7016842967ecd9746fbf78
+  - enabled: 1
+    path: Assets/Scenes/Tutorial Scenes/ClickerTutorialScene.unity
+    guid: ac3013917e3b94c4da6005d73eba85c9
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

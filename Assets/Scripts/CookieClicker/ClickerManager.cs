@@ -1,0 +1,816 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+
+public class ClickerManager : MonoBehaviour
+{
+    public static event Action onActiveClick;
+    public static event Action onIdleClick;
+    public static event Action<SFX> onPlaySFX;
+    public static event Action<Music> onPlayMusic;
+
+    
+
+    [Header("Parameters")]
+    [SerializeField] private float baseActiveMoneyIncrement = 1; //Default is 1
+    [SerializeField] private float baseActiveMoneyMultiplier = 1; //Default is 1
+    [SerializeField] private float baseIdleMoneyIncrement = 1; //Default is 1
+    [SerializeField] private float baseIdleMoneyMultiplier = 1; //Default is 1
+    [Tooltip("Increase this to longer the elevatorSpeed of idle money")]
+    [SerializeField] private float baseIdleTime = 5;
+    [SerializeField] private float baseActiveTime = 1;
+    [Space(10)]
+
+    [Header("Animation and Effect")]
+    [SerializeField] private Animator playerOfficeAnimator;
+    [SerializeField] private Animator playerClickEffectAnimator;
+    [SerializeField] private Animator AFKAnimator1;
+    [SerializeField] private Animator AFKAnimator2;
+    [SerializeField] private Animator AFKAnimator3;
+    [SerializeField] private Animator AFKAnimator4;
+
+    [SerializeField] private AnimationClip AFKWalkClip1;
+    [SerializeField] private AnimationClip AFKWalkClip2;
+    [SerializeField] private AnimationClip AFKWalkClip3;
+    [SerializeField] private AnimationClip AFKWalkClip4;
+
+
+    [SerializeField] private float speedInterval = 1;
+    [SerializeField] private ClickerEffects effects;
+    [SerializeField] private AFKEffectManager AFKEffectManager;
+    [SerializeField] private float[] AFKRateIntervals;
+
+    private int clickSpeed = 1000; //Bigger the number slower the speed
+    private float idleMoneyProfitRate = 0;
+    private bool[] AFKBools = { true, true, true, true };
+    
+    //private ClickerEffect effect;
+    private List<ClickerUpgradeItem> upgradeClickerItems;
+    private List<PlatformUpgradeItem> upgradePlatformItems;
+
+    public float activeMoneyIncrement;
+    private float activeMoneyMultiplier;
+    private float idleMoneyIncrement;
+    private float idleMoneyMultiplier;
+    private float idleTime;
+    private bool isMouseOverButton = false;
+
+    private bool idleToggle = true;
+    private bool activeToggle = true;
+    private bool gameToggle = true;
+    private bool mouseEnable = false;
+    private bool animToggleOnce = true;
+    private bool animToggleOfficePlayer = true;
+    private bool enableIdleMoney = false;
+
+    private float clickTimer = 0;
+    private float clickAnimTimer = 0;
+    private int currentFrame = 0;
+    private int previousFrame = 0;
+
+    private InputSystem inputSystem;
+
+    #region UnityFunctions
+
+    private void OnEnable()
+    {
+        inputSystem.PlayerCookie.GetMoney.Enable();
+        inputSystem.PlayerCookie.GetMoney.performed += OnButtonClick;
+        global::CheckMousePos.onMouseOver += CheckMousePos;
+        onActiveClick += IncreaseActiveMoney;
+        onIdleClick += IncreaseIdleMoney;
+        ClickerUpgrade.onItemExchange += ImplementUpgrades;
+
+    }
+
+    private void OnDisable()
+    {
+        inputSystem.PlayerCookie.GetMoney.Disable();
+        inputSystem.PlayerCookie.GetMoney.performed -= OnButtonClick;
+        global::CheckMousePos.onMouseOver -= CheckMousePos;
+        onActiveClick -= IncreaseActiveMoney;
+        onIdleClick -= IncreaseIdleMoney;
+        ClickerUpgrade.onItemExchange -= ImplementUpgrades;
+    }
+
+    private void Awake()
+    {
+        
+        upgradeClickerItems = new List<ClickerUpgradeItem>(UpgradeManager.Instance.GetClickerItems());
+        upgradePlatformItems = new List<PlatformUpgradeItem>(UpgradeManager.Instance.GetPlatformItems());
+        SetUpData();
+        //effect = transform.GetChild(0).gameObject.GetComponent<ClickerEffect>();
+        inputSystem = new InputSystem();
+        //effect.StartEffect();
+        //effect.IncreaseClickEffect(0);
+        SetClickingEnabled(true);
+        //idleMoneyInitialProfit = ((idleMoneyIncrement + 1) * idleMoneyMultiplier);
+    }
+
+    private void Start()
+    {
+        //InvokeRepeating(nameof(AccumulateMoney), 2.0f, 1f);
+        InvokeRepeating(nameof(CalculateMoneyPerSec), 5f, 1f);
+    }
+
+    private void FixedUpdate()
+    {
+        if (gameToggle && enableIdleMoney)
+        {
+            IdleMoney();
+        }
+    }
+
+    private void Update()
+    {
+        //HandleAnimSpeed();
+        clickAnimTimer += 6 * Time.deltaTime;
+        //Debug.Log("clickAnimTimer: " + clickAnimTimer);
+        if (clickAnimTimer > 3)
+        {
+            animToggleOfficePlayer = true;
+            playerOfficeAnimator.SetTrigger("Idle");
+            //currentFrame = Time.frameCount;
+            //clickSpeed = (currentFrame - previousFrame);
+            //clickSpeed = 1000;
+            clickAnimTimer = 0;
+
+        }
+
+    }
+
+    #endregion
+
+    #region Active&IdleLogic
+
+
+    private void HandleAFKAnim()
+    {
+        // profit increase formula: ((y-x)/x)*100
+        //idleMoneyProfitPercentage = (((idleMoneyIncrement * idleMoneyMultiplier) - idleMoneyInitialProfit) / idleMoneyInitialProfit) * 100;
+
+        if (idleTime < AFKRateIntervals[0])
+        {
+            if (AFKBools[0])
+            {
+                Debug.Log($"Idle Rate: {idleMoneyIncrement}");
+                PlayerAFKAnim(AFKAnimator1, AFKWalkClip1);
+                AFKBools[0] = false;
+            }
+        }
+
+        if (idleTime < AFKRateIntervals[1])
+        {
+            if (AFKBools[1])
+            {
+                Debug.Log("The Profit rate: AFK_2");
+                PlayerAFKAnim(AFKAnimator2, AFKWalkClip2);
+                AFKBools[1] = false;
+            }
+        }
+
+        if (idleTime < AFKRateIntervals[2])
+        {
+            if (AFKBools[2])
+            {
+                Debug.Log("The Profit rate: AFK_3");
+                PlayerAFKAnim(AFKAnimator3, AFKWalkClip3);
+                AFKBools[2] = false;
+            }
+        }
+
+        if (idleTime < AFKRateIntervals[3])
+        {
+            if (AFKBools[3])
+            {
+                Debug.Log("The Profit rate: AFK_3");
+                PlayerAFKAnim(AFKAnimator4, AFKWalkClip4);
+                AFKBools[3] = false;
+            }
+        }
+
+        //59000
+        //Debug.Log("The Profit rate: " + idleMoneyProfitPercentage);
+    }
+
+    private void PlayerAFKAnim(Animator anim, AnimationClip clip)
+    {
+        anim.SetTrigger("Walk");
+        StartCoroutine(DelayOnAFKAnim(anim, clip));
+
+    }
+
+    IEnumerator DelayOnAFKAnim(Animator anim, AnimationClip clip)
+    {
+        yield return new WaitForSeconds(clip.length);
+        anim.SetTrigger("Work");
+        AFKEffectManager.ActivateEffects();
+
+    }
+
+
+    private void CalculateMoneyPerSec()
+    {
+        //idleMoneyProfitRatePre = idleMoneyProfitRate;
+        Debug.Log("Profit: " + idleMoneyProfitRate);
+        idleMoneyProfitRate = (idleMoneyIncrement * idleMoneyMultiplier) / idleTime;
+    }
+
+    private void IdleMoney()
+    {
+        if (idleToggle)
+        {
+            StartCoroutine(IdleClicker());
+            //effect.StartEffect();
+            //effect.IncreaseClickEffect(2);
+            idleToggle = false;
+        }
+
+
+
+        clickTimer += Time.deltaTime + 1;
+        //Debug.Log("clickTimer: " + clickTimer);
+        if (clickTimer > 10)
+        {
+            StopActiveClicker();
+        }
+    }
+
+    IEnumerator IdleClicker()
+    {
+        onIdleClick?.Invoke();
+        AFKEffectManager.SpawnEffects();
+        HandleAFKAnim();
+        yield return new WaitForSeconds(idleTime);
+        onPlaySFX?.Invoke(SFX.Idle);
+        idleToggle = true;
+    }
+
+    public void ActiveMoney()
+    {
+        if (activeToggle && mouseEnable && isMouseOverButton)
+        {
+            StartCoroutine(ActiveClicker());
+            clickTimer = 0;
+            activeToggle = false;
+        }
+    }
+
+    IEnumerator ActiveClicker()
+    {
+        if (animToggleOfficePlayer)
+        {
+            playerOfficeAnimator.SetTrigger("Working");
+            animToggleOfficePlayer = false;
+        }
+        playerClickEffectAnimator.SetTrigger("Click");
+        effects.SpawnParticle();
+        clickAnimTimer = 0;
+        //previousFrame = currentFrame;
+        //currentFrame = Time.frameCount;
+        clickSpeed = (currentFrame - previousFrame);
+        if (animToggleOnce)
+        {
+            animToggleOnce = false;
+        }
+        Debug.Log("Clicker Speed: " + clickSpeed);
+        onActiveClick?.Invoke();
+        //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
+        yield return new WaitForSeconds(baseActiveTime);
+        onPlaySFX?.Invoke(SFX.Active);
+        //effect.IncreaseClickEffect(10);
+        activeToggle = true;
+    }
+
+    private void StopActiveClicker()
+    {
+        //effect.IncreaseClickEffect(0);
+    }
+
+    public void OnButtonClick(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Mouse Enable: " + mouseEnable);
+        ActiveMoney();
+    }
+
+    public void SetClickingEnabled(bool enabled)
+    {
+        mouseEnable = enabled;
+
+
+        // if (effect != null && effect.TryGetComponent(out Animator anim))
+        //     anim.enabled = enabled;
+    }
+
+    private void IncreaseActiveMoney()
+    {
+        double max = GameManager.Instance.GetGameData().maxTotalMoney;
+        double money = GameManager.Instance.GetGameData().totalMoney;
+
+        money += (activeMoneyIncrement * activeMoneyMultiplier);
+        if (money >= max)
+        {
+            money = max;
+            //Debug.Log("money: " + money);
+
+            GameManager.Instance.GetGameData().totalMoney = money;
+        }
+        else
+        {
+            money = (float)Math.Round(money);
+            GameManager.Instance.GetGameData().totalMoney = money;
+        }
+        FindAnyObjectByType<ClickerUI>().UpdateText();
+        //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
+    }
+
+    private void IncreaseIdleMoney()
+    {
+        double max = GameManager.Instance.GetGameData().maxTotalMoney;
+        double money = GameManager.Instance.GetGameData().totalMoney;
+
+        money += (idleMoneyIncrement * idleMoneyMultiplier);
+        if (money >= max)
+        {
+            money = max;
+            money = (float)Math.Round(money);
+            GameManager.Instance.GetGameData().totalMoney = money;
+        }
+        else
+        {
+            money = (float)Math.Round(money);
+            GameManager.Instance.GetGameData().totalMoney = money;
+        }
+
+        //Debug.Log("Money: " + GameManager.Instance.GetGameData().totalMoney);
+    }
+
+    #endregion
+
+    #region Upgrades
+
+    private void ImplementUpgrades(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems)
+    {
+        //ResetFields(upgradeItems[index].itemEffector);
+        switch (upgradeItems[index].itemEffector)
+        {
+            case ClickerItemEffetors.baseActiveMoneyIncrement:
+                activeMoneyIncrement = ImplementOperations(index, itemsData, upgradeItems, activeMoneyIncrement);
+                break;
+            case ClickerItemEffetors.baseActiveMoneyMultiplier:
+                activeMoneyMultiplier = ImplementOperations(index, itemsData, upgradeItems, activeMoneyMultiplier);
+                break;
+            case ClickerItemEffetors.baseIdleMoneyMultiplier:
+                idleMoneyMultiplier = ImplementOperations(index, itemsData, upgradeItems, idleMoneyMultiplier);
+                if (itemsData[index].tier > 0) { enableIdleMoney = true; }
+                break;
+            case ClickerItemEffetors.baseIdleMoneyIncrement:
+                idleMoneyIncrement = ImplementOperations(index, itemsData, upgradeItems, idleMoneyIncrement);
+                if (itemsData[index].tier > 0) { enableIdleMoney = true; }
+                break;
+            case ClickerItemEffetors.baseIdleTime:
+                idleTime = ImplementOperations(index, itemsData, upgradeItems, idleTime);
+                if (itemsData[index].tier > 0) { enableIdleMoney = true; }
+                break;
+            case ClickerItemEffetors.walletLevel:
+                GameManager.Instance.GetGameData().maxTotalMoney = ImplementOperations(index, itemsData, upgradeItems, idleTime);
+                break;
+            default:
+                break;
+
+        }
+
+        SaveParameters();
+    }
+
+    public void ImplementTutorialActiveIncrement(float delta)
+    {
+        activeMoneyIncrement += delta;  // change runtime value
+        SaveParameters();
+        //FindAnyObjectByType<ClickerUI>()?.UpdateText();
+    }
+
+    private float ImplementOperations(int index, ClickerItemSaveData[] itemsData, List<ClickerUpgradeItem> upgradeItems, float fieldEffected)
+    {
+        if (itemsData[index].tier != 0)
+        {
+            switch (upgradeItems[index].itemOperationOnItemEffector)
+            {
+                case Operations.Add:
+                    fieldEffected += upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
+                    break;
+                case Operations.Multiply:
+                    fieldEffected *= upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
+                    break;
+                case Operations.Subtract:
+                    fieldEffected -= upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
+                    break;
+                case Operations.Divide:
+                    fieldEffected /= upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
+                    break;
+                case Operations.Exact:
+                    fieldEffected = upgradeItems[index].itemTiers[itemsData[index].tier].tierEffect;
+                    break;
+                case Operations.Null:
+                    fieldEffected = 0;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return fieldEffected;
+    }
+
+    private void LoadParameters()
+    {
+        ClickerParametersData data = GameManager.Instance.GetGameData().clickerParameters;
+        activeMoneyIncrement = data.activeMoneyIncrement;
+        activeMoneyMultiplier = data.activeMoneyMultiplier;
+        idleMoneyIncrement = data.idleMoneyIncrement;
+        idleMoneyMultiplier = data.idleMoneyMultiplier;
+        idleTime = data.idleTime;
+        enableIdleMoney = data.enableIdleMoney;
+    }
+
+    private void SaveParameters()
+    {
+        ClickerParametersData data = new ClickerParametersData();
+        data.activeMoneyIncrement = activeMoneyIncrement;
+        data.activeMoneyMultiplier = activeMoneyMultiplier;
+        data.idleMoneyIncrement = idleMoneyIncrement;
+        data.idleMoneyMultiplier = idleMoneyMultiplier;
+        data.idleTime = idleTime;
+        data.enableIdleMoney = enableIdleMoney;
+        GameManager.Instance.GetGameData().clickerParameters = data;
+    }
+
+    #endregion
+
+    public void NextScene(int index)
+    {
+        GameManager.Instance.GetGameData().checkpointEnable = false;
+        GameManager.Instance.SaveGame();
+        GameManager.Instance.NextLevel(index);
+    }
+
+    private void CheckMousePos(bool isHover)
+    {
+        isMouseOverButton = isHover;
+    }
+
+    public void EnableInputs()
+    {
+        inputSystem.PlayerCookie.GetMoney.Enable();
+        gameToggle = true;
+        //effect.StartEffect();
+
+    }
+
+    public void DisableInputs()
+    {
+        inputSystem.PlayerCookie.GetMoney.Disable();
+        gameToggle = false;
+        //effect.PauseEffect();
+
+    }
+
+    private void ResetFields()
+    {
+        activeMoneyIncrement = baseActiveMoneyIncrement;
+        activeMoneyMultiplier = baseActiveMoneyMultiplier;
+        idleMoneyIncrement = baseIdleMoneyIncrement;
+        idleMoneyMultiplier = baseIdleMoneyMultiplier;
+        idleTime = baseIdleTime;
+    }
+
+    public void SetUpData()
+    {
+        GameManager.Instance.GetGameData();
+        if (GameManager.Instance.GetGameData().clickerParameterNewGame)
+        {
+            ResetFields();
+            SaveParameters();
+            GameManager.Instance.GetGameData().clickerParameterNewGame = false;
+        }
+        else
+        {
+            LoadParameters();
+        }
+        FindAnyObjectByType<ClickerUI>().UpdateText();
+
+        if (enableIdleMoney)
+        {
+            HandleAFKAnim();
+        }
+
+
+        PlatformItemSaveData[] platformItemData = GameManager.Instance.GetGameData().platformItems;
+        for (int i = 0; i < platformItemData.Length; i++)
+        {
+            switch (upgradePlatformItems[i].itemType)
+            {
+                case PlatformItemType.Permanent:
+                    break;
+                case PlatformItemType.Temporary:
+                    GameManager.Instance.GetGameData().platformItems[i].unlock = false;
+                    if (upgradePlatformItems[i].hasTier)
+                    {
+                        GameManager.Instance.GetGameData().platformItems[i].cost = upgradePlatformItems[i].costTiers[0];
+                        GameManager.Instance.GetGameData().platformItems[i].tier = 0;
+                    }
+                    else
+                    {
+                        GameManager.Instance.GetGameData().platformItems[i].cost = upgradePlatformItems[i].itemCost;
+                    }
+                    break;
+                case PlatformItemType.RepeatPurchase:
+                    break;
+            }
+        }
+    }
+
+    public string PrintFields()
+    {
+        string text = " activeMoneyIncrement: " + activeMoneyIncrement + "\n"
+    + " activeMoneyMultiplier: " + activeMoneyMultiplier + "\n"
+    + " idleMoneyIncrement: " + idleMoneyIncrement + "\n"
+    + " idleMoneyMultiplier: " + idleMoneyMultiplier + "\n"
+    + " idleTime: " + idleTime + "\n"
+    + " idle profit rate: " + idleMoneyProfitRate + "\n";
+        Debug.Log(text);
+
+        return text;
+    }
+
+}
+
+
+/*
+
+
+        ClickerItemSaveData[] clickerItemSaveData = GameManager.Instance.GetGameData().clickerItems;
+        foreach (var item in clickerItemSaveData)
+        {
+            Debug.Log("item: " + item.ID);
+            Debug.Log("item: " + item.unlock);
+        }
+
+
+
+
+
+    public void AddItemLvl()
+    {
+        gameRule.AddItemLvl(Level);
+    }
+ 
+        clickerUI.currentLevel.text = GameManager.Instance.GetGameData().ItemCount.ToString();
+        clickerUI.currentMoney.text = GameManager.Instance.GetGameData().totalMoney.ToString();
+
+    [SerializeField] private float baseActiveMoneyIncrement = 1; //Defualt is 1
+    [SerializeField] private float baseActiveMoneyMultiplier = 1; //Defualt is 1
+    [SerializeField] private float baseIdleMoneyIncrement = 0; //Defualt is 0
+    [SerializeField] private float baseIdleMoneyMultiplier = 1; //Defualt is 1
+
+
+    [Tooltip("Increase this to longer the time of idle money")]
+    [SerializeField] private float baseIdleTime = 1;
+    [SerializeField] private float baseActiveTime = 1;
+
+
+        switch (index)
+        {
+            case 0: //Improve Recipe
+                baseActiveMoneyIncrement += (2 * items[index].tier);
+                //Debug.Log("baseMoneyIncrement: " + baseActiveMoneyIncrement);
+                break;
+            case 1: //Better Packing
+                baseActiveMoneyMultiplier *= (1.5f * items[index].tier);
+                break;
+            case 2: //Offshore Cheap Worker
+                baseIdleMoneyIncrement += (1.5f + items[index].tier);
+                break;
+            case 3: //Hire Better Offshore Worker 
+                baseIdleMoneyMultiplier *= (0.5f + items[index].tier);
+                break;
+            case 4: //Better Sales Algorithm
+                baseIdleTime = (baseIdleTime / 2);
+                break;
+            case 5: //Better Delivery/Courier
+                baseIdleMoneyIncrement *= (1 + items[index].tier);
+                break;
+            default:
+                break;
+        }
+
+
+        for (int index = 0; index < items.Length; index++)
+        {
+            switch (index)
+            {
+                case 0: //Improve Recipe
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseActiveMoneyIncrement += (2 * items[index].tier);
+                        //PrintFields();
+                    }
+                    break;
+                case 1: //Better Packing
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseActiveMoneyMultiplier *= (1.5f * items[index].tier);
+                        //PrintFields();
+
+                    }
+                    break;
+                case 2: //Offshore Cheap Worker
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseIdleMoneyIncrement += (1.5f + items[index].tier);
+                        //PrintFields();
+
+                    }
+                    break;
+                case 3: //Hire Better Offshore Worker 
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseIdleMoneyMultiplier *= (0.5f + items[index].tier);
+                        //PrintFields();
+
+                    }
+                    break;
+                case 4: //Better Sales Algorithm
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseIdleTime = (baseIdleTime / 2);
+                        //PrintFields();
+
+                    }
+                    break;
+                case 5: //Better Delivery/Courier
+                    for (int i = 0; i < items[index].tier; i++)
+                    {
+                        baseIdleMoneyIncrement *= (1 + items[index].tier);
+                        //PrintFields();
+
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+         //This feels stupid.
+        switch (walletLevel)
+        {
+            case 0:
+                maxTotalMoney = 10000;
+                //Debug.Log("max Money: " + maxTotalMoney);
+                break;
+            case 1:
+                maxTotalMoney = 100000;
+                //Debug.Log("max Money: " + maxTotalMoney);
+                break;
+            case 2:
+                maxTotalMoney = 1000000;
+                break;
+            default:
+                break;
+        }
+
+
+        if (clicksPerTick >= speedInterval)
+        {
+            clickSpeed++;
+            clicksPerTick = 0;
+            speedInterval += 1;
+        }
+        else
+        {
+            if (speedInterval != 10)
+            {
+                speedInterval--;
+            }
+
+            if (clickSpeed != 0)
+            {
+                clickSpeed--;
+            }
+        }
+
+    IEnumerator StopAnimationSlowly()
+    {
+
+        yield return new WaitForSeconds(backgroundAnimator.speed);
+        effect.IncreaseClickEffect(0);
+        animToggle = true;
+
+    }
+    IEnumerator AnimationSlowly(float length)
+    {
+        Debug.Log("Animation len: " + length);
+        yield return new WaitForSeconds(backgroundAnimator.speed);
+        animToggle = true;
+    }
+
+            backgroundAnimator.SetBool("StartAnim_2", true);
+            backgroundAnimator.SetBool("StartAnim_1", false);
+            backgroundAnimator.SetBool("StopAnim", false);
+
+
+    //backgroundAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime>1 && !backgroundAnimator.IsInTransition(0)
+    //!backgroundAnimator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnim)
+
+    public IEnumerator CheckAnimationCompleted(string CurrentAnim, Action Oncomplete)
+    {
+        //Debug.Log("outside the while loop CheckAnimation");
+        //StopAnimationSignal();
+        while (!backgroundAnimator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnim))
+        {
+            Debug.Log("inside the while loop CheckAnimation");
+            yield return null;
+        }
+        Oncomplete?.Invoke();
+    }
+
+    private void HandleAnimSpeed()
+    {
+        clickAnimTimer += 4 * Time.deltaTime;
+        //Debug.Log("clickAnimTimer: " + clickAnimTimer);
+        if (clickAnimTimer > 10)
+        {
+            //currentFrame = Time.frameCount;
+            //clickSpeed = (currentFrame - previousFrame);
+            //clickSpeed = 1000;
+            clickAnimTimer = 0;
+            playerOfficeAnimator.SetTrigger("Idle");
+        }
+
+        if (animToggle)
+        {
+            //Debug.Log("Click Speed: " + clickSpeed);
+            //StartAnimation(clickSpeed);
+            //StartCoroutine(TestRoutine(10));
+
+            //Debug.Log("Animation Parameters: " + " clickSpeed: " + clickSpeed + " clickAnimTimer: " + clickAnimTimer + " animToggle: " + animToggle);
+            //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + clickSpeed);
+            animToggle = false;
+        }
+
+    }
+
+    private IEnumerator CheckAnimation(float timer, Action Oncomplete)
+    {
+        //Debug.Log("Animation is running");
+        yield return new WaitForSeconds(timer);
+        animToggle = true;
+        Oncomplete?.Invoke();
+    }
+
+    private void StartAnimation(int speed)
+    {
+        //Debug.Log("Animation Toggle: " + animToggle + "Speed: " + speed);
+        if (speed <= 100)
+        {
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_2");
+
+            //SetAnim_1
+            playerOfficeAnimator.SetTrigger("SetAnim_2");
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed2.length, () =>
+            {
+                animToggle = true;
+            }));
+            //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep2.length));
+        }
+        else if (101 < speed && speed <= 800)
+        {
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_1");
+            playerOfficeAnimator.SetTrigger("SetAnim_1");
+
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed1.length, () =>
+            {
+                animToggle = true;
+            }));
+            //StartCoroutine(AnimationSlowly(backgroundAnimClipSleep1.length));
+
+        }
+        else if (speed >= 900)
+        {
+            Debug.Log("Current Click Speed: " + clickSpeed + " ClickerAnimSpeed_0");
+            playerOfficeAnimator.SetTrigger("SetAnim_0");
+            StartCoroutine(CheckAnimation(backgroundAnimClipSpeed0.length, () =>
+            {
+                animToggle = true;
+            }));
+        }
+
+    }
+
+
+ */

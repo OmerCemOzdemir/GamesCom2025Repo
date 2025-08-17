@@ -2,8 +2,23 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - Ladder
+  - Door
+  - Key
+  - Elevator
+  - Bridge
+  - Shop
+  - Taxi
+  - Sign
+  - CheckpointCollector
+  - Wallet
+  - Item
+  - ElevatorControl
+  - NPC
+  - ClickerManager
+  - Bus
   layers:
   - Default
   - TransparentFX
@@ -11,15 +26,15 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Ladder
+  - Door
+  - Key
+  - Elevator
+  - Bridge
+  - Taxi
+  - Sign
+  - ClickerEffect
   - 
   - 
   - 
@@ -41,3 +56,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 1038038481
+    locked: 0
+  - name: Collider
+    uniqueID: 2581354077
+    locked: 0
+  - name: Player
+    uniqueID: 2646336013
+    locked: 0
+  - name: Foreground
+    uniqueID: 1040825749
+    locked: 0
+  - name: UI
+    uniqueID: 446078847
+    locked: 0
+  m_RenderingLayers:
+  - Default

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c461c3c92a14f45845bb4abff5c9e4, type: 3}
+  m_Name: JumpHeight
+  m_EditorClassIdentifier: 
+  itemName: Jumping Boots
+  itemDescription: Increase Jump Height
+  itemIcon: {fileID: -2516195779808049870, guid: 0204e5e9dcc62fb4eb88f5eeccb28978, type: 3}
+  itemCost: 500
+  itemType: 1
+  hasItemEffectOnMoney: 1
+  hasItemEffectOnMovement: 1
+  itemEffectOnMoney:
+    value: 100
+    operations: 2
+    moneySpent: 2
+  itemEffectOnMovement:
+    value: 2
+    operations: 2
+    playerMovement: 2
+  itemEffectSpecial: 0
+  hasTier: 0
+  effectTiersPercentage: []
+  costTiers: []
