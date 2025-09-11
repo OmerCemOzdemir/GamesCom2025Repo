@@ -190,7 +190,7 @@ public class PlayerControler : MonoBehaviour
         Move();
         HandleFlipSprite();
         HandleAnimationState();
-        DebugFunc();
+        //DebugFunc();
 
     }
 
@@ -1042,14 +1042,14 @@ public class PlayerControler : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            // PrintArray();
-            //onPlayerDebug?.Invoke(PrintFields());
+            //PrintArray();
+            onPlayerDebug?.Invoke(PrintFields());
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // PrintArray();
-            //GameManager.Instance.NextLevel(SceneManager.GetActiveScene().buildIndex);
+            //PrintArray();
+            GameManager.Instance.NextLevel(SceneManager.GetActiveScene().buildIndex);
         }
     }
 

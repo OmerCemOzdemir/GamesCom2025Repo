@@ -24,7 +24,7 @@ MonoBehaviour:
     operations: 2
     moneySpent: 2
   itemEffectOnMovement:
-    value: 2
+    value: 3
     operations: 2
     playerMovement: 2
   itemEffectSpecial: 0

@@ -24,20 +24,8 @@ public class ClickerDebug : MonoBehaviour
 
     private void Update()
     {
-        UpdateDebugText();
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            if (toggle)
-            {
-                OpenDebugPanel();
-                toggle = false;
-            }
-            else
-            {
-                CloseDebugPanel();
-                toggle = true;
-            }
-        }
+        //UpdateDebugText();
+       
     }
 
     public void OpenDebugPanel()
@@ -53,6 +41,20 @@ public class ClickerDebug : MonoBehaviour
 
     private void UpdateDebugText()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (toggle)
+            {
+                OpenDebugPanel();
+                toggle = false;
+            }
+            else
+            {
+                CloseDebugPanel();
+                toggle = true;
+            }
+        }
+
         debugText.text = clickerManager.PrintFields();
 
     }

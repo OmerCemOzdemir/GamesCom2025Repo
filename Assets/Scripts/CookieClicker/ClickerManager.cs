@@ -114,7 +114,7 @@ public class ClickerManager : MonoBehaviour
     private void Start()
     {
         //InvokeRepeating(nameof(AccumulateMoney), 2.0f, 1f);
-        InvokeRepeating(nameof(CalculateMoneyPerSec), 5f, 1f);
+        //InvokeRepeating(nameof(CalculateMoneyPerSec), 5f, 1f);
     }
 
     private void FixedUpdate()

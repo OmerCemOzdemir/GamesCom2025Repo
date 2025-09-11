@@ -817,7 +817,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -976,7 +975,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -1967,7 +1965,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -2918,7 +2915,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -3647,7 +3643,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -4568,7 +4563,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -4761,7 +4755,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -5159,7 +5152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
@@ -5320,7 +5313,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requireInput: 1
   advanceKey: 122
-  keyIcon: {fileID: 0}
   hideMode: 4
   specificTargetToHide: {fileID: 0}
   uiGraphicToHide: {fileID: 0}
@@ -17463,7 +17455,7 @@ MonoBehaviour:
   baseActiveMoneyMultiplier: 1
   baseIdleMoneyIncrement: 0
   baseIdleMoneyMultiplier: 1
-  baseIdleTime: 1
+  baseIdleTime: 5
   baseActiveTime: 0
   playerOfficeAnimator: {fileID: 1835358966}
   playerClickEffectAnimator: {fileID: 1422155964}
